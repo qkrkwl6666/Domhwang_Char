@@ -1,0 +1,7 @@
+﻿Id,Name,Tier,Atk,Atk_Up,Run,Run_Up,Skill_Id,Level,InstanceId,Texture
+101,워리어,normal,4,7,58,3,12,1,,
+102,아처,normal,5,5,56,5,13,1,,
+103,메이지,normal,6,6,54,3,11,1,,
+104,나이트,normal,7,3,52,4,14,1,,
+105,파이터,rare,15,8,49,3,21,1,,
+106,워록,rare,16,6,47,5,23,1,,
