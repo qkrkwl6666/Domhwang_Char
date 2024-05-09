@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChatacterSlot : MonoBehaviour
+public class CharacterSlot : MonoBehaviour
 {
     public CharacterInfo characterInfo;
     public Sprite characterImage;
 
     public static event Action<CharacterInfo> OnCharacterUIInfo;
+    public static event Action<CharacterInfo, CharacterSlot> OnCharacterUISelect;
 
     public void SetData(CharacterInfo data)
     {
@@ -25,5 +26,6 @@ public class ChatacterSlot : MonoBehaviour
     public void CharacterOnClick()
     {
         OnCharacterUIInfo?.Invoke(characterInfo);
+        OnCharacterUISelect?.Invoke(characterInfo, this);
     }
 }

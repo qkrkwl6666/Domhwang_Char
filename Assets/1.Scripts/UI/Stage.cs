@@ -26,6 +26,6 @@ public class Stage : MonoBehaviour
 
     private void OpenForamtion()
     {
-        UIManager.instance.OpenUI(Page.FORMATION);
+        UIManager.Instance.OpenUI(Page.FORMATION);
     }
 }

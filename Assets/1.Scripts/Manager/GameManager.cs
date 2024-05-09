@@ -1,23 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    private static GameManager m_instance;
-    public static GameManager instance
-    {
-        get
-        {
-            if (m_instance == null)
-            {
-                m_instance = FindObjectOfType<GameManager>();
-            }
-            return m_instance;
-        }
-    }
-
     public static readonly string pathData = "ScriptableObject/CharacterInitialData/";
     public static readonly string pathList = "Characters/";
 
@@ -29,15 +17,18 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-       
-    }
+
+        Debug.Log("GameManagerAwake");
+    }   
 
     void Start()
     {
-        if(SaveLoadSystem.Load() == null)
+        Debug.Log("GameManagerStart");
+
+        if (SaveLoadSystem.Load() == null)
         {
             // 세이브 데이터가 없다면 기본 캐릭터 지급
-            var go = DataTableMgr.instance.Get<CharacterTable>("Character");
+            var go = DataTableMgr.Instance.Get<CharacterTable>("Character");
             foreach (var c in go.characterTable)
             {
                 var character = Instantiate(Resources.Load<GameObject>("Characters/" + c.Value.Id));
@@ -45,19 +36,19 @@ public class GameManager : MonoBehaviour
                 info.SetCharacterData(c.Value);
                 info.creationTime = System.DateTime.Now;
                 info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
-
+                DontDestroyOnLoad(character);
                 character.SetActive(false);
                 playerCharacterList.Add(character);
             }
         }
-        else // 세이브 데이터 기반 캐릭터 생성
+        else if (playerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
         {
             foreach(CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
             {
                 var character = Instantiate(Resources.Load<GameObject>("Characters/" + go.Id));
                 var info = character.AddComponent<CharacterInfo>();
                 info.SetCharacterInfo(go);
-
+                DontDestroyOnLoad(character);
                 character.SetActive(false);
                 playerCharacterList.Add(character);
             }

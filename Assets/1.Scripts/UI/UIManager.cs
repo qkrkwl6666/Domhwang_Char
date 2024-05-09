@@ -2,47 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
-    private static UIManager m_instance;
-    public static UIManager instance 
-    { 
-        get 
-        { 
-            if (m_instance == null)
-            {
-                m_instance = FindObjectOfType<UIManager>();
-            }
-            return m_instance; 
-        } 
-    }
-
     public Page page;
 
-    public Transform mainPanels;
+    private Canvas canvas;
+    private Transform mainPanels;
     [SerializeField] private List<GameObject> defaultPanels = new ();
 
     private void Awake()
     {
+        mainPanels = GameObject.FindWithTag("MainPanel").transform;
+        canvas = mainPanels.GetComponentInParent<Canvas>();
+        
+        Debug.Log("UIManagerAwake");
         page = Page.TITLE;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("UIManagerStart");
         foreach (Transform panel in mainPanels)
         {
             defaultPanels.Add(panel.gameObject);
+            DontDestroyOnLoad(panel.gameObject);
             panel.gameObject.SetActive(false);
         }
 
         defaultPanels[(int)page].SetActive(true);
-
+        DontDestroyOnLoad(canvas.gameObject);
     }
 
     // Update is called once per frame
-    void Update()
+    void Update()   
     {
         
     }
@@ -53,5 +46,12 @@ public class UIManager : MonoBehaviour
 
         defaultPanels[(int)page].SetActive(true);
         this.page = page;
+    }
+    public void AllClose()
+    {
+        for(int i = 0; i < defaultPanels.Count; i++)
+        {
+            defaultPanels[i].SetActive(false);
+        }
     }
 }

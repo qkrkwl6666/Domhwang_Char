@@ -2,22 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataTableMgr : MonoBehaviour
+public class DataTableMgr : Singleton<DataTableMgr>
 {
-    private static Dictionary<string, DataTable> tables = new ();
-
-    private static DataTableMgr m_instance;
-    public static DataTableMgr instance
-    {
-        get
-        {
-            if (m_instance == null)
-            {
-                m_instance = FindObjectOfType<DataTableMgr>();
-            }
-            return m_instance;
-        }
-    }
+    private Dictionary<string, DataTable> tables = new ();
 
     private void Awake()
     {
