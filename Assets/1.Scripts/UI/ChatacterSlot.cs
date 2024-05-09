@@ -5,25 +5,25 @@ using UnityEngine;
 
 public class ChatacterSlot : MonoBehaviour
 {
-    public CharacterData characterData;
+    public CharacterInfo characterInfo;
     public Sprite characterImage;
 
-    public static event Action<CharacterData, Sprite> OnCharacterUIInfo;
+    public static event Action<CharacterInfo> OnCharacterUIInfo;
 
-    public void SetData(CharacterData data)
+    public void SetData(CharacterInfo data)
     {
-        characterData.Id = data.Id;
-        characterData.Name = data.Name;
-        characterData.Tier = data.Tier;
-        characterData.Atk = data.Atk;
-        characterData.Atk_Up = data.Atk_Up;
-        characterData.Run = data.Run;
-        characterData.Run_Up = data.Run_Up;
-        characterData.Skill_Id = data.Skill_Id;
+        characterInfo.Id = data.Id;
+        characterInfo.Name = data.Name;
+        characterInfo.Tier = data.Tier;
+        characterInfo.Atk = data.Atk;
+        characterInfo.Atk_Up = data.Atk_Up;
+        characterInfo.Run = data.Run;
+        characterInfo.Run_Up = data.Run_Up;
+        characterInfo.Skill_Id = data.Skill_Id;
     }
 
     public void CharacterOnClick()
     {
-        OnCharacterUIInfo?.Invoke(characterData, characterImage);
+        OnCharacterUIInfo?.Invoke(characterInfo);
     }
 }

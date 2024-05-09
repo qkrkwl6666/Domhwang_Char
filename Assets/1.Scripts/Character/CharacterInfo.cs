@@ -20,12 +20,6 @@ public class CharacterInfo : MonoBehaviour
     public Sprite characterImage;
     public System.DateTime creationTime;
 
-    public CharacterInfo()
-    {
-        creationTime = System.DateTime.Now;
-        InstanceId = Animator.StringToHash(creationTime.Ticks.ToString());
-    }
-
     public void SetCharacterData(CharacterData data)
     {
         Id = data.Id;
@@ -38,6 +32,7 @@ public class CharacterInfo : MonoBehaviour
         Skill_Id = data.Skill_Id;
         Level = data.Level;
         Texture = data.Id;
+        characterImage = Resources.Load<Sprite>("ChatacterImage/" + Id.ToString() + "Img");
     }
 
     public void SetCharacterInfo(CharacterInfo characterInfo)
@@ -54,6 +49,7 @@ public class CharacterInfo : MonoBehaviour
         Texture = characterInfo.Id;
         InstanceId = characterInfo.InstanceId;
 
+        characterImage = Resources.Load<Sprite>("ChatacterImage/" + Id.ToString() + "Img");
     }
 
     private void Awake()

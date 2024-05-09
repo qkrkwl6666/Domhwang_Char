@@ -115,6 +115,7 @@ public class CharacterInfoConverter : JsonConverter<CharacterInfo>
     {
         JObject jo = JObject.Load(reader);
         CharacterInfo v = new CharacterInfo();
+        
         v.Id = (int)jo["Id"];
         v.Name = (string)jo["Name"];
         v.Tier = (string)jo["Tier"];
@@ -126,6 +127,7 @@ public class CharacterInfoConverter : JsonConverter<CharacterInfo>
         v.Level = (int)jo["Level"];
         v.InstanceId = (int)jo["InstanceId"];
         v.Texture = (int)jo["Texture"];
+
         return v;
     }
 

@@ -72,23 +72,30 @@ public class SaveLoadSystem : MonoBehaviour
         if (!Directory.Exists(SaveDirectory))
             return null;
 
-        var path = Path.Combine(SaveDirectory, SaveFileName[slot]);
-        using (var writer = new JsonTextReader(new StreamReader(path)))
+        try
         {
-            var serializer = new JsonSerializer();
-            serializer.TypeNameHandling = TypeNameHandling.All;
-            serializer.Converters.Add(new ColorConverter());
-            serializer.Converters.Add(new Vector3Converter());
-            serializer.Converters.Add(new Vector2Converter());
-            serializer.Converters.Add(new QuaternionConverter());
-            serializer.Converters.Add(new CharacterInfoConverter());
-            var saveData = serializer.Deserialize<SaveData>(writer);
+            var path = Path.Combine(SaveDirectory, SaveFileName[slot]);
+            using (var writer = new JsonTextReader(new StreamReader(path)))
+            {
+                var serializer = new JsonSerializer();
+                serializer.TypeNameHandling = TypeNameHandling.All;
+                serializer.Converters.Add(new ColorConverter());
+                serializer.Converters.Add(new Vector3Converter());
+                serializer.Converters.Add(new Vector2Converter());
+                serializer.Converters.Add(new QuaternionConverter());
+                serializer.Converters.Add(new CharacterInfoConverter());
+                var saveData = serializer.Deserialize<SaveData>(writer);
 
-            CurrentData = saveData as SaveData1;
-            currentSlot = slot;
-            return saveData;
+                CurrentData = saveData as SaveData1;
+                currentSlot = slot;
+                return saveData;
+            }
         }
-
+        catch(FileNotFoundException ex)
+        {
+            Debug.Log($"세이브 파일을 찾을 수 없습니다 " + ex);
+            return null;
+        }
         
     }
 

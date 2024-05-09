@@ -11,7 +11,7 @@ public class Forming : MonoBehaviour
     public GameObject UICharacterPrefabs;
     public Transform content;
 
-    // PlayerInfo UI 
+    // CharacterInfo UI 
     public Image selectedCharacter;
     public TMPro.TextMeshProUGUI characterName;
     public TMPro.TextMeshProUGUI attack;
@@ -19,44 +19,65 @@ public class Forming : MonoBehaviour
     public TMPro.TextMeshProUGUI skill;
     public TMPro.TextMeshProUGUI rare;
 
-    // 내가 보유 중인 캐릭터 리스트
-    public List<GameObject> playerCharacterList { get; private set; } = new List<GameObject>();
+    // SelectCharacter UI
+    public Transform selectCharacterUI;
 
-    // 편성 선택한 캐릭터 리스트
-    public List<GameObject> selectCharacterList { get; private set; } = new List<GameObject>();
+    // UI 캐릭터 보유중인 리스트
+    public List<GameObject> uiCharacterList { get; private set; } = new List<GameObject>();
 
     private void Awake()
     {
-        // 세이브 없을때 초기 캐릭터 생성
-        playerCharacterList = GameManager.instance.playerCharacterList;
+        foreach(Transform t in selectCharacterUI)
+        {
+            uiCharacterList.Add(t.gameObject);
+        }
+    }   
 
-       // foreach(GameObject character in playerCharacterList)
-       // { 
-       //     var go = Instantiate(UICharacterPrefabs, content.transform);
-       //     go.name = character.name;
-       //     var characterInfo = character.GetComponent<CharacterInfo>();
-       //     characterInfo.characterData.Instance_Id = character.GetInstanceID();
-       //     go.GetComponent<Image>().sprite = characterInfo.characterImage;
-       //     go.GetComponent<ChatacterSlot>().characterData = characterInfo.characterData;
-       //     go.GetComponent<ChatacterSlot>().characterImage = characterInfo.characterImage;
-       // }
-            
+    private void OnEnable()
+    {
+        uiCharacterList.Clear();
+        GameManager.instance.formationCharacterList.Clear();
 
-        
+        for (int i = 0; i < uiCharacterList.Count; i++)
+        {
+            Destroy(uiCharacterList[i]);
+            uiCharacterList.RemoveAt(i);
+        }
+
+        foreach (GameObject character in GameManager.instance.playerCharacterList)
+        {
+            var uiCharacter = Instantiate(UICharacterPrefabs, content.transform);
+            CharacterInfo characterInfo = character.GetComponent<CharacterInfo>();
+            uiCharacter.GetComponent<Image>().sprite = characterInfo.characterImage;
+            uiCharacter.GetComponent<ChatacterSlot>().characterInfo = characterInfo;
+            uiCharacter.GetComponent<ChatacterSlot>().characterImage = characterInfo.characterImage;
+            uiCharacterList.Add(uiCharacter);
+        }
     }
+
     private void Start()
     {
         ChatacterSlot.OnCharacterUIInfo += UICharacterInfo;
     }
 
-    public void UICharacterInfo(CharacterData characterData, Sprite img)
+    public void UICharacterInfo(CharacterInfo characterInfo)
     {
-        selectedCharacter.sprite = img;
-        characterName.text = characterData.Name;
-        attack.text = characterData.Atk.ToString();
-        run.text = characterData.Run.ToString();
-        skill.text = characterData.Skill_Id.ToString();
-        rare.text = characterData.Tier;
+        selectedCharacter.sprite = characterInfo.characterImage;
+        characterName.text = characterInfo.Name;
+        attack.text = characterInfo.Atk.ToString();
+        run.text = characterInfo.Run.ToString();
+        skill.text = characterInfo.Skill_Id.ToString();
+        rare.text = characterInfo.Tier;
+    }
+
+    public void OnCharacterSelect(in CharacterInfo characterInfo)
+    {
+        if (GameManager.instance.formationCharacterList.Count > 6) return;
+
+        for(int i = 0; i < uiCharacterList.Count; i++)
+        {
+
+        }
     }
 
 }
