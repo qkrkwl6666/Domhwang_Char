@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - MainPanel
+  - RunCollider
   layers:
   - Default
   - TransparentFX
