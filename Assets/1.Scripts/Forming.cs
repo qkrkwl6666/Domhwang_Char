@@ -34,6 +34,7 @@ public class Forming : MonoBehaviour
 
     private void Awake()
     {
+
         int i = 0;
         foreach(Transform t in selectCharacterUI)
         {

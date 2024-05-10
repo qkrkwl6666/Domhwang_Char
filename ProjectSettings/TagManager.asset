@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainPanel
   - RunCollider
+  - Monster
   layers:
   - Default
   - TransparentFX
