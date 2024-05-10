@@ -15,8 +15,10 @@ public class MonsterTable : DataTable
         public int Hp { get; set; }
         public string Tier { get; set; }
         public int Enc { get; set; }
-        public int F_type { get; set; }
-        public string Feature { get; set; }
+        public int Feature_Id { get; set; }
+        public string round { get; set; }
+        public string reduced_dmg { get; set; }
+        public string heal { get; set; }
 
     }
 

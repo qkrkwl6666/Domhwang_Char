@@ -11,6 +11,7 @@ public class Title : MonoBehaviour
 
     private void Awake()
     {
+
         startButton.onClick.AddListener(StartButton);
         optionButton.onClick.AddListener(OptionButton);
         exitButton.onClick.AddListener(ExitButton);
@@ -30,12 +31,12 @@ public class Title : MonoBehaviour
 
     private void StartButton()
     {
-        UIManager.instance.OpenUI(Page.STAGE);
+        UIManager.Instance.OpenUI(Page.STAGE);
     }
 
     private void OptionButton()
     {
-        UIManager.instance.OpenUI(Page.OPTION);
+        UIManager.Instance.OpenUI(Page.OPTION);
     }
 
     private void ExitButton()
