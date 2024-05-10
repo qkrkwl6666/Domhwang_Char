@@ -7,8 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class BattleSystem : MonoBehaviour
 {
-    private List<GameObject> battleCharacter = new List<GameObject>();
+    public List<GameObject> battleCharacter = new List<GameObject>();
 
+    private List<GameObject> removeCharacter = new List<GameObject>();
     private List<GameObject> characterList;
     private float spawnXPosition = -10f;
 
@@ -20,7 +21,7 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        RoundCharacterSpawn();
+        RoundCharacterSpawn(3);
     }
 
     // Update is called once per frame
@@ -34,10 +35,12 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-    private void RoundCharacterSpawn()
+    private void RoundCharacterSpawn(int index)
     {
+        removeCharacter.Clear();
         spawnXPosition = -10f;
 
+        // 첫 라운드
         for (int i = 0; i < 3; i ++)
         {
             characterList[i].GetComponent<CharacterMove>().runPercent = characterList[i].GetComponent<CharacterInfo>().Run;
@@ -49,6 +52,19 @@ public class BattleSystem : MonoBehaviour
             battleCharacter[i].SetActive(true);
             battleCharacter[i].transform.position = new Vector3(spawnXPosition, 0f , 0f);
             spawnXPosition -= 2f;
+
+            var characterMove = battleCharacter[i].GetComponent<CharacterMove>();
+            characterMove.RunMode();
+            if (characterMove.isRun) { removeCharacter.Add(battleCharacter[i]); }
         }
+
+        for(int i = 0; i < removeCharacter.Count; i++)
+        {
+            battleCharacter.Remove(removeCharacter[i]);
+        }
+
+        
+
+
     }
 }

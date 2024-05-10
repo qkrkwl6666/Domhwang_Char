@@ -27,16 +27,19 @@ public class Forming : MonoBehaviour
     public Transform selectCharacterUI;
 
     // UI 캐릭터 선택 리스트
-    public List<GameObject> uiSelectCharacterList { get; private set; } = new List<GameObject>();
+    public List<GameObject> uiSelectCharacterList { get; set; } = new List<GameObject>();
 
     // UI 캐릭터 보유중인 리스트
     public List<GameObject> uiCharacterList { get; private set; } = new List<GameObject>();
 
     private void Awake()
     {
+        int i = 0;
         foreach(Transform t in selectCharacterUI)
         {
-            uiSelectCharacterList.Add(t.gameObject);
+            GameObject go = t.gameObject;
+            go.GetComponent<CharacterSelectSlot>().SlotIndex = i++;
+            uiSelectCharacterList.Add(go);
         }
 
         gameStartButton.interactable = false;
@@ -46,6 +49,11 @@ public class Forming : MonoBehaviour
     private void OnEnable()
     {
         GameManager.Instance.formationCharacterList.Clear();
+
+        for (int i = 0; i < 6; i++)
+        {
+            GameManager.Instance.formationCharacterList.Add(null);
+        }
 
         // Todo : 나중에 오브젝트풀로 관리
         for (int i = 0; i < uiCharacterList.Count; i++)
@@ -77,8 +85,18 @@ public class Forming : MonoBehaviour
         CharacterSlot.OnCharacterUISelect += OnCharacterSelect;
     }
 
+    private void Update()
+    {
+        if(MultiTouchManager.Instance.LongTap == true)
+        {
+            Debug.Log("LongTap");
+        }
+    }
+
     public void UICharacterInfo(CharacterInfo characterInfo)
     {
+        if (MultiTouchManager.Instance.LongTap == false) return;
+
         selectedCharacter.sprite = characterInfo.characterImage;
         characterName.text = characterInfo.Name;
         attack.text = characterInfo.Atk.ToString();
@@ -89,17 +107,29 @@ public class Forming : MonoBehaviour
 
     public void OnCharacterSelect(CharacterInfo characterInfo , CharacterSlot characterSlot)
     {
-        int index = GameManager.Instance.formationCharacterList.Count;
-        if (index > 5) return;
+        if (MultiTouchManager.Instance.Tap == false) return;
 
-        Debug.Log(index);
+        List<GameObject> list = GameManager.Instance.formationCharacterList;
+        int index = -1;
 
-        GameManager.Instance.formationCharacterList.Add(characterInfo.gameObject);
-        var uiImg = uiSelectCharacterList[index].GetComponent<Image>();
-        uiImg.sprite = characterInfo.characterImage;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] != null) continue;
+
+            list[i] = characterInfo.gameObject;
+            index = i;
+            break;
+        }
+
+        if (index == -1) return;
+
         characterSlot.gameObject.SetActive(false);
 
-        if(index == 5) gameStartButton.interactable = true;
+        var uiImg = uiSelectCharacterList[index].GetComponent<Image>();
+        uiSelectCharacterList[index].GetComponent<CharacterSelectSlot>().characterSlot = characterSlot; 
+        uiImg.sprite = characterInfo.characterImage;
+
+        gameStartButton.interactable = GameStartCheck();
     }
 
     public void OnClickGameStart()
@@ -116,6 +146,18 @@ public class Forming : MonoBehaviour
         run.text = "Run";
         skill.text = "Skill";
         rare.text = "Rare";
+    }
+
+    private bool GameStartCheck()
+    {
+        var list = GameManager.Instance.formationCharacterList;
+
+        for(int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == null) return false;
+        }
+
+        return true;
     }
 
 }

@@ -11,29 +11,23 @@ public class CharacterMove : MonoBehaviour
         Run,
         Attack,
     }
-
     public Status status;
 
     public int runPercent;
-    private bool isRun = false;
+    public bool isRun = false;
+
     private float moveSpeed = 2f;
     private float runSpeed = 4f;
+
+    public Vector3 stopPosition = Vector3.zero;
 
     private void Awake()
     {
         status = Status.Move;
-
-        
-
     }
-
     private void Start()
     {
-        status = Status.Move;
-
-        int randomInt = Random.Range(0, 101);
-        if (randomInt > runPercent) isRun = false;
-        else isRun = true;
+        
     }
 
     private void Update()
@@ -41,9 +35,6 @@ public class CharacterMove : MonoBehaviour
           
     }
 
-
-
-    // Update is called once per frame
     private void FixedUpdate()
     {
         switch (status)
@@ -63,6 +54,14 @@ public class CharacterMove : MonoBehaviour
         }
     }
 
+    public void RunMode()
+    {
+        int randomInt = Random.Range(0, 101);
+
+        isRun = randomInt > runPercent ? false : true;
+
+    }
+
     public void RunModeChange()
     {
         if (!isRun) return;
@@ -73,11 +72,12 @@ public class CharacterMove : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("충돌1!!");
+        Debug.Log("OnTriggerEnter");
+
         if (other.tag == "RunCollider")
         {
-            Debug.Log("충돌!!");
-            float randomTime = Random.Range(1f, 2f);
+            Debug.Log("OnTriggerEnter 충돌!!");
+            float randomTime = Random.Range(0.5f, 1f);
             Invoke("RunModeChange", randomTime);
         }
     }

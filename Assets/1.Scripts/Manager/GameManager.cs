@@ -40,7 +40,7 @@ public class GameManager : Singleton<GameManager>
                 character.SetActive(false);
                 playerCharacterList.Add(character);
             }
-        }
+        }// 세이브 데이터가 있다면 캐릭터 Load
         else if (playerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
         {
             foreach(CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
@@ -51,13 +51,8 @@ public class GameManager : Singleton<GameManager>
                 DontDestroyOnLoad(character);
                 character.SetActive(false);
                 playerCharacterList.Add(character);
-            }
-            
+            } 
         }
-        
-
-        // 세이브 데이터가 있다면 캐릭터 Load
-
     }
 
     // Update is called once per frame
