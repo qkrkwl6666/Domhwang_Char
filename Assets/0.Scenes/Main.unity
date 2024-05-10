@@ -2576,6 +2576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forming: {fileID: 1152609431}
+  characterSlot: {fileID: 0}
 --- !u!1 &554552319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2993,6 +2994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forming: {fileID: 1152609431}
+  characterSlot: {fileID: 0}
 --- !u!1 &633822420
 GameObject:
   m_ObjectHideFlags: 0
@@ -3990,6 +3992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forming: {fileID: 1152609431}
+  characterSlot: {fileID: 0}
 --- !u!1 &947912218
 GameObject:
   m_ObjectHideFlags: 0
@@ -4515,6 +4518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forming: {fileID: 1152609431}
+  characterSlot: {fileID: 0}
 --- !u!1 &1069696700
 GameObject:
   m_ObjectHideFlags: 0
@@ -5098,6 +5102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forming: {fileID: 1152609431}
+  characterSlot: {fileID: 0}
 --- !u!114 &1258862956 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 776979154425011545, guid: 62cad46b3d162490783e0965dba3e0a4, type: 3}
@@ -5682,6 +5687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forming: {fileID: 1152609431}
+  characterSlot: {fileID: 0}
 --- !u!1 &1474143309
 GameObject:
   m_ObjectHideFlags: 0
