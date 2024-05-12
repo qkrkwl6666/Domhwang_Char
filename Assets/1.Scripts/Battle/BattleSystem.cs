@@ -46,7 +46,8 @@ public class BattleSystem : MonoBehaviour
             UIManager.Instance.OpenUI(Page.TITLE);
         }
     }
-
+    // Todo : 캐릭터 도망가면 비활성화 및 중간에 몬스터가 죽으면 보상창
+    // 몬스터가 죽지 않았을경우 캐릭터에게 공격 
     IEnumerator CharactersBattleSystem()
     {
         removeCharacter.Clear();
