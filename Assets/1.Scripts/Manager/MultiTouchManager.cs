@@ -16,7 +16,6 @@ public class MultiTouchManager : Singleton<MultiTouchManager>
     public bool Hold {  get; private set; }
 
     private int primayFingerId = int.MinValue;
-    private int subFingerId = int.MinValue;
 
     private float timeTap = 0.25f;
     private float timeLongTap = 0.5f;
@@ -103,7 +102,6 @@ public class MultiTouchManager : Singleton<MultiTouchManager>
                     if (primayFingerId == touch.fingerId)
                     {
                         primayFingerId = int.MinValue;
-                        subFingerId = int.MinValue;
                         float duration = Time.time - primayStartTime;
 
                         if (duration > timeLongTap) // ╥у ег

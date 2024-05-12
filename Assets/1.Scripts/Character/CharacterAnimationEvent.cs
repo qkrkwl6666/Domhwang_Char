@@ -7,8 +7,6 @@ public class CharacterAnimationEvent : MonoBehaviour
 {
     private Animator animator;
     private CharacterControll characterControll;
-    
-    public static event Action<CharacterControll> CharacterRunEvent;
 
     private void Awake()
     {
@@ -19,13 +17,13 @@ public class CharacterAnimationEvent : MonoBehaviour
 
     private void AttackEnd()
     {
+        Debug.Log("AttackEnd");
+
         animator.SetBool("Attack", false);
 
-        CharacterRunEvent?.Invoke(characterControll);
-
-        if (characterControll.isRun)
+        if (characterControll.attackEndRun)
         {
-            characterControll.RunModeChange();
+            characterControll.AttackEndRunModeChange();
         }
         else
         {

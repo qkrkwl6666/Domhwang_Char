@@ -11,6 +11,7 @@ public class CharacterControll : MonoBehaviour
         Run,
         Attack,
         Back,
+        MoveToIdle,
     }
 
     Animator animator;
@@ -21,9 +22,10 @@ public class CharacterControll : MonoBehaviour
 
     public int runPercent;
     public bool isRun = false;
+    public bool attackEndRun = false;
 
-    private float moveSpeed = 2f;
-    private float runSpeed = 4f;
+    public float moveSpeed = 2f;
+    public float runSpeed = 4f;
 
     public Vector3 StopPosition { get; set; } = Vector3.zero;
 
@@ -52,27 +54,45 @@ public class CharacterControll : MonoBehaviour
 
                 break;
             case Status.Move:
-                transform.Translate(new Vector3(1, 0, 0) * Time.deltaTime * moveSpeed);
+                UpdateRightMove(moveSpeed);
                 break;
             case Status.Run:
-                transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * runSpeed);
+                UpdateLeftMove(runSpeed);
                 break;
             case Status.Attack:
 
                 break;
 
             case Status.Back:
-                var distance = Vector3.Distance(StopPosition , transform.position);
-                if (distance < 1)
                 {
-                    ChangeStatus(Status.Idle);
-                    animator.SetBool("Move", false);
-                    animator.SetBool("Idle", true);
-                    Flip(true);
+                    var distance = Vector3.Distance(StopPosition, transform.position);
+                    if (distance < 1)
+                    {
+                        ChangeStatus(Status.Idle);
+                        animator.SetBool("Move", false);
+                        animator.SetBool("Idle", true);
+                        Flip(true);
+                    }
+                    UpdateLeftMove(moveSpeed);
                 }
-                transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * moveSpeed);
 
                 break;
+
+            case Status.MoveToIdle:
+                {
+                    var distance = Vector3.Distance(StopPosition, transform.position);
+
+                    if (distance < 1)
+                    {
+                        ChangeStatus(Status.Idle);
+                        animator.SetBool("Move", false);
+                        animator.SetBool("Idle", true);
+                    }
+                    UpdateRightMove(moveSpeed);
+                }
+
+                break;
+
         }
     }
 
@@ -86,11 +106,12 @@ public class CharacterControll : MonoBehaviour
 
     }
 
-    public void RunMode()
+    public void RunMode(bool isRun)
     {
         int randomInt = Random.Range(0, 101);
 
-        isRun = randomInt > runPercent ? false : true;
+        if (isRun) this.isRun = randomInt > runPercent ? false : true;
+        else attackEndRun = randomInt > runPercent ? false : true;
     }
 
     public void ChangeStatus(Status status)
@@ -105,7 +126,18 @@ public class CharacterControll : MonoBehaviour
         Flip(false);
         status = Status.Run;
 
-        AnimationRun();
+        AnimationMove();
+    }
+
+
+    public void AttackEndRunModeChange()
+    {
+        if (!attackEndRun) return;
+
+        Flip(false);
+        status = Status.Run;
+
+        AnimationMove();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -121,20 +153,32 @@ public class CharacterControll : MonoBehaviour
         if (other.tag == "Monster")
         {
             status = Status.Attack;
+
             other.gameObject.GetComponent<MonsterInfo>().Damage(attack);
+
             animator.SetBool("Move", false);
+
             animator.SetBool("Attack",true);
-            Logger.Log("Monster!!");
         }
     }
 
-    public void AnimationRun()
+    public void AnimationMove()
     {
         animator.SetBool("Attack", false);
         animator.SetBool("Idle", false);
 
         animator.SetBool("Move", true);
+    }
 
+
+    public void UpdateRightMove(float speed)
+    {
+        transform.Translate(new Vector3(1, 0, 0) * Time.deltaTime * speed);
+    }
+
+    public void UpdateLeftMove(float speed)
+    {
+        transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * speed);
     }
 
 }
