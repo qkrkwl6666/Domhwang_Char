@@ -27,7 +27,7 @@ public class CharacterControll : MonoBehaviour
     public float moveSpeed = 2f;
     public float runSpeed = 4f;
 
-    public static event Action OnCharacterControll;
+    public static event Action<GameObject> OnCharacterControll;
 
     public Vector3 StopPosition { get; set; } = Vector3.zero;
 
@@ -74,7 +74,7 @@ public class CharacterControll : MonoBehaviour
                         animator.SetBool("Move", false);
                         animator.SetBool("Idle", true);
                         Flip(true);
-                        OnCharacterControll?.Invoke();
+                        OnCharacterControll?.Invoke(gameObject);
                     }
                     UpdateLeftMove(moveSpeed);
                 }
@@ -85,11 +85,6 @@ public class CharacterControll : MonoBehaviour
     public void Flip(bool isFlip)
     {
         transform.localScale = isFlip ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
-    }
-
-    public void Attack()
-    {
-
     }
 
     public void RunMode(bool isRun)
@@ -122,7 +117,16 @@ public class CharacterControll : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    
+    public void AttackMode()
+    {
+        if (isRun) return;
+
+        AnimationMove();
+
+        ChangeStatus(Status.Move);
+
+        RunMode(false);
+    }
 
 
     public void AttackEndRunModeChange()

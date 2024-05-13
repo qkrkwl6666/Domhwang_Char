@@ -9,18 +9,29 @@ using static UnityEditor.ShaderData;
 
 public class BattleSystem : MonoBehaviour
 {
-    public List<GameObject> battleCharacter = new List<GameObject>();
-    private List<GameObject> removeCharacter = new List<GameObject>();
+    public List<List<GameObject>> battleCharacter { get; private set; } = new List<List<GameObject>>();
+
+    private List<GameObject> removeCharacters = new List<GameObject>();
     private List<GameObject> characterList;
+    private GameObject removeCharacter = null;
 
     // 라운드 별 캐릭터
-    public List<List<GameObject>> roundsCharacters = new List<List<GameObject>>();
+    public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
 
+    // 전투 중인 캐릭터
+    public List<GameObject> playingCharacters { get; private set; } = new List<GameObject>();
+
+    // 잔류 병사 캐릭터
+    public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
+
+    // 대기 잔류 병사 다음 라운드에 잔류 병사에 추가할 리스트
+    public List<GameObject> StandRemainingCharacters { get; private set; } = new List<GameObject>();
+
+    private Vector3 lastPosition = Vector3.zero;
     private float spawnXPosition = -10f;
     private int PositionSpacing = 3;
 
     public int Round { get; private set; } = 3;
-    private int eventCount = 0;
 
     private GameObject monster;
 
@@ -32,7 +43,7 @@ public class BattleSystem : MonoBehaviour
 
         InitializeRoundCharacters(Round);
 
-        CharacterControll.OnCharacterControll += EventCount;
+        CharacterControll.OnCharacterControll += IdleToEvent;
     }
 
     // Start is called before the first frame update    
@@ -58,17 +69,28 @@ public class BattleSystem : MonoBehaviour
 
         while (currentRound <= Round)
         {
-            removeCharacter.Clear();
+            removeCharacters.Clear();
+
+            // 전 라운드 잔류 병사 추가
+            InsertStandRemainingCharacters();
 
             // 라운드별 캐릭터 스폰  
             BattleSetCharacters(currentRound);
 
             SetIdlePosition(currentRound);
 
-            yield return StartCoroutine(WaitForCharactersIdle(currentRound));
+            // 현재 라운드 공격이 끝났는지 대기
+            yield return StartCoroutine(WaitForCharactersIdle());
 
-            Debug.Log("남은 라운드 캐릭터 공격");
-            RoundCharactersAttack(currentRound);
+            // Todo : 라운드에 나오는 캐릭터가 모두 도망가거나 1Run 1AttackEndRound || 2 Run 일때 시간 조절 해야함
+            //yield return RunTimeCheck(currentRound);
+            
+            Debug.Log("현재 라운드 공격 끝남");
+
+            // 남은 병사가 있으면 남은 병사 공격
+            RemainingCharactersAttack();
+            
+            yield return StartCoroutine(WaitForCharactersIdle());
 
             currentRound++;
         }
@@ -76,44 +98,43 @@ public class BattleSystem : MonoBehaviour
         yield break;
     }
 
-    IEnumerator WaitForCharactersIdle(int Round)
+    IEnumerator RunTimeCheck(int currentRound)
     {
-        eventCount = 0;
-
-        while (true)
+        if (roundsCharacters[currentRound - 1].Count == 0)
         {
-            var roundCharacters = roundsCharacters[Round - 1];
-
-            var ccc = characterList[characterList.Count - 1].GetComponent<CharacterControll>();
-
-            if (Round == 3 && ccc.attackEndRun)
+            bool isPass = false;
+            while (!isPass)
             {
-                yield return new WaitForSeconds(10f);
-                break;
+                for (int i = 0; i < battleCharacter[currentRound - 1].Count; i++)
+                {
+                    if(i == battleCharacter[currentRound - 1].Count - 1 && !battleCharacter[currentRound - 1][i].activeSelf)
+                    {
+                        isPass = true;
+                    }
+                    else break;
+                }
             }
-
-            if(roundCharacters.Count == 0)
-            {
-                yield return new WaitForSeconds(6f);
-                break;
-            }
-
-            if(eventCount == roundCharacters.Count)
-            {
-                eventCount = 0;
-                break;
-            }
-
-            yield return null;
         }
 
         yield break;
     }
 
-    public void EventCount()
+
+    IEnumerator WaitForCharactersIdle()
     {
-        ++eventCount;
-        Debug.Log(eventCount);
+        while (true)
+        {
+            if(playingCharacters.Count == 0) yield break;
+
+            yield return null;
+        }
+    }
+
+    public void IdleToEvent(GameObject gameObject)
+    {
+        if (gameObject == null) return;
+
+        playingCharacters.Remove(gameObject);
     }
 
     public void InitializeRoundCharacters(int round = 3)
@@ -125,25 +146,32 @@ public class BattleSystem : MonoBehaviour
         List<GameObject> round1 = new List<GameObject>();
         List<GameObject> round2 = new List<GameObject>();
         List<GameObject> round3 = new List<GameObject>();
-        
+
+        battleCharacter.Add(new List<GameObject>());
+
         for (int i = 0; i < 3; i++)
         {
             round1.Add(characterList[i]);
+            battleCharacter[0].Add(characterList[i]);
         }
 
+        battleCharacter.Add(new List<GameObject>());
         roundsCharacters.Add(round1);
 
         // 2라운드 캐릭터
         for (int i = 3; i < 5; i++)
         {
             round2.Add(characterList[i]);
+            battleCharacter[1].Add(characterList[i]);
         }
-        roundsCharacters.Add(round2);
 
+        roundsCharacters.Add(round2);
+        battleCharacter.Add(new List<GameObject>());
         // 3라운드 캐릭터
-        for(int i = 5; i <= 5; i++)
+        for (int i = 5; i <= 5; i++)
         {
             round3.Add(characterList[i]);
+            battleCharacter[2].Add(characterList[i]);
         }
 
         roundsCharacters.Add(round3);
@@ -151,7 +179,7 @@ public class BattleSystem : MonoBehaviour
 
     public void RoundCharactersAttack(int Round)
     {
-        removeCharacter.Clear();
+        removeCharacters.Clear();
 
         int currentRound = 1;
 
@@ -175,19 +203,28 @@ public class BattleSystem : MonoBehaviour
                 characterController.RunMode(false);
                 if (characterController.attackEndRun)
                 {
-                    removeCharacter.Add(roundCharacters[i]);
+                    removeCharacters.Add(roundCharacters[i]);
                 }
             }
 
-            foreach (var character in removeCharacter)
+            foreach (var character in removeCharacters)
             {
                 roundCharacters.Remove(character);
             }
 
-            removeCharacter.Clear();
+            removeCharacters.Clear();
             currentRound++;
         }
+    }
 
+    public void InsertStandRemainingCharacters()
+    {
+        foreach(var character in StandRemainingCharacters)
+        {
+            remainingCharacters.Add(character);
+        }
+
+        StandRemainingCharacters.Clear();
     }
 
     public void BattleSetCharacters(int currentRound)
@@ -195,7 +232,7 @@ public class BattleSystem : MonoBehaviour
         if (currentRound > Round) return;
 
         spawnXPosition = -10f;
-        // 1 -> 0
+
         --currentRound;
 
         var currentRoundCharacters = roundsCharacters[currentRound];
@@ -218,7 +255,7 @@ public class BattleSystem : MonoBehaviour
 
     public void CharactersRun(List<GameObject> charactersList = null)
     {
-        removeCharacter.Clear();
+        removeCharacters.Clear();
 
         foreach (var character in charactersList)
         {
@@ -228,7 +265,7 @@ public class BattleSystem : MonoBehaviour
 
             if (characterControll.isRun) 
             {
-                removeCharacter.Add(character);
+                removeCharacters.Add(character);
                 continue;
             }
 
@@ -236,15 +273,53 @@ public class BattleSystem : MonoBehaviour
             characterControll.RunMode(false);
             if (characterControll.attackEndRun) 
             {
-                removeCharacter.Add(character);
+                removeCharacters.Add(character);
                 continue;
+            }
+
+            // 잔류 병사 추가 && 플레이 중인 병사 추가
+            if(!characterControll.isRun && !characterControll.attackEndRun)
+            {
+                StandRemainingCharacters.Add(character);
+                playingCharacters.Add(character);
             }
         }
 
-        foreach(var removeCharacter in removeCharacter)
+        foreach(var removeCharacter in removeCharacters)
         {
             charactersList.Remove(removeCharacter);
         }
+    }
+
+    public void RemainingCharactersAttack()
+    {
+        removeCharacters.Clear();
+
+        if (remainingCharacters.Count <= 0) return;
+
+        foreach (var character in remainingCharacters)
+        {
+            var characterControll = character.GetComponent<CharacterControll>();
+
+            characterControll.AttackMode();
+
+            if (characterControll.attackEndRun) removeCharacters.Add(character);
+            else playingCharacters.Add(character);
+        }
+
+        foreach(var removeCharacter in removeCharacters)
+        {
+            remainingCharacters.Remove(removeCharacter);
+        }
+    }
+
+    public void PlayingListRemove()
+    {
+        if(removeCharacter == null) return;
+
+        playingCharacters.Remove(removeCharacter);
+
+        removeCharacter = null;
     }
 
     public void SetIdlePosition(int Round)
