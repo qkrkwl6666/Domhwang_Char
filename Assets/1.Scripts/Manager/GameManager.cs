@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,7 +11,9 @@ public class GameManager : Singleton<GameManager>
     public static readonly string pathList = "Characters/";
 
     // 플레이어 스테이지
-    private int currentStage = 1;
+    public int CurrentStage { get; private set; } = 0;
+    // 몬스터 
+    public MonsterData MonsterData { get; private set; }
 
     // 내가 보유 중인 캐릭터들
     public List<GameObject> playerCharacterList { get; private set; } = new List<GameObject>();
@@ -83,4 +86,51 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("Load");
         }
     }
+
+    public void CreateMonster()
+    {
+        MonsterTable monsterTable = DataTableMgr.Instance.Get<MonsterTable>("Monster");
+
+        // 현재 스테이지 몬스터만 가져오기
+        List<MonsterData> currentStageMonsterDatas = new List<MonsterData>();
+        int totalWeight = 0;
+
+        foreach (KeyValuePair<string, MonsterData> data in monsterTable.monsterTable)
+        {
+            if(CurrentStage == data.Value.Stage - 1)
+            {
+                currentStageMonsterDatas.Add(data.Value);
+                totalWeight += data.Value.Enc;
+            }
+        }
+
+        foreach(var data in currentStageMonsterDatas)
+        {
+            data.weight = (float)data.Enc / totalWeight;
+        }
+
+        // 오름차순 정렬 
+        currentStageMonsterDatas.Sort((a,b) => a.weight.CompareTo(b.weight));
+
+        float dcc = 0f;
+        float randomMonster = UnityEngine.Random.Range(0f, 1f);
+
+        foreach (var data in currentStageMonsterDatas)
+        {
+            dcc += data.weight;
+
+            // 몬스터 세팅
+            if (randomMonster <= dcc)
+            {
+                MonsterData = data;
+                break;
+            }
+        }
+    }
+
+    public void StageClear()
+    {
+        ++CurrentStage;
+    }
+
 }

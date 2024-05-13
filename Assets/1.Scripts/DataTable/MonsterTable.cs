@@ -1,28 +1,28 @@
 using CsvHelper;
+using CsvHelper.Configuration.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
+public class MonsterData
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Stage { get; set; }
+    public int Hp { get; set; }
+    public string Tier { get; set; }
+    public int Enc { get; set; }
+    public int Feature_Id { get; set; }
+    public int round { get; set; }
+    public int reduced_dmg { get; set; }
+    public int heal { get; set; }
+    [Ignore] public float weight {  get; set; }
+}
 
 public class MonsterTable : DataTable
 {
-    public class MonsterData
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Stage { get; set; }
-        public int Hp { get; set; }
-        public string Tier { get; set; }
-        public int Enc { get; set; }
-        public int Feature_Id { get; set; }
-        public string round { get; set; }
-        public string reduced_dmg { get; set; }
-        public string heal { get; set; }
-
-    }
-
-    private Dictionary<string, MonsterData> monsterTable = new();
+    public Dictionary<string, MonsterData> monsterTable { get; private set; } = new();
 
     public MonsterData Get(string id)
     {

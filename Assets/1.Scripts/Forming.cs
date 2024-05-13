@@ -20,6 +20,10 @@ public class Forming : MonoBehaviour
     public TMPro.TextMeshProUGUI skill;
     public TMPro.TextMeshProUGUI rare;
 
+    // MonsterUI
+    public TMPro.TextMeshProUGUI monsterName;
+    public TMPro.TextMeshProUGUI monsterHp;
+
     // GameStartUI
     public Button gameStartButton;
 
@@ -78,6 +82,12 @@ public class Forming : MonoBehaviour
             uiCharacterSelect.GetComponent<Image>().sprite = default;
         }
 
+        // 각 스테이지 맞는 몬스터 뽑기
+        GameManager.Instance.CreateMonster();
+
+        // MonsterUI
+        monsterName.text = GameManager.Instance.MonsterData.Name;
+        monsterHp.text = "Hp : " + GameManager.Instance.MonsterData.Hp.ToString();
     }
 
     private void Start()

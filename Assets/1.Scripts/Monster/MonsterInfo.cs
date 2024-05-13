@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using static MonsterTable;
 
 public class MonsterInfo : MonoBehaviour
 {
     public Canvas HpSliderPrefabs;
+
+    public int Id {  get; private set; }
     public int Hp {  get; private set; }
     public bool isDead { get; private set; } = false;
+    public int Feature_Id { get; private set; }
+    public int Heal { get; private set; }
+    public int Reduced_dmg { get; private set; }
+
 
     private Slider hpSlider;
     private void Awake()
     {
-        Hp = 30;
+        SetMonster(GameManager.Instance.MonsterData);
 
-        if(hpSlider == null)
+        if (hpSlider == null)
         {
             var hpCanvas = Instantiate(HpSliderPrefabs, transform);
             hpSlider = hpCanvas.GetComponentInChildren<Slider>();
@@ -29,6 +36,15 @@ public class MonsterInfo : MonoBehaviour
     private void Update()
     {
 
+    }
+
+    public void SetMonster(MonsterData monsterData)
+    {
+        Id = monsterData.Id;
+        Hp = monsterData.Hp;
+        Feature_Id = monsterData.Feature_Id;
+        Heal = monsterData.heal;
+        Reduced_dmg = monsterData.reduced_dmg;
     }
 
     public void Damage(int damage)
