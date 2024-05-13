@@ -9,6 +9,9 @@ public class GameManager : Singleton<GameManager>
     public static readonly string pathData = "ScriptableObject/CharacterInitialData/";
     public static readonly string pathList = "Characters/";
 
+    // 플레이어 스테이지
+    private int currentStage = 1;
+
     // 내가 보유 중인 캐릭터들
     public List<GameObject> playerCharacterList { get; private set; } = new List<GameObject>();
 
