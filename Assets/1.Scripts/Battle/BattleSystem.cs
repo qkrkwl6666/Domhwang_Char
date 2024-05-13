@@ -58,7 +58,9 @@ public class BattleSystem : MonoBehaviour
         SetIdlePosition(round1Characters);
 
         // 1라운드 캐릭터 공격 끝나고 2라운드 시작 (연동 작업)
-        yield return StartCoroutine(WaitForCharactersIdle(round1Characters));
+        yield return StartCoroutine(WaitForCharactersIdle(round1Characters, null,null));
+
+        if (round1Characters.Count == 0) yield return new WaitForSeconds(5f);
 
         Debug.Log("2라운드 시작");
 
@@ -69,7 +71,8 @@ public class BattleSystem : MonoBehaviour
         SetIdlePosition(round1Characters,round2Characters);
 
         // 2라운드 캐릭터 공격 끝나고 >> 1라운드 남은 캐릭터 공격 시작
-        yield return StartCoroutine(WaitForCharactersIdle(round2Characters));
+        yield return StartCoroutine(WaitForCharactersIdle(null, round2Characters, null));
+        if (round2Characters.Count == 0) yield return new WaitForSeconds(5f);
 
         // 1라운드 캐릭터 공격 시작
         Debug.Log("1라운드 캐릭터 공격 시작");
@@ -94,6 +97,12 @@ public class BattleSystem : MonoBehaviour
         // Todo : 3라운드 캐릭터 도망가는거 연동 체크 해야함 << 현재 3라운드 캐릭터가 
         // 공격후 AttackEnd 에 걸렸을때 남은 캐릭터들이 바로 공격하는 현상 고쳐야함
         Debug.Log("3라운드 캐릭터 공격이 끝나고 남은 1 2 라운드 캐릭터 공격");
+
+        // 3라운드 캐릭터가 도망칠 경우 5초 대기
+        var round3Character = characterList[characterList.Count - 1].GetComponent<CharacterControll>();
+
+        if (round3Character.isRun) yield return new WaitForSeconds(5f);
+        else if(round3Character.attackEndRun) yield return new WaitForSeconds(10f);
 
         RoundCharactersAttack(round1Characters);
         RoundCharactersAttack(round2Characters);
