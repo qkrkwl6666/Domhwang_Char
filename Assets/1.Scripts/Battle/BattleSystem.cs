@@ -13,12 +13,14 @@ public class BattleSystem : MonoBehaviour
     private List<GameObject> removeCharacter = new List<GameObject>();
     private List<GameObject> characterList;
 
-    public List<GameObject> round1Characters;
-    public List<GameObject> round2Characters;
-    public GameObject round3Characters;
+    // 라운드 별 캐릭터
+    public List<List<GameObject>> roundsCharacters = new List<List<GameObject>>();
 
     private float spawnXPosition = -10f;
     private int PositionSpacing = 3;
+
+    public int Round { get; private set; } = 3;
+    private int eventCount = 0;
 
     private GameObject monster;
 
@@ -28,10 +30,12 @@ public class BattleSystem : MonoBehaviour
         characterList = GameManager.Instance.formationCharacterList;
         monster = GameObject.FindWithTag("Monster");
 
-        InitializeRoundCharacters();
+        InitializeRoundCharacters(Round);
+
+        CharacterControll.OnCharacterControll += EventCount;
     }
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update    
     void Start()
     {
         StartCoroutine(CharactersBattleSystem());
@@ -50,215 +54,166 @@ public class BattleSystem : MonoBehaviour
     // 몬스터가 죽지 않았을경우 캐릭터에게 공격 
     IEnumerator CharactersBattleSystem()
     {
-        removeCharacter.Clear();
+        int currentRound = 1;
 
-        // 첫 라운드
-        BattleSetCharacters(round1Characters);
+        while (currentRound <= Round)
+        {
+            removeCharacter.Clear();
 
-        SetIdlePosition(round1Characters);
+            // 라운드별 캐릭터 스폰  
+            BattleSetCharacters(currentRound);
 
-        // 1라운드 캐릭터 공격 끝나고 2라운드 시작 (연동 작업)
-        yield return StartCoroutine(WaitForCharactersIdle(round1Characters, null,null));
+            SetIdlePosition(currentRound);
 
-        if (round1Characters.Count == 0) yield return new WaitForSeconds(5f);
+            yield return StartCoroutine(WaitForCharactersIdle(currentRound));
 
-        Debug.Log("2라운드 시작");
+            Debug.Log("남은 라운드 캐릭터 공격");
+            RoundCharactersAttack(currentRound);
 
-        // 2 라운드
+            currentRound++;
+        }
 
-        BattleSetCharacters(round2Characters);
-
-        SetIdlePosition(round1Characters,round2Characters);
-
-        // 2라운드 캐릭터 공격 끝나고 >> 1라운드 남은 캐릭터 공격 시작
-        yield return StartCoroutine(WaitForCharactersIdle(null, round2Characters, null));
-        if (round2Characters.Count == 0) yield return new WaitForSeconds(5f);
-
-        // 1라운드 캐릭터 공격 시작
-        Debug.Log("1라운드 캐릭터 공격 시작");
-
-        RoundCharactersAttack(round1Characters);
-
-        yield return StartCoroutine(WaitForCharactersIdle(round1Characters));
-
-        // Todo : 캐릭터가 공격후 도망가면 Idle 위치 새로 고침
-
-        // 3라운드 시작
-
-        Debug.Log("3라운드 시작");
-
-        BattleSetCharacters(ref round3Characters);
-
-        SetIdlePosition(round1Characters, round2Characters, round3Characters);
-
-        // 3라운드 캐릭터 공격이 끝나고 남은 1 2 라운드 캐릭터 공격
-
-        yield return StartCoroutine(WaitForCharactersIdle(null, null, round3Characters));
-        // Todo : 3라운드 캐릭터 도망가는거 연동 체크 해야함 << 현재 3라운드 캐릭터가 
-        // 공격후 AttackEnd 에 걸렸을때 남은 캐릭터들이 바로 공격하는 현상 고쳐야함
-        Debug.Log("3라운드 캐릭터 공격이 끝나고 남은 1 2 라운드 캐릭터 공격");
-
-        // 3라운드 캐릭터가 도망칠 경우 5초 대기
-        var round3Character = characterList[characterList.Count - 1].GetComponent<CharacterControll>();
-
-        if (round3Character.isRun) yield return new WaitForSeconds(5f);
-        else if(round3Character.attackEndRun) yield return new WaitForSeconds(10f);
-
-        RoundCharactersAttack(round1Characters);
-        RoundCharactersAttack(round2Characters);
-
-        // 공격이 다끝났는지 확인
-        yield return StartCoroutine(WaitForCharactersIdle(round1Characters, round2Characters, round3Characters));
-
-        Debug.Log("보스 공격 or 클리어");
+        yield break;
     }
 
-    IEnumerator WaitForCharactersIdle(List<GameObject> round1 = null, List<GameObject> round2 = null , GameObject round3 = null)
+    IEnumerator WaitForCharactersIdle(int Round)
     {
-        bool ready = false;
+        eventCount = 0;
 
-        // 1라운드 캐릭터
-        while (!ready)
+        while (true)
         {
-            if (round1 == null || round1.Count == 0) break;
+            var roundCharacters = roundsCharacters[Round - 1];
 
-            for (int i = 0; i < round1.Count; i++)
+            var ccc = characterList[characterList.Count - 1].GetComponent<CharacterControll>();
+
+            if (Round == 3 && ccc.attackEndRun)
             {
-                var controll = round1[i].GetComponent<CharacterControll>();
-                if (i == round1.Count - 1 && controll.status == CharacterControll.Status.Idle)
-                {
-                    ready = true;
-                }
-                else if (controll.status != CharacterControll.Status.Idle)
-                {
-                    break;
-                }
+                yield return new WaitForSeconds(10f);
+                break;
+            }
+
+            if(roundCharacters.Count == 0)
+            {
+                yield return new WaitForSeconds(6f);
+                break;
+            }
+
+            if(eventCount == roundCharacters.Count)
+            {
+                eventCount = 0;
+                break;
             }
 
             yield return null;
         }
 
-        ready = false;
-
-        // 2라운드 캐릭터
-        while (!ready)
-        {
-            if (round2 == null || round2.Count == 0) break;
-
-            for (int i = 0; i < round2.Count; i++)
-            {
-                var controll = round2[i].GetComponent<CharacterControll>();
-                if (i == round2.Count - 1 && controll.status == CharacterControll.Status.Idle)
-                {
-                    ready = true;
-                }
-                else if (controll.status != CharacterControll.Status.Idle)
-                {
-                    break;
-                }
-            }
-
-            yield return null;
-        }
-
-        ready = false;
-
-        // 3라운드 캐릭터
-        while (!ready)
-        {
-            if (round3 == null) break;
-
-            var controll = round3.GetComponent<CharacterControll>();
-
-            if (controll.status == CharacterControll.Status.Idle) { ready = true; }
-
-            yield return null;
-        }
-
+        yield break;
     }
 
-    public void InitializeRoundCharacters()
+    public void EventCount()
+    {
+        ++eventCount;
+        Debug.Log(eventCount);
+    }
+
+    public void InitializeRoundCharacters(int round = 3)
     {
         if (characterList == null) return;
 
         // 1라운드 캐릭터
 
+        List<GameObject> round1 = new List<GameObject>();
+        List<GameObject> round2 = new List<GameObject>();
+        List<GameObject> round3 = new List<GameObject>();
+        
         for (int i = 0; i < 3; i++)
         {
-            round1Characters.Add(characterList[i]);
+            round1.Add(characterList[i]);
         }
+
+        roundsCharacters.Add(round1);
 
         // 2라운드 캐릭터
-
         for (int i = 3; i < 5; i++)
         {
-            round2Characters.Add(characterList[i]);
+            round2.Add(characterList[i]);
+        }
+        roundsCharacters.Add(round2);
+
+        // 3라운드 캐릭터
+        for(int i = 5; i <= 5; i++)
+        {
+            round3.Add(characterList[i]);
         }
 
-        round3Characters = characterList[characterList.Count - 1];
+        roundsCharacters.Add(round3);
     }
 
-    public void RoundCharactersAttack(List<GameObject> roundCharacters)
+    public void RoundCharactersAttack(int Round)
     {
         removeCharacter.Clear();
 
-        for (int i = 0; i < roundCharacters.Count; i++)
-        {
-            var characterController = roundCharacters[i].GetComponent<CharacterControll>();
-            characterController.ChangeStatus(CharacterControll.Status.Move);
-            characterController.AnimationMove();
+        int currentRound = 1;
 
-            // 공격 끝나고 난후 도망칠지 다시 계산
-            characterController.RunMode(false);
-            if (characterController.attackEndRun)
+        while (currentRound < Round)
+        {
+            var roundCharacters = roundsCharacters[currentRound - 1];
+
+            if(roundCharacters.Count == 0)
             {
-                removeCharacter.Add(roundCharacters[i]);
+                ++currentRound;
+                continue;
             }
+
+            for (int i = 0; i < roundCharacters.Count; i++)
+            {
+                var characterController = roundCharacters[i].GetComponent<CharacterControll>();
+                characterController.ChangeStatus(CharacterControll.Status.Move);
+                characterController.AnimationMove();
+
+                // 공격 끝나고 난후 도망칠지 다시 계산
+                characterController.RunMode(false);
+                if (characterController.attackEndRun)
+                {
+                    removeCharacter.Add(roundCharacters[i]);
+                }
+            }
+
+            foreach (var character in removeCharacter)
+            {
+                roundCharacters.Remove(character);
+            }
+
+            removeCharacter.Clear();
+            currentRound++;
         }
 
-        foreach(var character in removeCharacter)
-        {
-            roundCharacters.Remove(character);
-        }
-
-        removeCharacter.Clear();
     }
 
-    public void BattleSetCharacters(List<GameObject> charactersList = null)
+    public void BattleSetCharacters(int currentRound)
     {
-        if (charactersList == null) return;
+        if (currentRound > Round) return;
 
         spawnXPosition = -10f;
+        // 1 -> 0
+        --currentRound;
 
-        for (int i = 0; i < charactersList.Count - 1; i++)
+        var currentRoundCharacters = roundsCharacters[currentRound];
+
+        for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
-            charactersList[i].GetComponent<CharacterControll>().runPercent = charactersList[i].GetComponent<CharacterInfo>().Run;
+            currentRoundCharacters[i].GetComponent<CharacterControll>().runPercent = currentRoundCharacters[i].GetComponent<CharacterInfo>().Run;
         }
 
-        for (int i = 0; i < charactersList.Count; i++)
+        for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
-            charactersList[i].SetActive(true);
-            charactersList[i].transform.position = new Vector3(spawnXPosition, 0f, 0f);
+            currentRoundCharacters[i].SetActive(true);
+            currentRoundCharacters[i].transform.position = new Vector3(spawnXPosition, 0f, 0f);
             spawnXPosition -= 2f;
         }
 
-        CharactersRun(charactersList);
+        CharactersRun(currentRoundCharacters);
 
-    }
-
-    public void BattleSetCharacters(ref GameObject character)
-    {
-        if (character == null) return;
-
-        spawnXPosition = -10f;
-
-        character.GetComponent<CharacterControll>().runPercent = character.GetComponent<CharacterInfo>().Run;
-
-        character.SetActive(true);
-        character.transform.position = new Vector3(spawnXPosition, 0f, 0f);
-        spawnXPosition -= 2f;
-
-        CharactersRun(ref character);
     }
 
     public void CharactersRun(List<GameObject> charactersList = null)
@@ -292,66 +247,33 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void CharactersRun(ref GameObject character)
-    {
-        removeCharacter.Clear();
-
-        if(character == null) return;
-
-        var characterControll = character.GetComponent<CharacterControll>();
-
-        characterControll.RunMode(true);
-
-        if (characterControll.isRun)
-        {
-            character = null;
-        }
-
-        // 공격 끝나고 난후 도망칠지 다시 계산
-        characterControll.RunMode(false);
-        if (characterControll.attackEndRun)
-        {
-            character = null;
-        }
-    }
-
-    public void SetIdlePosition(List<GameObject> roun1Characters = null, List<GameObject> roun2Characters = null, 
-        GameObject roun3Characters = null)
+    public void SetIdlePosition(int Round)
     {
         PositionSpacing = 3;
 
-        // 1라운드 캐릭터 위치
-        if(roun1Characters != null)
+        int currentRound = 1;
+
+        while (currentRound <= Round)
         {
-            for (int i = 0; i < roun1Characters.Count; i++)
+            var roundCharacters = roundsCharacters[currentRound - 1];
+
+            if (roundCharacters.Count == 0)
             {
-                var characterController = roun1Characters[i].GetComponent<CharacterControll>();
+                currentRound++;
+                continue;
+            }
+
+            for (int i = 0; i < roundCharacters.Count; i++)
+            {
+                var characterController = roundCharacters[i].GetComponent<CharacterControll>();
 
                 characterController.StopPosition = monster.transform.position - new Vector3(PositionSpacing, 0, 0);
 
                 PositionSpacing += 1;
             }
-        }
 
-        // 2라운드 캐릭터 위치
-        if (roun2Characters != null)
-        {
-            for (int i = 0; i < roun2Characters.Count; i++)
-            {
-                var characterController = roun2Characters[i].GetComponent<CharacterControll>();
+            currentRound++;
 
-                characterController.StopPosition = monster.transform.position - new Vector3(PositionSpacing, 0, 0);
-
-                PositionSpacing += 1;
-            }
-        }
-
-        // 3라운드 위치
-        if(roun3Characters != null)
-        {
-            var characterController = roun3Characters.GetComponent<CharacterControll>();
-
-            characterController.StopPosition = monster.transform.position - new Vector3(PositionSpacing, 0, 0);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,6 @@ public class CharacterControll : MonoBehaviour
         Run,
         Attack,
         Back,
-        MoveToIdle,
     }
 
     Animator animator;
@@ -26,6 +26,8 @@ public class CharacterControll : MonoBehaviour
 
     public float moveSpeed = 2f;
     public float runSpeed = 4f;
+
+    public static event Action OnCharacterControll;
 
     public Vector3 StopPosition { get; set; } = Vector3.zero;
 
@@ -72,27 +74,11 @@ public class CharacterControll : MonoBehaviour
                         animator.SetBool("Move", false);
                         animator.SetBool("Idle", true);
                         Flip(true);
+                        OnCharacterControll?.Invoke();
                     }
                     UpdateLeftMove(moveSpeed);
                 }
-
                 break;
-
-            case Status.MoveToIdle:
-                {
-                    var distance = Vector3.Distance(StopPosition, transform.position);
-
-                    if (distance < 1)
-                    {
-                        ChangeStatus(Status.Idle);
-                        animator.SetBool("Move", false);
-                        animator.SetBool("Idle", true);
-                    }
-                    UpdateRightMove(moveSpeed);
-                }
-
-                break;
-
         }
     }
 
@@ -108,7 +94,7 @@ public class CharacterControll : MonoBehaviour
 
     public void RunMode(bool isRun)
     {
-        int randomInt = Random.Range(0, 101);
+        int randomInt = UnityEngine.Random.Range(0, 101);
 
         if (isRun) this.isRun = randomInt > runPercent ? false : true;
         else attackEndRun = randomInt > runPercent ? false : true;
@@ -127,7 +113,16 @@ public class CharacterControll : MonoBehaviour
         status = Status.Run;
 
         AnimationMove();
+
+        Invoke("RunGameObjectActiveFalse", 10f);
     }
+
+    private void RunGameObjectActiveFalse()
+    {
+        gameObject.SetActive(false);
+    }
+
+    
 
 
     public void AttackEndRunModeChange()
@@ -138,6 +133,8 @@ public class CharacterControll : MonoBehaviour
         status = Status.Run;
 
         AnimationMove();
+
+        Invoke("RunGameObjectActiveFalse", 10f);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -145,7 +142,7 @@ public class CharacterControll : MonoBehaviour
         // Run 
         if (other.tag == "RunCollider")
         {
-            float randomTime = Random.Range(0.5f, 1f);
+            float randomTime = UnityEngine.Random.Range(0.5f, 1f);
             Invoke("RunModeChange", randomTime);
         }
 
