@@ -37,7 +37,9 @@ public class GameManager : Singleton<GameManager>
             var go = DataTableMgr.Instance.Get<CharacterTable>("Character");
             foreach (var c in go.characterTable)
             {
-                var character = Instantiate(Resources.Load<GameObject>("Characters/" + c.Value.Id));
+                GameObject resourcesData = Resources.Load<GameObject>("Characters/" + c.Value.Id);
+                if (resourcesData == null) continue;
+                var character = Instantiate(resourcesData);
                 var info = character.AddComponent<CharacterInfo>();
                 info.SetCharacterData(c.Value);
                 info.creationTime = System.DateTime.Now;
