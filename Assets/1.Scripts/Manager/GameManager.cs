@@ -20,7 +20,6 @@ public class GameManager : Singleton<GameManager>
 
     // 편성 선택한 캐릭터 리스트
     public List<GameObject> formationCharacterList = new List<GameObject>();
-
     private void Awake()
     {
 
@@ -86,6 +85,11 @@ public class GameManager : Singleton<GameManager>
             // Load
             SaveData1 save = SaveLoadSystem.Load() as SaveData1;
             Debug.Log("Load");
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            StageClear();
         }
     }
 

@@ -9,6 +9,7 @@ using static UnityEditor.ShaderData;
 
 public class BattleSystem : MonoBehaviour
 {
+    
     public List<List<GameObject>> battleCharacter { get; private set; } = new List<List<GameObject>>();
 
     private List<GameObject> removeCharacters = new List<GameObject>();
@@ -16,13 +17,9 @@ public class BattleSystem : MonoBehaviour
     private GameObject removeCharacter = null;
 
     // 라운드 별 캐릭터
-    [field: SerializeField] public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
-
-    // 전투 중인 캐릭터
-    [field: SerializeField] public List<GameObject> playingCharacters { get; private set; } = new List<GameObject>();
-
-    // 잔류 병사 캐릭터
-    [field: SerializeField] public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
+    public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
+    public List<GameObject> playingCharacters { get; private set; } = new List<GameObject>();
+    public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
 
     // 대기 잔류 병사 다음 라운드에 잔류 병사에 추가할 리스트
     public List<GameObject> StandRemainingCharacters { get; private set; } = new List<GameObject>();
@@ -30,7 +27,6 @@ public class BattleSystem : MonoBehaviour
     private Vector3 lastPosition = Vector3.zero;
     private float spawnXPosition = -10f;
     private int PositionSpacing = 3;
-
     public int Round { get; private set; } = 3;
 
     private GameObject monster;
@@ -39,7 +35,9 @@ public class BattleSystem : MonoBehaviour
     private void Awake()
     {
         characterList = GameManager.Instance.formationCharacterList;
-        monster = GameObject.FindWithTag("Monster");
+        var go = Resources.Load<GameObject>("Monsters/" + GameManager.Instance.MonsterData.Id.ToString());
+        // 몬스터 생성
+        monster = Instantiate(go);    
 
         InitializeRoundCharacters(Round);
 
@@ -316,15 +314,6 @@ public class BattleSystem : MonoBehaviour
         {
             remainingCharacters.Remove(removeCharacter);
         }
-    }
-
-    public void PlayingListRemove()
-    {
-        if(removeCharacter == null) return;
-
-        playingCharacters.Remove(removeCharacter);
-
-        removeCharacter = null;
     }
 
     public void SetIdlePosition(int Round)
