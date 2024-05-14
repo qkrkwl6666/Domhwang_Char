@@ -60,11 +60,14 @@ public class CharacterControll : MonoBehaviour
                 break;
             case Status.Run:
                 UpdateLeftMove(runSpeed);
+                if(transform.position.x < -15)
+                {
+                    gameObject.SetActive(false);
+                }
                 break;
             case Status.Attack:
 
                 break;
-
             case Status.Back:
                 {
                     var distance = Vector3.Distance(StopPosition, transform.position);
@@ -108,13 +111,6 @@ public class CharacterControll : MonoBehaviour
         status = Status.Run;
 
         AnimationMove();
-
-        Invoke("RunGameObjectActiveFalse", 10f);
-    }
-
-    private void RunGameObjectActiveFalse()
-    {
-        gameObject.SetActive(false);
     }
 
     public void AttackMode()
@@ -137,8 +133,6 @@ public class CharacterControll : MonoBehaviour
         status = Status.Run;
 
         AnimationMove();
-
-        Invoke("RunGameObjectActiveFalse", 10f);
     }
 
     private void OnTriggerEnter(Collider other)

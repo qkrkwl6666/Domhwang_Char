@@ -16,13 +16,13 @@ public class BattleSystem : MonoBehaviour
     private GameObject removeCharacter = null;
 
     // 라운드 별 캐릭터
-    public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
+    [field: SerializeField] public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
 
     // 전투 중인 캐릭터
-    public List<GameObject> playingCharacters { get; private set; } = new List<GameObject>();
+    [field: SerializeField] public List<GameObject> playingCharacters { get; private set; } = new List<GameObject>();
 
     // 잔류 병사 캐릭터
-    public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
+    [field: SerializeField] public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
 
     // 대기 잔류 병사 다음 라운드에 잔류 병사에 추가할 리스트
     public List<GameObject> StandRemainingCharacters { get; private set; } = new List<GameObject>();
@@ -80,10 +80,9 @@ public class BattleSystem : MonoBehaviour
             SetIdlePosition(currentRound);
 
             // 현재 라운드 공격이 끝났는지 대기
-            yield return StartCoroutine(WaitForCharactersIdle());
+            yield return StartCoroutine(WaitForCharactersIdle(true, currentRound));
 
             // Todo : 라운드에 나오는 캐릭터가 모두 도망가거나 1Run 1AttackEndRound || 2 Run 일때 시간 조절 해야함
-            //yield return RunTimeCheck(currentRound);
             
             Debug.Log("현재 라운드 공격 끝남");
 
@@ -98,36 +97,42 @@ public class BattleSystem : MonoBehaviour
         yield break;
     }
 
-    IEnumerator RunTimeCheck(int currentRound)
+
+    IEnumerator WaitForCharactersIdle(bool firstRound = false, int currentRound = -1)
     {
-        if (roundsCharacters[currentRound - 1].Count == 0)
+        if(playingCharacters.Count == 0 && !firstRound && currentRound == -1) { yield break; }
+        else if (playingCharacters.Count == 0 && firstRound)
         {
             bool isPass = false;
+        
             while (!isPass)
             {
                 for (int i = 0; i < battleCharacter[currentRound - 1].Count; i++)
                 {
-                    if(i == battleCharacter[currentRound - 1].Count - 1 && !battleCharacter[currentRound - 1][i].activeSelf)
+                    var currentRoundCharacters = battleCharacter[currentRound - 1];
+                    var character = currentRoundCharacters[i];
+
+                    if (i == currentRoundCharacters.Count - 1 && !character.activeSelf)
                     {
-                        isPass = true;
+                        yield break;
                     }
-                    else break;
+                    else if (character.activeSelf) break;
                 }
+
+                yield return null;
+            }
+        }
+        else
+        {
+            while (true)
+            {
+                if(playingCharacters.Count == 0) yield break;
+
+                yield return null;
             }
         }
 
         yield break;
-    }
-
-
-    IEnumerator WaitForCharactersIdle()
-    {
-        while (true)
-        {
-            if(playingCharacters.Count == 0) yield break;
-
-            yield return null;
-        }
     }
 
     public void IdleToEvent(GameObject gameObject)
@@ -233,9 +238,7 @@ public class BattleSystem : MonoBehaviour
 
         spawnXPosition = -10f;
 
-        --currentRound;
-
-        var currentRoundCharacters = roundsCharacters[currentRound];
+        var currentRoundCharacters = roundsCharacters[currentRound - 1];
 
         for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
@@ -289,6 +292,8 @@ public class BattleSystem : MonoBehaviour
         {
             charactersList.Remove(removeCharacter);
         }
+
+        removeCharacters.Clear();
     }
 
     public void RemainingCharactersAttack()
