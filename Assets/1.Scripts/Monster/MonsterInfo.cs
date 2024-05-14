@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static MonsterTable;
 
 public class MonsterInfo : MonoBehaviour
@@ -16,8 +18,7 @@ public class MonsterInfo : MonoBehaviour
     public int Heal { get; private set; }
     public int Reduced_dmg { get; private set; }
 
-
-    private Slider hpSlider;
+    private UnityEngine.UI.Slider hpSlider;
     private void Awake()
     {
         SetMonster(GameManager.Instance.MonsterData);
@@ -25,12 +26,16 @@ public class MonsterInfo : MonoBehaviour
         if (hpSlider == null)
         {
             var hpCanvas = Instantiate(HpSliderPrefabs, transform);
-            hpSlider = hpCanvas.GetComponentInChildren<Slider>();
-        }
+            hpSlider = hpCanvas.GetComponentInChildren<UnityEngine.UI.Slider>();
+            hpCanvas.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 2.5f);
+        }   
 
         hpSlider.minValue = 0;
         hpSlider.maxValue = Hp;
         hpSlider.value = hpSlider.maxValue;
+        Debug.Log(hpSlider.transform.position);
+
+        transform.position = new Vector3(5f, 0f, 0f);
     }
 
     private void Update()

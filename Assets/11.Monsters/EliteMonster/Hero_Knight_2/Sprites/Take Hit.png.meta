@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 1a97e1436e5c2694faed82c3de06031b
+guid: d58a7c901ea677743866d81f3a06713e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7460046300004610927
-    second: Jump_0
+      213: -7500690451134026123
+    second: Take Hit_0
   - first:
-      213: 7034338576483803127
-    second: Jump_1
+      213: -889859373511162655
+    second: Take Hit_1
   - first:
-      213: 6054277451648750542
-    second: Jump_2
+      213: -3088938797480143695
+    second: Take Hit_2
   - first:
-      213: 6937500446539429301
-    second: Jump_3
+      213: -9206091644520726168
+    second: Take Hit_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 15
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -161,7 +161,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Jump_0
+      name: Take Hit_0
       rect:
         serializedVersion: 2
         x: 0
@@ -175,14 +175,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a38f4a1eb3570d42938e555ce6260ae
-      internalID: 7460046300004610927
+      spriteID: 51bc5996547ec4d4c80448e612d7d4e2
+      internalID: -7500690451134026123
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Jump_1
+      name: Take Hit_1
       rect:
         serializedVersion: 2
         x: 140
@@ -196,14 +196,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 99cc82cc5f46e25429a9bf9b51fb2b42
-      internalID: 7034338576483803127
+      spriteID: bfae72a2dbc95294ebef393a7a7223bc
+      internalID: -889859373511162655
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Jump_2
+      name: Take Hit_2
       rect:
         serializedVersion: 2
         x: 280
@@ -217,14 +217,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f0d71870af61e4543971e90cfcb40f06
-      internalID: 6054277451648750542
+      spriteID: ee56629c1e40935499247264e41240b3
+      internalID: -3088938797480143695
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Jump_3
+      name: Take Hit_3
       rect:
         serializedVersion: 2
         x: 420
@@ -238,8 +238,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 16d6619f4a847f0419c9fc23ad7f5ccd
-      internalID: 6937500446539429301
+      spriteID: 93a485e000440874fae6ce94349ea990
+      internalID: -9206091644520726168
       vertices: []
       indices: 
       edges: []
@@ -255,10 +255,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Jump_0: 7460046300004610927
-      Jump_1: 7034338576483803127
-      Jump_2: 6054277451648750542
-      Jump_3: 6937500446539429301
+      Take Hit_0: -7500690451134026123
+      Take Hit_1: -889859373511162655
+      Take Hit_2: -3088938797480143695
+      Take Hit_3: -9206091644520726168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
