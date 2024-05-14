@@ -22,14 +22,11 @@ public class GameManager : Singleton<GameManager>
     public List<GameObject> formationCharacterList = new List<GameObject>();
     private void Awake()
     {
-
-        Debug.Log("GameManagerAwake");
+        
     }   
 
     void Start()
     {
-        Debug.Log("GameManagerStart");
-
         if (SaveLoadSystem.Load() == null)
         {
             // 세이브 데이터가 없다면 기본 캐릭터 지급
@@ -137,6 +134,19 @@ public class GameManager : Singleton<GameManager>
     public void StageClear()
     {
         ++CurrentStage;
+    }
+
+    public void GameManagerAwake()
+    {
+        MonsterData = null;
+        formationCharacterList.Clear();
+
+        foreach(var character in playerCharacterList)
+        {
+            var cc = character.GetComponent<CharacterControll>();
+            cc.CharacterAwake();
+            character.SetActive(false);
+        }
     }
 
 }

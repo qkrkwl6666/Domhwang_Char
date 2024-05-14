@@ -164,7 +164,6 @@ public class CharacterControll : MonoBehaviour
     {
         animator.SetBool("Attack", false);
         animator.SetBool("Idle", false);
-
         animator.SetBool("Move", true);
     }
 
@@ -177,6 +176,19 @@ public class CharacterControll : MonoBehaviour
     public void UpdateLeftMove(float speed)
     {
         transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * speed);
+    }
+
+    public void CharacterAwake()
+    {
+        attackEndRun = false;
+        isRun = false;
+        Flip(true);
+        ChangeStatus(Status.Move);
+
+        gameObject.SetActive(true);
+        AnimationMove();
+        gameObject.SetActive(false);
+        StopPosition = Vector3.zero;
     }
 
 }

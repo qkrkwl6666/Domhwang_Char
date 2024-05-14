@@ -7,5 +7,6 @@ public enum Page
     FORMATION,
     LEVELUP,
     NEWHERO,
-    BATTLE,
+    LOSE,
+
 }

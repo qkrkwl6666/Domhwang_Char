@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,7 @@ using static UnityEditor.ShaderData;
 
 public class BattleSystem : MonoBehaviour
 {
-    
+    public TextMeshProUGUI roundTextUI;
     public List<List<GameObject>> battleCharacter { get; private set; } = new List<List<GameObject>>();
 
     private List<GameObject> removeCharacters = new List<GameObject>();
@@ -35,6 +36,7 @@ public class BattleSystem : MonoBehaviour
     private void Awake()
     {
         characterList = GameManager.Instance.formationCharacterList;
+
         var go = Resources.Load<GameObject>("Monsters/" + GameManager.Instance.MonsterData.Id.ToString());
         // 몬스터 생성
         monster = Instantiate(go);    
@@ -67,6 +69,7 @@ public class BattleSystem : MonoBehaviour
 
         while (currentRound <= Round)
         {
+            roundTextUI.text = currentRound.ToString() + " 라운드";
             removeCharacters.Clear();
 
             // 전 라운드 잔류 병사 추가
@@ -90,6 +93,13 @@ public class BattleSystem : MonoBehaviour
             yield return StartCoroutine(WaitForCharactersIdle());
 
             currentRound++;
+        }
+
+        // Todo : 라운드가 끝났는데 적이 안죽었다면 적 공격 하고 남아있는 캐릭터 날라가기
+
+        if(!monster.GetComponent<MonsterInfo>().isDead)
+        {
+            UIManager.Instance.OpenUI(Page.LOSE);
         }
 
         yield break;
