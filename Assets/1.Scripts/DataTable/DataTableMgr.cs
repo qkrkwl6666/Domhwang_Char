@@ -9,7 +9,8 @@ public class DataTableMgr : Singleton<DataTableMgr>
     private void Awake()
     {
         DataTable characterTable = new CharacterTable();
-        characterTable.Load("CharacterData");
+        // characterTable.Load("CharacterData"); 기존 데이터 테이블 비활성화
+        characterTable.Load("CharacterData_Designer");
 
         DataTable skillTable = new SkillTable();
         skillTable.Load("SkillData");

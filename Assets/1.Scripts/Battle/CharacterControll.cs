@@ -140,7 +140,8 @@ public class CharacterControll : MonoBehaviour
         // Run 
         if (other.tag == "RunCollider")
         {
-            float randomTime = UnityEngine.Random.Range(0.5f, 1f);
+            // float randomTime = UnityEngine.Random.Range(0.5f, 1f); (수정 전) 랜덤한 도망 타이밍 산출
+            float randomTime = UnityEngine.Random.Range(0, 2); // (수정 후) 특정한 두 타이밍 산출
             Invoke("RunModeChange", randomTime);
         }
 
