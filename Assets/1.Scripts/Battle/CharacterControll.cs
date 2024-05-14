@@ -155,6 +155,8 @@ public class CharacterControll : MonoBehaviour
             animator.SetBool("Move", false);
 
             animator.SetBool("Attack",true);
+
+            other.GetComponent<Animator>().SetTrigger("TakeHit");
         }
     }
 

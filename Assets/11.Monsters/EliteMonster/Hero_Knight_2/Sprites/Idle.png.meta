@@ -248,7 +248,7 @@ TextureImporter:
       name: Idle_3
       rect:
         serializedVersion: 2
-        x: 422
+        x: 419
         y: 0
         width: 140
         height: 140
@@ -374,7 +374,7 @@ TextureImporter:
       name: Idle_9
       rect:
         serializedVersion: 2
-        x: 1267
+        x: 1260
         y: 0
         width: 140
         height: 140
