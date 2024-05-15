@@ -26,8 +26,11 @@ public class CharacterControll : MonoBehaviour
     public bool isRun = false;
     public bool attackEndRun = false;
 
-    public float moveSpeed = 2f;
-    public float runSpeed = 4f;
+    //public float moveSpeed = 2f;
+    private float moveSpeed = 3f;
+
+    //public float runSpeed = 4f;
+    private float runSpeed = 12f;
 
     public static event Action<GameObject> OnCharacterControll;
 
@@ -146,7 +149,7 @@ public class CharacterControll : MonoBehaviour
         if (other.tag == "RunCollider")
         {
             // float randomTime = UnityEngine.Random.Range(0.5f, 1f); (수정 전) 랜덤한 도망 타이밍 산출
-            float randomTime = UnityEngine.Random.Range(0f, 2f); // (수정 후) 특정한 두 타이밍 산출
+            float randomTime = UnityEngine.Random.Range(0, 2); // (수정 후) 특정한 두 타이밍 산출
             Invoke("RunModeChange", randomTime);
         }
 
