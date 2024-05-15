@@ -38,7 +38,7 @@ public class MonsterInfo : MonoBehaviour
         hpSlider.value = hpSlider.maxValue;
         Debug.Log(hpSlider.transform.position);
 
-        transform.position = new Vector3(5f, 0f, 0f);
+        transform.position = new Vector3(5f, 0.5f, 0f);
     }
 
     private void Update()

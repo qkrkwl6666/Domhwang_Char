@@ -26,17 +26,13 @@ public class CharacterControll : MonoBehaviour
     public bool isRun = false;
     public bool attackEndRun = false;
 
-    //public float moveSpeed = 2f;
     private float moveSpeed = 3f;
-
-    //public float runSpeed = 4f;
     private float runSpeed = 12f;
-
     public static event Action<GameObject> OnCharacterControll;
 
     public UnityEngine.Transform MonsterTransform {  get; set; }
 
-    public Vector3 StopPosition { get; set; } = Vector3.zero;
+    public Vector3 StopPosition = Vector3.zero;
 
     private void Awake()
     {
