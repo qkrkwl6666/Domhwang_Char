@@ -26,8 +26,8 @@ public class CharacterControll : MonoBehaviour
     public bool isRun = false;
     public bool attackEndRun = false;
 
-    public float moveSpeed = 2f;
-    public float runSpeed = 4f;
+    private float moveSpeed = 2f;
+    private float runSpeed = 4f;
 
     public static event Action<GameObject> OnCharacterControll;
 

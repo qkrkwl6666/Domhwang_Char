@@ -14,17 +14,15 @@ public class BattleSystem : MonoBehaviour
 
     private List<GameObject> removeCharacters = new List<GameObject>();
     private List<GameObject> characterList;
-    private GameObject removeCharacter = null;
 
     // 라운드 별 캐릭터
     public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
-    public List<GameObject> playingCharacters { get; private set; } = new List<GameObject>();
+    public List<GameObject> playingCharacters = new List<GameObject>();
     public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
 
     // 대기 잔류 병사 다음 라운드에 잔류 병사에 추가할 리스트
     public List<GameObject> StandRemainingCharacters { get; private set; } = new List<GameObject>();
 
-    private Vector3 lastPosition = Vector3.zero;
     private float spawnXPosition = -10f;
     private int PositionSpacing = 3;
 
@@ -81,11 +79,14 @@ public class BattleSystem : MonoBehaviour
 
             // 남은 병사가 있으면 남은 병사 공격
             RemainingCharactersAttack();
-            
+
             yield return StartCoroutine(WaitForCharactersIdle());
 
             currentRound++;
         }
+
+        // 스테이지 끝나고 2초후 공격
+        yield return StartCoroutine(WaitFor2Sec());
 
         // 몬스터 공격
         yield return StartCoroutine(MonsterAttack());
@@ -110,6 +111,11 @@ public class BattleSystem : MonoBehaviour
         }
 
         yield break;
+    }
+
+    IEnumerator WaitFor2Sec()
+    {
+        yield return new WaitForSeconds(2f);
     }
 
     IEnumerator WaitForCharactersIdle(bool firstRound = false, int currentRound = -1)
@@ -264,7 +270,7 @@ public class BattleSystem : MonoBehaviour
         for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
             currentRoundCharacters[i].SetActive(true);
-            currentRoundCharacters[i].transform.position = new Vector3(spawnXPosition, 0f, 0f);
+            currentRoundCharacters[i].transform.position = new Vector3(spawnXPosition, 0.5f, 0f);
             spawnXPosition -= 2f;
         }
 
@@ -367,11 +373,14 @@ public class BattleSystem : MonoBehaviour
     public void SetIdlePoint()
     {
         // 1라운드 Idle 위치
-        IdlePoint.Add(monster.transform.position + new Vector3(-3f , 1.5f, 0f));
+        IdlePoint.Add(monster.transform.position + new Vector3(-3f , 1.0f, 0f));
+
         // 2라운드 Idle 위치
-        IdlePoint.Add(monster.transform.position + new Vector3(-3f , 0.5f, 0f));
+        IdlePoint.Add(monster.transform.position + new Vector3(-3f, -1f, 0f));
+
         // 3라운드 Idle 위치
-        IdlePoint.Add(monster.transform.position + new Vector3(-3f , -0.5f, 0f));
+        IdlePoint.Add(monster.transform.position + new Vector3(-3f , 0f, 0f));
+
     }
 
     IEnumerator MonsterAttack()

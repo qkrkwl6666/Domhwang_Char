@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
 
     // 편성 선택한 캐릭터 리스트
     public List<GameObject> formationCharacterList = new List<GameObject>();
+
     private void Awake()
     {
         
