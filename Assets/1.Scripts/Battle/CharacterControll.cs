@@ -33,7 +33,7 @@ public class CharacterControll : MonoBehaviour
 
     public UnityEngine.Transform MonsterTransform {  get; set; }
 
-    public Vector3 StopPosition { get; set; } = Vector3.zero;
+    public Vector3 StopPosition = Vector3.zero;
 
     private void Awake()
     {

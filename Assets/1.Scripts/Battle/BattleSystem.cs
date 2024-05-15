@@ -74,11 +74,11 @@ public class BattleSystem : MonoBehaviour
 
             // 현재 라운드 공격이 끝났는지 대기
             yield return StartCoroutine(WaitForCharactersIdle(true, currentRound));
-            
-            Debug.Log("현재 라운드 공격 끝남");
 
             // 남은 병사가 있으면 남은 병사 공격
             RemainingCharactersAttack();
+
+            SetIdlePosition(currentRound);
 
             yield return StartCoroutine(WaitForCharactersIdle());
 
@@ -229,6 +229,7 @@ public class BattleSystem : MonoBehaviour
                 if (characterController.attackEndRun)
                 {
                     removeCharacters.Add(roundCharacters[i]);
+
                 }
             }
 
@@ -337,7 +338,14 @@ public class BattleSystem : MonoBehaviour
         foreach(var removeCharacter in removeCharacters)
         {
             remainingCharacters.Remove(removeCharacter);
+
+            foreach (var characterList in roundsCharacters)
+            {
+                characterList.Remove(removeCharacter);
+            }
         }
+
+        
     }
 
     public void SetIdlePosition(int Round)

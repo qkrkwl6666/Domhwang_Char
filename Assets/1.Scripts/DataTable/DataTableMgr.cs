@@ -23,12 +23,6 @@ public class DataTableMgr : Singleton<DataTableMgr>
         tables.Add("Monster", monsterTable);
     }
 
-
-    private void Start()
-    {
-
-    }
-
     public T Get<T>(string id) where T : DataTable
     {
         if (!tables.ContainsKey(id)) return default;
