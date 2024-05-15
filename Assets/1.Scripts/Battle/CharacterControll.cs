@@ -29,6 +29,8 @@ public class CharacterControll : MonoBehaviour
 
     public static event Action<GameObject> OnCharacterControll;
 
+    public Transform MonsterTransform {  get; set; }
+
     public Vector3 StopPosition { get; set; } = Vector3.zero;
 
     private void Awake()
@@ -50,16 +52,17 @@ public class CharacterControll : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         switch (status)
         {
             case Status.Idle:
 
                 break;
             case Status.Move:
-                UpdateRightMove(moveSpeed);
+                UpdateMoveToMonster();
                 break;
             case Status.Run:
-                UpdateLeftMove(runSpeed);
+                UpdateLeftMove();
                 if(transform.position.x < -15)
                 {
                     gameObject.SetActive(false);
@@ -70,16 +73,7 @@ public class CharacterControll : MonoBehaviour
                 break;
             case Status.Back:
                 {
-                    var distance = Vector3.Distance(StopPosition, transform.position);
-                    if (distance < 1)
-                    {
-                        ChangeStatus(Status.Idle);
-                        animator.SetBool("Move", false);
-                        animator.SetBool("Idle", true);
-                        Flip(true);
-                        OnCharacterControll?.Invoke(gameObject);
-                    }
-                    UpdateLeftMove(moveSpeed);
+                    UpdateIdlePointMove();
                 }
                 break;
         }
@@ -167,15 +161,40 @@ public class CharacterControll : MonoBehaviour
         animator.SetBool("Move", true);
     }
 
-
-    public void UpdateRightMove(float speed)
+    public void UpdateMoveToMonster()
     {
-        transform.Translate(new Vector3(1, 0, 0) * Time.deltaTime * speed);
+        Vector3 dir = MonsterTransform.position - transform.position;
+
+        dir.Normalize();
+
+        transform.Translate(dir * Time.deltaTime * moveSpeed);
     }
 
-    public void UpdateLeftMove(float speed)
+    public void UpdateLeftMove()
     {
-        transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * speed);
+        transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * moveSpeed);
+    }
+
+    public void UpdateIdlePointMove()
+    {
+        Vector3 dir = StopPosition - transform.position;
+
+        var distance = Vector3.Distance(StopPosition, transform.position);
+
+        if (distance < 0.1)
+        {
+            ChangeStatus(Status.Idle);
+            animator.SetBool("Move", false);
+            animator.SetBool("Idle", true);
+            Flip(true);
+            OnCharacterControll?.Invoke(gameObject);
+            return;
+        }
+        
+        dir.Normalize();
+
+        transform.Translate(dir * Time.deltaTime * moveSpeed);
+
     }
 
     public void CharacterAwake()
