@@ -87,16 +87,30 @@ public class BattleSystem : MonoBehaviour
             currentRound++;
         }
 
-        // Todo : 라운드가 끝났는데 적이 안죽었다면 적 공격 하고 남아있는 캐릭터 날라가기
+        // 몬스터 공격
+        yield return StartCoroutine(MonsterAttack());
 
-        if(!monster.GetComponent<MonsterInfo>().isDead)
+        // 캐릭터가 날아가야함
+
+        foreach(var characterList in roundsCharacters)
+        {
+            foreach (var character in characterList)
+            {
+                var cc = character.GetComponent<CharacterControll>();
+                cc.ChangeStatus(CharacterControll.Status.Fly);
+            }
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        // 날아가고 3초뒤 Lose UI
+        if (!monster.GetComponent<MonsterInfo>().isDead)
         {
             UIManager.Instance.OpenUI(Page.LOSE);
         }
 
         yield break;
     }
-
 
     IEnumerator WaitForCharactersIdle(bool firstRound = false, int currentRound = -1)
     {
@@ -346,11 +360,10 @@ public class BattleSystem : MonoBehaviour
 
                 idlePosition += new Vector3(-1f, 0f, 0f);
             }
-
             currentRound++;
         }
     }
-
+                    
     public void SetIdlePoint()
     {
         // 1라운드 Idle 위치
@@ -359,5 +372,21 @@ public class BattleSystem : MonoBehaviour
         IdlePoint.Add(monster.transform.position + new Vector3(-3f , 0.5f, 0f));
         // 3라운드 Idle 위치
         IdlePoint.Add(monster.transform.position + new Vector3(-3f , -0.5f, 0f));
+    }
+
+    IEnumerator MonsterAttack()
+    {
+        Animator monsterAnimator = monster.GetComponent<Animator>();
+        monsterAnimator.SetTrigger("Attack");
+
+        var monsterInfo = monster.GetComponent<MonsterInfo>();
+
+        // 몬스터의 공격이 끝날때 까지 대기
+        while (true)
+        {
+            if (monsterInfo.MonsterAttackEnd) yield break;
+
+            yield return null;
+        }
     }
 }

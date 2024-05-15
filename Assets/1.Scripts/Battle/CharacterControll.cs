@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CharacterControll : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class CharacterControll : MonoBehaviour
         Run,
         Attack,
         Back,
+        Fly,
     }
 
     Animator animator;
@@ -29,7 +31,7 @@ public class CharacterControll : MonoBehaviour
 
     public static event Action<GameObject> OnCharacterControll;
 
-    public Transform MonsterTransform {  get; set; }
+    public UnityEngine.Transform MonsterTransform {  get; set; }
 
     public Vector3 StopPosition { get; set; } = Vector3.zero;
 
@@ -58,9 +60,11 @@ public class CharacterControll : MonoBehaviour
             case Status.Idle:
 
                 break;
+
             case Status.Move:
                 UpdateMoveToMonster();
                 break;
+
             case Status.Run:
                 UpdateLeftMove();
                 if(transform.position.x < -15)
@@ -68,14 +72,21 @@ public class CharacterControll : MonoBehaviour
                     gameObject.SetActive(false);
                 }
                 break;
+
             case Status.Attack:
 
                 break;
+
             case Status.Back:
                 {
                     UpdateIdlePointMove();
                 }
                 break;
+
+            case Status.Fly:
+                UpdateFly();
+                break;
+
         }
     }
 
@@ -135,7 +146,7 @@ public class CharacterControll : MonoBehaviour
         if (other.tag == "RunCollider")
         {
             // float randomTime = UnityEngine.Random.Range(0.5f, 1f); (수정 전) 랜덤한 도망 타이밍 산출
-            float randomTime = UnityEngine.Random.Range(0, 2); // (수정 후) 특정한 두 타이밍 산출
+            float randomTime = UnityEngine.Random.Range(0f, 2f); // (수정 후) 특정한 두 타이밍 산출
             Invoke("RunModeChange", randomTime);
         }
 
@@ -172,7 +183,22 @@ public class CharacterControll : MonoBehaviour
 
     public void UpdateLeftMove()
     {
-        transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * moveSpeed);
+        transform.Translate(new Vector3(-1, 0, 0) * Time.deltaTime * runSpeed);
+    }
+
+    public void UpdateFly()
+    {
+        Vector3 flyDir = new Vector3(-1, 0.5f, 0);
+
+        flyDir.Normalize();
+
+        transform.Translate(flyDir * Time.deltaTime * 10f, Space.World);
+
+        // Todo : 회전 추가
+
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        currentRotation.z += Time.deltaTime * 720f;
+        transform.rotation = Quaternion.Euler(currentRotation);
     }
 
     public void UpdateIdlePointMove()
@@ -208,6 +234,7 @@ public class CharacterControll : MonoBehaviour
         AnimationMove();
         gameObject.SetActive(false);
         StopPosition = Vector3.zero;
+        transform.rotation = Quaternion.identity;
     }
 
 }

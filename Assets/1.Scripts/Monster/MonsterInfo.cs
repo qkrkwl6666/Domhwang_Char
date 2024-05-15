@@ -19,6 +19,9 @@ public class MonsterInfo : MonoBehaviour
     public int Reduced_dmg { get; private set; }
 
     private UnityEngine.UI.Slider hpSlider;
+
+    public bool MonsterAttackEnd { get; private set; } = false;
+
     private void Awake()
     {
         SetMonster(GameManager.Instance.MonsterData);
@@ -64,5 +67,10 @@ public class MonsterInfo : MonoBehaviour
         }
 
         hpSlider.value = Hp;
+    }
+
+    public void AttackEnd()
+    {
+        MonsterAttackEnd = true;
     }
 }
