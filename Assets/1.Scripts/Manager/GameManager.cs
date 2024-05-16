@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -164,4 +165,13 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void GameWin()
+    {
+
+    }
+
+    public void GameLose()
+    {
+        UIManager.Instance.OpenUI(Page.LOSE);
+    }
 }

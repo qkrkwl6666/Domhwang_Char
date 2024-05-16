@@ -102,11 +102,11 @@ public class BattleSystem : MonoBehaviour
 
         UIManager.Instance.OpenUI(Page.LOSE);
 
-        // 날아가고 3초뒤 Lose UI
-        //if (!monster.GetComponent<MonsterInfo>().isDead)
-        //{
-        //    UIManager.Instance.OpenUI(Page.LOSE);
-        //}
+        //날아가고 3초뒤 Lose UI // 안죽었으면 패배
+        if (!monster.GetComponent<MonsterInfo>().isDead)
+        {
+            GameManager.Instance.GameLose();
+        }
 
         yield break;
     }
