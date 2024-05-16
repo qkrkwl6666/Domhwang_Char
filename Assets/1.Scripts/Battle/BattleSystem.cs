@@ -1,11 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
-using static UnityEditor.ShaderData;
 
 public class BattleSystem : MonoBehaviour
 {
@@ -104,11 +100,13 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
+        UIManager.Instance.OpenUI(Page.LOSE);
+
         // 날아가고 3초뒤 Lose UI
-        if (!monster.GetComponent<MonsterInfo>().isDead)
-        {
-            UIManager.Instance.OpenUI(Page.LOSE);
-        }
+        //if (!monster.GetComponent<MonsterInfo>().isDead)
+        //{
+        //    UIManager.Instance.OpenUI(Page.LOSE);
+        //}
 
         yield break;
     }

@@ -8,6 +8,8 @@ public class CharacterAnimationEvent : MonoBehaviour
     private Animator animator;
     private CharacterControll characterControll;
 
+    public static Action<int> MonsterDamageEvent;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -15,10 +17,16 @@ public class CharacterAnimationEvent : MonoBehaviour
         
     }
 
+    private void AttackDamage()
+    {
+        Debug.Log("AttackDamage");
+
+        // 여기서 몬스터 데미지
+        MonsterDamageEvent?.Invoke(characterControll.attack);
+    }
+
     private void AttackEnd()
     {
-        Debug.Log("AttackEnd");
-
         animator.SetBool("Attack", false);
 
         if (characterControll.attackEndRun)

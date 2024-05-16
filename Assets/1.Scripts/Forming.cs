@@ -31,7 +31,7 @@ public class Forming : MonoBehaviour
     public Transform selectCharacterUI;
 
     // UI 캐릭터 선택 리스트
-    public List<GameObject> uiSelectCharacterList { get; set; } = new List<GameObject>();
+    [field:SerializeField] public List<GameObject> uiSelectCharacterList { get; private set; } = new List<GameObject>();
 
     // UI 캐릭터 보유중인 리스트
     public List<GameObject> uiCharacterList { get; private set; } = new List<GameObject>();
@@ -88,6 +88,9 @@ public class Forming : MonoBehaviour
         // MonsterUI
         monsterName.text = GameManager.Instance.MonsterData.Name;
         monsterHp.text = "Hp : " + GameManager.Instance.MonsterData.Hp.ToString();
+
+        // 게임 시작 버튼 비활성화
+        gameStartButton.interactable = false;
     }
 
     private void Start()

@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
-using static MonsterTable;
+
 
 public class MonsterInfo : MonoBehaviour
 {
@@ -21,6 +15,7 @@ public class MonsterInfo : MonoBehaviour
     private UnityEngine.UI.Slider hpSlider;
 
     public bool MonsterAttackEnd { get; private set; } = false;
+    private Animator animator;
 
     private void Awake()
     {
@@ -38,12 +33,11 @@ public class MonsterInfo : MonoBehaviour
         hpSlider.value = hpSlider.maxValue;
         Debug.Log(hpSlider.transform.position);
 
-        transform.position = new Vector3(5f, 0.5f, 0f);
-    }
+        transform.position = new Vector3(4f, 0.5f, 0f);
 
-    private void Update()
-    {
+        animator = GetComponent<Animator>();
 
+        CharacterAnimationEvent.MonsterDamageEvent += Damage;
     }
 
     public void SetMonster(MonsterData monsterData)
@@ -58,7 +52,8 @@ public class MonsterInfo : MonoBehaviour
     public void Damage(int damage)
     {
         Hp -= damage;
-        
+        animator.SetTrigger("TakeHit");
+
         if (Hp <= 0)
         {
             Hp = 0;

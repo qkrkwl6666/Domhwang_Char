@@ -154,13 +154,11 @@ public class CharacterControll : MonoBehaviour
         {
             status = Status.Attack;
 
-            other.gameObject.GetComponent<MonsterInfo>().Damage(attack);
+            //other.gameObject.GetComponent<MonsterInfo>().Damage(attack);
 
             animator.SetBool("Move", false);
 
             animator.SetBool("Attack",true);
-
-            other.GetComponent<Animator>().SetTrigger("TakeHit");
         }
     }
 

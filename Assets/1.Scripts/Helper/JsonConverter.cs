@@ -1,9 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Palmmedia.ReportGenerator.Core.Common;
 using System;
-using System.Data;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ColorConverter : JsonConverter<Color>

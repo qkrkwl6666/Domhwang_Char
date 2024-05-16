@@ -30,10 +30,15 @@ public class CharacterSelectSlot : MonoBehaviour
         if (MultiTouchManager.Instance.Tap == false) return;
 
         //forming.uiSelectCharacterList[SlotIndex].get
+        //
+
+        if (characterSlot == null) return;
+
         image.sprite = null;
         GameManager.Instance.formationCharacterList[SlotIndex] = null;
-
         characterSlot.gameObject.SetActive(true);
+        characterSlot = null;
+
         forming.gameStartButton.interactable = false;
     }
 
