@@ -3864,7 +3864,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.008726557, z: -0, w: 0.9999619}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 651433582712560758}
@@ -3908,7 +3908,8 @@ MonoBehaviour:
   status: 0
   runPercent: 0
   isRun: 0
-  stopPosition: {x: 0, y: 0, z: 0}
+  attackEndRun: 0
+  StopPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &5938705969268234949
 BoxCollider:
   m_ObjectHideFlags: 0

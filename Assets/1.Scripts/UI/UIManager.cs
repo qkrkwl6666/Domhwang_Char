@@ -26,7 +26,6 @@ public class UIManager : Singleton<UIManager>
         foreach (Transform panel in mainPanels)
         {
             defaultPanels.Add(panel.gameObject);
-            DontDestroyOnLoad(panel.gameObject);
             panel.gameObject.SetActive(false);
         }
 

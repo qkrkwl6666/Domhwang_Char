@@ -34,6 +34,45 @@ public class CharacterTable : DataTable
                 characterTable.Add(record.Id.ToString(), record);
             }
         }
-        
+    }
+
+    public List<CharacterData> GetAllCharacterDatas()
+    {
+        List<CharacterData> allCharacterDatas = new List<CharacterData>();
+
+        foreach (var character in characterTable.Values)
+        {
+            allCharacterDatas.Add(character);
+        }
+
+        return allCharacterDatas;
+    }
+
+    public List<List<CharacterData>> GetTierCharacterDatasList()
+    {
+        List<List<CharacterData>> tierCharacterDatasList = new List<List<CharacterData>>();
+
+        for(int i = 0; i < (int)CharacterTier.COUNT; i++)
+        {
+            tierCharacterDatasList.Add(new List<CharacterData>());
+        }
+
+        foreach (var character in characterTable.Values)
+        {
+            switch (character.Tier)
+            {
+                case "normal":
+                    tierCharacterDatasList[(int)CharacterTier.NORMAL].Add(character);
+                    break;
+                case "rare":
+                    tierCharacterDatasList[(int)CharacterTier.RARE].Add(character);
+                    break;
+                case "epic":
+                    tierCharacterDatasList[(int)CharacterTier.EPIC].Add(character);
+                    break;
+            }
+        }
+
+        return tierCharacterDatasList;
     }
 }

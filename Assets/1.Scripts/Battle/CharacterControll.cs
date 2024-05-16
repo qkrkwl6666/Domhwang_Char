@@ -39,6 +39,9 @@ public class CharacterControll : MonoBehaviour
         status = Status.Move;
 
         animator = GetComponentInChildren<Animator>();
+
+        // 기본 상태 오른쪽 보게 하기
+        Flip(true);
     }
     private void Start()
     {
@@ -91,7 +94,13 @@ public class CharacterControll : MonoBehaviour
 
     public void Flip(bool isFlip)
     {
-        transform.localScale = isFlip ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
+        //transform.rotation = isFlip ? Quaternion.AngleAxis(-180, Vector3.up) : Quaternion.AngleAxis(0, Vector3.up);
+
+        Quaternion quaternion = Quaternion.identity;
+        quaternion.eulerAngles = isFlip ? new Vector3(0f, -180, 0) : Vector3.zero;
+        transform.rotation = quaternion;
+
+        //transform.localScale = isFlip ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
     }
 
     public void RunMode(bool isRun)
@@ -173,6 +182,7 @@ public class CharacterControll : MonoBehaviour
     {
         Vector3 dir = MonsterTransform.position - transform.position;
 
+        dir = new Vector3(-1f * dir.x, dir.y, dir.z);
         dir.Normalize();
 
         transform.Translate(dir * Time.deltaTime * moveSpeed);

@@ -31,7 +31,7 @@ public class Forming : MonoBehaviour
     public Transform selectCharacterUI;
 
     // UI 캐릭터 선택 리스트
-    [field:SerializeField] public List<GameObject> uiSelectCharacterList { get; private set; } = new List<GameObject>();
+    public List<GameObject> uiSelectCharacterList { get; private set; } = new List<GameObject>();
 
     // UI 캐릭터 보유중인 리스트
     public List<GameObject> uiCharacterList { get; private set; } = new List<GameObject>();
