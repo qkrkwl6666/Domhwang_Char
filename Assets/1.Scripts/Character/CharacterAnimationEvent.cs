@@ -8,26 +8,29 @@ public class CharacterAnimationEvent : MonoBehaviour
     private Animator animator;
     private CharacterControll characterControll;
 
+    public CharacterInfo characterInfo;
+
+    public MonsterInfo monsterInfo;
     public static Action<int> MonsterDamageEvent;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         characterControll = GetComponentInParent<CharacterControll>();
-        
     }
 
     private void AttackDamage()
     {
         Debug.Log("AttackDamage");
-
         // 여기서 몬스터 데미지
-        MonsterDamageEvent?.Invoke(characterControll.attack);
+        MonsterDamageEvent?.Invoke(characterInfo.Atk);
     }
 
     private void AttackEnd()
     {
         animator.SetBool("Attack", false);
+
+        if (monsterInfo.isDead) return;
 
         if (characterControll.attackEndRun)
         {
@@ -41,5 +44,10 @@ public class CharacterAnimationEvent : MonoBehaviour
             characterControll.Flip(false);
         }
         
+    }
+
+    public void UpdateMonsterInfo()
+    {
+        monsterInfo = characterControll.MonsterTransform.gameObject.GetComponent<MonsterInfo>();
     }
 }

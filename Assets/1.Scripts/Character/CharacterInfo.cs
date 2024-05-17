@@ -52,6 +52,15 @@ public class CharacterInfo : MonoBehaviour
         characterImage = Resources.Load<Sprite>("ChatacterImage/" + Id.ToString() + "Img");
     }
 
+    public void LevelUp()
+    {
+        Level++;
+        Atk += Atk_Up;
+        Run -= Run_Up;
+
+        if (Run < 0) Run = 0;
+    }
+
     private void Awake()
     {
 

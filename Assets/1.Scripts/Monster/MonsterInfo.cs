@@ -6,11 +6,13 @@ public class MonsterInfo : MonoBehaviour
     public Canvas HpSliderPrefabs;
 
     public int Id {  get; private set; }
-    public int Hp {  get; private set; }
+    [field:SerializeField] public int Hp {  get; private set; }
     public bool isDead { get; private set; } = false;
     public int Feature_Id { get; private set; }
     public int Heal { get; private set; }
     public int Reduced_dmg { get; private set; }
+
+    private BattleSystem battleSystem;
 
     private UnityEngine.UI.Slider hpSlider;
 
@@ -19,6 +21,8 @@ public class MonsterInfo : MonoBehaviour
 
     private void Awake()
     {
+        battleSystem = GameObject.FindWithTag("BattleSystem").GetComponent<BattleSystem>();
+
         SetMonster(GameManager.Instance.MonsterData);
 
         if (hpSlider == null)
@@ -58,7 +62,9 @@ public class MonsterInfo : MonoBehaviour
         {
             Hp = 0;
             isDead = true;
-            Debug.Log("Dead");
+            GameManager.Instance.CharactersCCEnable(false);
+            battleSystem.StopAllCoroutines();
+            animator.SetTrigger("Death");
         }
 
         hpSlider.value = Hp;
@@ -67,5 +73,11 @@ public class MonsterInfo : MonoBehaviour
     public void AttackEnd()
     {
         MonsterAttackEnd = true;
+    }
+
+    public void DeathEnd()
+    {
+        // Todo : 여기서 게임 우승 메서드 호출
+        GameManager.Instance.GameWin();
     }
 }

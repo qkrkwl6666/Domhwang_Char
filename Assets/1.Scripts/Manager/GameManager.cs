@@ -28,6 +28,9 @@ public class GameManager : Singleton<GameManager>
     // 편성 선택한 캐릭터 리스트
     public List<GameObject> formationCharacterList = new List<GameObject>();
 
+    // 레벨업 리스트
+    public List<CharacterInfo> LevelUpCharacterList { get; private set; } = new List<CharacterInfo>();
+
     private void Awake()
     {
         // 캐릭터 데이터 가져오기
@@ -60,6 +63,7 @@ public class GameManager : Singleton<GameManager>
             {
                 var character = Instantiate(Resources.Load<GameObject>("Characters/" + go.Id));
                 var info = character.AddComponent<CharacterInfo>();
+                character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
                 info.SetCharacterInfo(go);
                 DontDestroyOnLoad(character);
                 character.SetActive(false);
@@ -154,10 +158,13 @@ public class GameManager : Singleton<GameManager>
 
     public void GameManagerAwake()
     {
+        CharacterAnimationEvent.MonsterDamageEvent = null;
         MonsterData = null;
         formationCharacterList.Clear();
+        LevelUpCharacterList.Clear();
+        CharactersCCEnable(true);
 
-        foreach(var character in playerCharacterList)
+        foreach (var character in playerCharacterList)
         {
             var cc = character.GetComponent<CharacterControll>();
             cc.CharacterAwake();
@@ -167,11 +174,39 @@ public class GameManager : Singleton<GameManager>
 
     public void GameWin()
     {
+        Debug.Log("GameWin");
+        StageClear();
 
+        foreach (var character in formationCharacterList)
+        {
+            var cc = character.GetComponent<CharacterControll>();
+            if(!cc.isRun && !cc.attackEndRun)
+            {
+                var ci = character.GetComponent<CharacterInfo>();
+                ci.LevelUp();
+                LevelUpCharacterList.Add(ci);
+            }
+        }
+
+        UIManager.Instance.OpenUI(Page.LEVELUP);
     }
 
     public void GameLose()
     {
         UIManager.Instance.OpenUI(Page.LOSE);
+    }
+
+    public void CharactersCCEnable(bool isEnable)
+    {
+        foreach(var gameObject in playerCharacterList)
+        {
+            var cc = gameObject.GetComponent<CharacterControll>();
+            cc.enabled = isEnable;
+        }
+    }
+
+    public void GameSetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
     }
 }

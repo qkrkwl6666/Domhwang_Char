@@ -18,8 +18,6 @@ public class CharacterControll : MonoBehaviour
 
     Animator animator;
 
-    public int attack;
-
     public Status status;
 
     public int runPercent;
@@ -29,11 +27,9 @@ public class CharacterControll : MonoBehaviour
     private float moveSpeed = 3f;
     private float runSpeed = 12f;
     public static event Action<GameObject> OnCharacterControll;
-
     public UnityEngine.Transform MonsterTransform {  get; set; }
 
     public Vector3 StopPosition = Vector3.zero;
-
     private void Awake()
     {
         status = Status.Move;
@@ -43,9 +39,14 @@ public class CharacterControll : MonoBehaviour
         // 기본 상태 오른쪽 보게 하기
         Flip(true);
     }
+
+    private void OnEnable()
+    {
+        Flip(true);
+    }
+
     private void Start()
     {
-        attack = GetComponent<CharacterInfo>().Atk;
         animator.SetBool("Move", true);
     }
 
@@ -53,7 +54,6 @@ public class CharacterControll : MonoBehaviour
     {
 
     }
-
     private void FixedUpdate()
     {
 
@@ -134,10 +134,8 @@ public class CharacterControll : MonoBehaviour
 
         ChangeStatus(Status.Move);
 
-        RunMode(false);
+        //RunMode(false);
     }
-
-
     public void AttackEndRunModeChange()
     {
         if (!attackEndRun) return;
@@ -162,8 +160,6 @@ public class CharacterControll : MonoBehaviour
         if (other.tag == "Monster")
         {
             status = Status.Attack;
-
-            //other.gameObject.GetComponent<MonsterInfo>().Damage(attack);
 
             animator.SetBool("Move", false);
 

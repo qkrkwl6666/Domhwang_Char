@@ -13,6 +13,7 @@ public class BattleSystem : MonoBehaviour
 
     // 라운드 별 캐릭터
     public List<List<GameObject>> roundsCharacters { get; private set; } = new List<List<GameObject>>();
+
     public List<GameObject> playingCharacters = new List<GameObject>();
     public List<GameObject> remainingCharacters { get; private set; } = new List<GameObject>();
 
@@ -23,7 +24,6 @@ public class BattleSystem : MonoBehaviour
     private int PositionSpacing = 3;
 
     private List<Vector3> IdlePoint = new List<Vector3>();
-
     public int Round { get; private set; } = 3;
 
     private GameObject monster;
@@ -264,6 +264,9 @@ public class BattleSystem : MonoBehaviour
             var characterControll = currentRoundCharacters[i].GetComponent<CharacterControll>();
             characterControll.runPercent = currentRoundCharacters[i].GetComponent<CharacterInfo>().Run;
             characterControll.MonsterTransform = monster.transform;
+
+            var animationEvent = currentRoundCharacters[i].GetComponentInChildren<CharacterAnimationEvent>();
+            animationEvent.UpdateMonsterInfo();
         }
 
         for (int i = 0; i < currentRoundCharacters.Count; i++)
@@ -280,7 +283,9 @@ public class BattleSystem : MonoBehaviour
     public void CharactersRun(List<GameObject> charactersList = null)
     {
         removeCharacters.Clear();
+        var monsterInfo = monster.GetComponent<MonsterInfo>();
 
+        int totalAttack = 0;
         foreach (var character in charactersList)
         {
             var characterControll = character.GetComponent<CharacterControll>();
@@ -293,23 +298,28 @@ public class BattleSystem : MonoBehaviour
                 continue;
             }
 
-            // 공격 끝나고 난후 도망칠지 다시 계산
+            var ci = character.GetComponent<CharacterInfo>();
+
+            totalAttack += ci.Atk;
+
+            if (monsterInfo.Hp - totalAttack <= 0) continue;
+
             characterControll.RunMode(false);
-            if (characterControll.attackEndRun) 
+            if (characterControll.attackEndRun)
             {
                 removeCharacters.Add(character);
                 continue;
             }
 
             // 잔류 병사 추가 && 플레이 중인 병사 추가
-            if(!characterControll.isRun && !characterControll.attackEndRun)
+            if (!characterControll.isRun && !characterControll.attackEndRun)
             {
                 StandRemainingCharacters.Add(character);
                 playingCharacters.Add(character);
             }
         }
 
-        foreach(var removeCharacter in removeCharacters)
+        foreach (var removeCharacter in removeCharacters)
         {
             charactersList.Remove(removeCharacter);
         }
@@ -323,12 +333,22 @@ public class BattleSystem : MonoBehaviour
 
         if (remainingCharacters.Count <= 0) return;
 
+        int totalAttack = 0;
+
         foreach (var character in remainingCharacters)
         {
             var characterControll = character.GetComponent<CharacterControll>();
+            var ci = character.GetComponent<CharacterInfo>();
+
+            totalAttack += ci.Atk;
 
             characterControll.AttackMode();
 
+            var monsterInfo = monster.GetComponent<MonsterInfo>();
+            
+            if (monsterInfo.Hp - totalAttack <= 0) continue;
+
+            characterControll.RunMode(false);
             if (characterControll.attackEndRun) removeCharacters.Add(character);
             else playingCharacters.Add(character);
         }
