@@ -8,6 +8,7 @@ TagManager:
   - RunCollider
   - Monster
   - BattleSystem
+  - MainCanvas
   layers:
   - Default
   - TransparentFX

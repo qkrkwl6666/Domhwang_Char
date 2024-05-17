@@ -133,8 +133,6 @@ public class CharacterControll : MonoBehaviour
         AnimationMove();
 
         ChangeStatus(Status.Move);
-
-        //RunMode(false);
     }
     public void AttackEndRunModeChange()
     {

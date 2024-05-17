@@ -1036,92 +1036,33 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2221319004601351453}
-  - component: {fileID: 5934175851042643745}
-  - component: {fileID: 937685453204255903}
-  - component: {fileID: 646635970120616999}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: 105
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2221319004601351453
-Transform:
+--- !u!224 &2221319004601351453
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2431160011411277081}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.008726557, z: -0, w: 0.9999619}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 150, y: 150, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6845721518339268517}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
---- !u!114 &5934175851042643745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2431160011411277081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ac21711b0ec40a0812d33a586eb7ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _version: 166
-  _spriteOBj: {fileID: 7223039715440035093}
-  EditChk: 0
-  _code: Unit003
-  _anim: {fileID: 3022286977015960146}
-  _horse: 0
-  _horseString: 
-  UnitTypeChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &937685453204255903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2431160011411277081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 266af2f5aa17b9547b23002426f342e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  status: 0
-  runPercent: 0
-  isRun: 0
-  attackEndRun: 0
-  StopPosition: {x: 0, y: 0, z: 0}
---- !u!65 &646635970120616999
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2431160011411277081}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.4, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2485471829284853566
 GameObject:
   m_ObjectHideFlags: 0

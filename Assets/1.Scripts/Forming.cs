@@ -13,7 +13,7 @@ public class Forming : MonoBehaviour
     public Transform content;
 
     // CharacterInfo UI 
-    public Image selectedCharacter;
+    public Transform selectedCharacter;
     public TMPro.TextMeshProUGUI characterName;
     public TMPro.TextMeshProUGUI attack;
     public TMPro.TextMeshProUGUI run;
@@ -71,7 +71,11 @@ public class Forming : MonoBehaviour
         {
             var uiCharacter = Instantiate(UICharacterPrefabs, content.transform);
             CharacterInfo characterInfo = character.GetComponent<CharacterInfo>();
-            uiCharacter.GetComponent<Image>().sprite = characterInfo.characterImage;
+            // uiCharacter.GetComponent<Image>().sprite = characterInfo.characterImage;
+            var resource = Resources.Load("CharacterModel/" + characterInfo.Id) as GameObject;
+            var model = Instantiate(resource, uiCharacter.transform);
+            model.GetComponent<RectTransform>().anchoredPosition = new Vector3 (0, -50, 0);
+            Debug.Log(model.transform.position);
             uiCharacter.GetComponent<CharacterSlot>().characterInfo = characterInfo;
             uiCharacter.GetComponent<CharacterSlot>().characterImage = characterInfo.characterImage;
             uiCharacterList.Add(uiCharacter);
@@ -101,17 +105,24 @@ public class Forming : MonoBehaviour
 
     private void Update()
     {
-        if(MultiTouchManager.Instance.LongTap == true)
-        {
-            Debug.Log("LongTap");
-        }
+
     }
 
     public void UICharacterInfo(CharacterInfo characterInfo)
     {
         if (MultiTouchManager.Instance.LongTap == false) return;
 
-        selectedCharacter.sprite = characterInfo.characterImage;
+        foreach(Transform transform in selectedCharacter.transform)
+        {
+            Destroy(transform.gameObject);
+        }
+
+        //selectedCharacter.sprite = characterInfo.characterImage;
+
+        var resource = Resources.Load("CharacterModel/" + characterInfo.Id) as GameObject;
+        var model = Instantiate(resource, selectedCharacter.transform);
+        model.transform.localScale = new Vector3(200f, 200f, 200f);
+        model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -70, 0);
         characterName.text = characterInfo.Name;
         attack.text = characterInfo.Atk.ToString();
         run.text = characterInfo.Run.ToString();
@@ -149,12 +160,15 @@ public class Forming : MonoBehaviour
     public void OnClickGameStart()
     {
         SceneManager.LoadScene("Battle");
+        SceneManager.sceneLoaded += GameManager.Instance.CanvasMainCameraFind;
+
         UIManager.Instance.AllClose();
+        
     }
 
     public void DefaultSetting()
     {
-        selectedCharacter.sprite = default;
+        //selectedCharacter
         characterName.text = "Name";
         attack.text = "Attack";
         run.text = "Run";

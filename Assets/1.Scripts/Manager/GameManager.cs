@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
 
 public class GameManager : Singleton<GameManager>
 {
     public static readonly string pathData = "ScriptableObject/CharacterInitialData/";
     public static readonly string pathList = "Characters/";
+
+    public Canvas canvas { get; private set; }
 
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
@@ -71,7 +74,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-
+        canvas = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>();
     }   
 
     void Start()
@@ -163,7 +166,7 @@ public class GameManager : Singleton<GameManager>
         formationCharacterList.Clear();
         LevelUpCharacterList.Clear();
         CharactersCCEnable(true);
-
+        
         foreach (var character in playerCharacterList)
         {
             var cc = character.GetComponent<CharacterControll>();
@@ -208,5 +211,11 @@ public class GameManager : Singleton<GameManager>
     public void GameSetTimeScale(float timeScale)
     {
         Time.timeScale = timeScale;
+    }
+
+    public void CanvasMainCameraFind(Scene scene, LoadSceneMode mode)
+    {
+        canvas.gameObject.SetActive(false);
+        canvas.gameObject.SetActive(true);
     }
 }

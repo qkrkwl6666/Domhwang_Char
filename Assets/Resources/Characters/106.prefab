@@ -2711,7 +2711,7 @@ GameObject:
   - component: {fileID: 4056202462960311988}
   - component: {fileID: -1947338522351683932}
   - component: {fileID: 4102987540326606852}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: 106
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2768,7 +2768,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266af2f5aa17b9547b23002426f342e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack: 0
   status: 0
   runPercent: 0
   isRun: 0
@@ -3784,6 +3783,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0919fda73564be24bab275aa9102146a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterInfo: {fileID: 0}
+  monsterInfo: {fileID: 0}
 --- !u!1 &8911011947206324966
 GameObject:
   m_ObjectHideFlags: 0

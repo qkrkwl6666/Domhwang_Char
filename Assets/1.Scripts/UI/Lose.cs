@@ -17,6 +17,7 @@ public class Lose : MonoBehaviour
     {
         GameManager.Instance.GameManagerAwake();
         SceneManager.LoadScene("Main");
+        SceneManager.sceneLoaded += GameManager.Instance.CanvasMainCameraFind;
         UIManager.Instance.OpenUI(Page.TITLE);
         
     }
