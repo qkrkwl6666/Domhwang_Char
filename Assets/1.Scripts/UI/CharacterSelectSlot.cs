@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class CharacterSelectSlot : MonoBehaviour
 {
-    private Image image;
     private Button button;
     public Forming forming;
 
@@ -16,7 +15,6 @@ public class CharacterSelectSlot : MonoBehaviour
 
     private void Awake()
     {
-        image = GetComponent<Image>();
         button = GetComponent<Button>();
     }
 
@@ -24,18 +22,26 @@ public class CharacterSelectSlot : MonoBehaviour
     {
         button.onClick.AddListener(OnRemoveButton);
     }
+    private void OnEnable()
+    {
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 
     public void OnRemoveButton()
     {
         if (MultiTouchManager.Instance.Tap == false) return;
 
-        //forming.uiSelectCharacterList[SlotIndex].get
-        //
-
         if (characterSlot == null) return;
 
-        image.sprite = null;
         GameManager.Instance.formationCharacterList[SlotIndex] = null;
+
+        var characterModel = transform.GetChild(0);
+        characterModel.transform.SetParent(characterSlot.transform);
+        characterModel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -50f, 0f);
+
         characterSlot.gameObject.SetActive(true);
         characterSlot = null;
 

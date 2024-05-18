@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine.TextCore.Text;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using System.Numerics;
+using Vector3 = UnityEngine.Vector3;
 
 public class Forming : MonoBehaviour
 {
@@ -74,7 +76,7 @@ public class Forming : MonoBehaviour
             // uiCharacter.GetComponent<Image>().sprite = characterInfo.characterImage;
             var resource = Resources.Load("CharacterModel/" + characterInfo.Id) as GameObject;
             var model = Instantiate(resource, uiCharacter.transform);
-            model.GetComponent<RectTransform>().anchoredPosition = new Vector3 (0, -50, 0);
+            model.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector3 (0, -50, 0);
             Debug.Log(model.transform.position);
             uiCharacter.GetComponent<CharacterSlot>().characterInfo = characterInfo;
             uiCharacter.GetComponent<CharacterSlot>().characterImage = characterInfo.characterImage;
@@ -129,7 +131,7 @@ public class Forming : MonoBehaviour
         skill.text = characterInfo.Skill_Id.ToString();
         rare.text = characterInfo.Tier;
     }
-
+        
     public void OnCharacterSelect(CharacterInfo characterInfo , CharacterSlot characterSlot)
     {
         if (MultiTouchManager.Instance.Tap == false) return;
@@ -149,10 +151,15 @@ public class Forming : MonoBehaviour
         if (index == -1) return;
 
         characterSlot.gameObject.SetActive(false);
+        
+        var characterSlotGo = characterSlot.gameObject;
+        var characterModel = characterSlotGo.transform.GetChild(0);
+        var uiSelectGo = uiSelectCharacterList[index];
 
-        var uiImg = uiSelectCharacterList[index].GetComponent<Image>();
+        characterModel.transform.SetParent(uiSelectGo.transform);
+        characterModel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -50f, 0f);
+
         uiSelectCharacterList[index].GetComponent<CharacterSelectSlot>().characterSlot = characterSlot; 
-        uiImg.sprite = characterInfo.characterImage;
 
         gameStartButton.interactable = GameStartCheck();
     }
@@ -160,7 +167,6 @@ public class Forming : MonoBehaviour
     public void OnClickGameStart()
     {
         SceneManager.LoadScene("Battle");
-        SceneManager.sceneLoaded += GameManager.Instance.CanvasMainCameraFind;
 
         UIManager.Instance.AllClose();
         

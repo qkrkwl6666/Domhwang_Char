@@ -52,6 +52,7 @@ public class GameManager : Singleton<GameManager>
                 if (resourcesData == null) continue;
                 var character = Instantiate(resourcesData);
                 var info = character.AddComponent<CharacterInfo>();
+                character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
                 info.SetCharacterData(c.Value);
                 info.creationTime = System.DateTime.Now;
                 info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
@@ -213,9 +214,4 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = timeScale;
     }
 
-    public void CanvasMainCameraFind(Scene scene, LoadSceneMode mode)
-    {
-        canvas.gameObject.SetActive(false);
-        canvas.gameObject.SetActive(true);
-    }
 }
