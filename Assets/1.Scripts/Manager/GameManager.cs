@@ -12,6 +12,8 @@ public class GameManager : Singleton<GameManager>
     public static readonly string pathData = "ScriptableObject/CharacterInitialData/";
     public static readonly string pathList = "Characters/";
 
+    public readonly int MAX_FORMATION_SIZE = 8;
+
     public Canvas canvas { get; private set; }
 
     // 플레이어 스테이지
@@ -45,21 +47,43 @@ public class GameManager : Singleton<GameManager>
 
         if (SaveLoadSystem.Load() == null)
         {
-            // 세이브 데이터가 없다면 기본 캐릭터 지급
-            foreach (var c in characterDatas.characterTable)
+            int normalListCount = TierCharacterDatasList[(int)CharacterTier.NORMAL].Count;
+            int rarelListCount = TierCharacterDatasList[(int)CharacterTier.RARE].Count;
+            int randomIndex;
+            int id;
+            CharacterData characterData;
+            // 세이브 데이터가 없다면 기본 캐릭터 지급 일반 7명, 레어 1명 랜덤
+            for (int i = 0; i < MAX_FORMATION_SIZE; i++) // 7명 랜덤 뽑기
             {
-                GameObject resourcesData = Resources.Load<GameObject>("Characters/" + c.Value.Id);
+                if(i == MAX_FORMATION_SIZE - 1) // 레어 뽑기
+                {
+                    randomIndex = UnityEngine.Random.Range(0, rarelListCount);
+                    characterData = TierCharacterDatasList[(int)CharacterTier.RARE][randomIndex];
+                    id = characterData.Id;
+
+                }
+                else
+                {
+                    randomIndex = UnityEngine.Random.Range(0, normalListCount);
+                    characterData = TierCharacterDatasList[(int)CharacterTier.NORMAL][randomIndex];
+                    id = characterData.Id;
+                }
+
+                GameObject resourcesData = Resources.Load<GameObject>("Characters/" + id);
                 if (resourcesData == null) continue;
+
                 var character = Instantiate(resourcesData);
                 var info = character.AddComponent<CharacterInfo>();
                 character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
-                info.SetCharacterData(c.Value);
+
+                info.SetCharacterData(characterData);
                 info.creationTime = System.DateTime.Now;
                 info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
-                DontDestroyOnLoad(character);
                 character.SetActive(false);
+                DontDestroyOnLoad(character);
                 playerCharacterList.Add(character);
             }
+            
         }// 세이브 데이터가 있다면 캐릭터 Load
         else if (playerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
         {

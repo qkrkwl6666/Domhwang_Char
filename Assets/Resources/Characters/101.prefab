@@ -341,7 +341,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5691425934638070526}
-  - component: {fileID: 3933851897540418319}
   - component: {fileID: 5894079962387532184}
   - component: {fileID: 5149858860263113850}
   m_Layer: 0
@@ -368,28 +367,6 @@ Transform:
   - {fileID: 2480678994357144804}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
---- !u!114 &3933851897540418319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901318653782632190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ac21711b0ec40a0812d33a586eb7ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _version: 166
-  _spriteOBj: {fileID: 8689802533749806042}
-  EditChk: 1
-  _code: Unit000
-  _anim: {fileID: 4991162435815667158}
-  _horse: 0
-  _horseString: 
-  UnitTypeChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &5894079962387532184
 MonoBehaviour:
   m_ObjectHideFlags: 0
