@@ -34,8 +34,8 @@ public class LevelUp : MonoBehaviour
 
     public void OnNextButton()
     {
-        GameManager.Instance.GameManagerAwake();
-        SceneManager.LoadScene("Main");
-        UIManager.Instance.OpenUI(Page.STAGE);
+        //GameManager.Instance.GameManagerAwake();
+        //SceneManager.LoadScene("Main");
+        UIManager.Instance.OpenUI(Page.NEWHERO);
     }
 }

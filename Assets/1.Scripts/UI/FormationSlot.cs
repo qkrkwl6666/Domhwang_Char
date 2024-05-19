@@ -1,0 +1,42 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.U2D.Animation;
+using UnityEngine;
+using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
+
+public class FormationSlot : MonoBehaviour
+{
+    public CardUIInfo card;
+    public CharacterInfo characterInfo;
+    private Button Button;
+
+    //public static event Action<CharacterData> CardEvent;
+
+    private void Awake()
+    {
+        Button = GetComponent<Button>();
+        card = GameObject.FindWithTag("SelectCard").GetComponent<CardUIInfo>();
+        Button.onClick.AddListener(OnCharacterClick);
+
+    }
+
+    public void SetData(CharacterInfo characterInfo)
+    {
+        this.characterInfo = characterInfo;
+        var go = Resources.Load("CharacterModel/" + characterInfo.Id.ToString()) as GameObject;
+
+        var model = Instantiate(go, transform);
+        model.transform.localScale = new Vector3(100f, 100f , 1f);
+        model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -35f, 0f);
+    }
+
+    public void OnCharacterClick()
+    {
+        // card 에 내 현재 정보 넘기기
+        //CardEvent?.Invoke(characterInfo.ConvertCharacterData());
+        card.SetData(characterInfo.ConvertCharacterData());
+    }
+
+}

@@ -29,7 +29,7 @@ public class MainCanvas : MonoBehaviour
         }
         else if (scene.name == "Battle")
         {
-            canvas.sortingOrder = 6;
+            canvas.sortingOrder = 4;
         }
     }
 

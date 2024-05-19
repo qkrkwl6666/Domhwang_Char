@@ -13,7 +13,6 @@ public class GameManager : Singleton<GameManager>
     public static readonly string pathList = "Characters/";
 
     public readonly int MAX_FORMATION_SIZE = 8;
-
     public Canvas canvas { get; private set; }
 
     // 플레이어 스테이지
@@ -236,6 +235,15 @@ public class GameManager : Singleton<GameManager>
     public void GameSetTimeScale(float timeScale)
     {
         Time.timeScale = timeScale;
+    }
+
+    public CharacterData GetRandomCharacter(CharacterTier tier)
+    {
+        var chList = TierCharacterDatasList[(int)tier];
+        int count = chList.Count;
+        int randomIndex = UnityEngine.Random.Range(0 , count);
+
+        return TierCharacterDatasList[(int)tier][randomIndex];
     }
 
 }

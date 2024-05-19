@@ -52,6 +52,24 @@ public class CharacterInfo : MonoBehaviour
         characterImage = Resources.Load<Sprite>("ChatacterImage/" + Id.ToString() + "Img");
     }
 
+    public CharacterData ConvertCharacterData()
+    {
+        CharacterData characterData = new CharacterData();
+
+        characterData.Id = Id;
+        characterData.Name = Name;
+        characterData.Tier = Tier;
+        characterData.Atk = Atk;
+        characterData.Atk_Up = Atk_Up;
+        characterData.Run = Run;
+        characterData.Run_Up = Run_Up;
+        characterData.Skill_Id = Skill_Id;
+        characterData.Level = Level;
+        characterData.Instance_Id = InstanceId;
+
+        return characterData;
+    }
+
     public void LevelUp()
     {
         Level++;

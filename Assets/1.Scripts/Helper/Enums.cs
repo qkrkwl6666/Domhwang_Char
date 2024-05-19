@@ -1,4 +1,4 @@
-enum CharacterTier
+public enum CharacterTier
 {
     NORMAL,
     RARE,

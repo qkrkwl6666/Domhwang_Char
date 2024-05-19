@@ -9,6 +9,7 @@ TagManager:
   - Monster
   - BattleSystem
   - MainCanvas
+  - SelectCard
   layers:
   - Default
   - TransparentFX
