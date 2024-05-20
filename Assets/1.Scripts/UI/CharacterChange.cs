@@ -69,6 +69,7 @@ public class CharacterChange : MonoBehaviour
 
     public void OnCencelButtonClick()
     {
+        SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.STAGE);
     }
 }
