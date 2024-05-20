@@ -17,10 +17,15 @@ public class LevelUp : MonoBehaviour
             var prefab = Instantiate(LevelUpUIPrefab, Content);
             var uiPrefab = prefab.GetComponent<LevelUpUIPrefab>();
 
-            uiPrefab.characterImage.sprite = character.characterImage;
-            uiPrefab.levelText.text = $"{character.Level.ToString()}";
-            uiPrefab.attackText.text = $"{character.Atk.ToString()} +{character.Atk_Up.ToString()}";
-            uiPrefab.runText.text = $"{character.Run.ToString()} -{character.Run_Up.ToString()}";
+            //uiPrefab.characterImage.sprite = character.characterImage;
+            var go = Resources.Load("CharacterModel/" + character.Id.ToString()) as GameObject;
+            var model = Instantiate(go, uiPrefab.characterModel.transform);
+            model.transform.localScale = new Vector3(100f, 100f, 100f);
+            model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -40f, 0f);
+
+            uiPrefab.levelText.text = $"{character.Level}";
+            uiPrefab.attackText.text = $"{character.Atk} +{character.Atk_Up}";
+            uiPrefab.runText.text = $"{character.Run} -{character.Run_Up}";
         }   
     }
 

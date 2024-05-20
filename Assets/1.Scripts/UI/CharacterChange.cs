@@ -25,14 +25,22 @@ public class CharacterChange : MonoBehaviour
 
     private void OnEnable()
     {
-        ChangeButton.interactable = false;
-        removeCharacterInfo = null;
-
         foreach (var character in GameManager.Instance.PlayerCharacterList)
         {
             var go = Instantiate(characterSlotPrefab, content);
             var slot = go.GetComponent<FormationSlot>();
             slot.SetData(character.GetComponent<CharacterInfo>());
+        }
+    }
+
+    private void OnDisable()
+    {
+        ChangeButton.interactable = false;
+        removeCharacterInfo = null;
+
+        foreach (Transform transform in content.transform)
+        {
+            Destroy(transform.gameObject);
         }
     }
 

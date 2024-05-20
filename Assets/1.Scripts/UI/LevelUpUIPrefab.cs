@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LevelUpUIPrefab : MonoBehaviour
 {
-    public Image characterImage;
+    public GameObject characterModel;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI attackText;
     public TextMeshProUGUI runText;
