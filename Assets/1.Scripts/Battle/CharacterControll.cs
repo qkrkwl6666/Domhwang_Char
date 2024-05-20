@@ -29,6 +29,9 @@ public class CharacterControll : MonoBehaviour
     public static event Action<GameObject> OnCharacterControll;
     public UnityEngine.Transform MonsterTransform {  get; set; }
 
+    // Todo : 게임 패배후 재시작시 캐릭터 애니메이션 상태 전환 해줘야함
+    // 버그 : 게임 패배후 편성 창 가면 캐릭터가 하나 증가되는 버그
+
     public Vector3 StopPosition = Vector3.zero;
     private void Awake()
     {
@@ -43,11 +46,12 @@ public class CharacterControll : MonoBehaviour
     private void OnEnable()
     {
         Flip(true);
+        AnimationMove();
     }
 
     private void Start()
     {
-        animator.SetBool("Move", true);
+        
     }
 
     private void Update()
@@ -230,6 +234,7 @@ public class CharacterControll : MonoBehaviour
         isRun = false;
         Flip(true);
         ChangeStatus(Status.Move);
+        gameObject.transform.position = Vector3.zero;
 
         gameObject.SetActive(true);
         AnimationMove();

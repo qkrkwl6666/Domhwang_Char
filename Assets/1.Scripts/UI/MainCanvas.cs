@@ -21,6 +21,7 @@ public class MainCanvas : MonoBehaviour
 
     public void FindCanvasChangeScene(Scene scene, LoadSceneMode mode)
     {
+        if (canvas == null) return;
         canvas.worldCamera = Camera.main;
 
         if(scene.name == "Main")

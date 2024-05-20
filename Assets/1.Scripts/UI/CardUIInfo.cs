@@ -13,6 +13,8 @@ public class CardUIInfo : MonoBehaviour
     public TextMeshProUGUI skill;
     public Transform character;
 
+    public CharacterData CharacterData { get; private set; }
+
     private void Awake()
     {
         //FormationSlot.CardEvent += SetData;
@@ -20,7 +22,9 @@ public class CardUIInfo : MonoBehaviour
 
     public void SetData(CharacterData characterData)
     {
-        foreach(Transform t in character)
+        CharacterData = characterData;
+
+        foreach (Transform t in character)
         {
             Destroy(t.gameObject);
         }

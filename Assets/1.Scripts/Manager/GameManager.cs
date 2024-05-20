@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
+using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
@@ -27,7 +28,7 @@ public class GameManager : Singleton<GameManager>
     public List<List<CharacterData>> TierCharacterDatasList { get; private set; } = new List<List<CharacterData>>();
 
     // 내가 보유 중인 캐릭터들
-    public List<GameObject> playerCharacterList { get; private set; } = new List<GameObject>();
+    public List<GameObject> PlayerCharacterList { get; private set; } = new List<GameObject>();
 
     // 편성 선택한 캐릭터 리스트
     public List<GameObject> formationCharacterList = new List<GameObject>();
@@ -68,23 +69,11 @@ public class GameManager : Singleton<GameManager>
                     id = characterData.Id;
                 }
 
-                GameObject resourcesData = Resources.Load<GameObject>("Characters/" + id);
-                if (resourcesData == null) continue;
-
-                var character = Instantiate(resourcesData);
-                var info = character.AddComponent<CharacterInfo>();
-                character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
-
-                info.SetCharacterData(characterData);
-                info.creationTime = System.DateTime.Now;
-                info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
-                character.SetActive(false);
-                DontDestroyOnLoad(character);
-                playerCharacterList.Add(character);
+                CreateCharacter(characterData);
             }
             
         }// 세이브 데이터가 있다면 캐릭터 Load
-        else if (playerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
+        else if (PlayerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
         {
             foreach (CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
             {
@@ -94,11 +83,12 @@ public class GameManager : Singleton<GameManager>
                 info.SetCharacterInfo(go);
                 DontDestroyOnLoad(character);
                 character.SetActive(false);
-                playerCharacterList.Add(character);
+                PlayerCharacterList.Add(character);
             }
         }
 
         canvas = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>();
+        SceneManager.sceneLoaded += GameManagerAwake;
     }   
 
     void Start()
@@ -114,7 +104,7 @@ public class GameManager : Singleton<GameManager>
             SaveData1 saveData1 = new SaveData1();
             List<CharacterInfo> list = new List<CharacterInfo>();
 
-            foreach(var character in playerCharacterList)
+            foreach(var character in PlayerCharacterList)
             {
                 list.Add(character.GetComponent<CharacterInfo>());
             }
@@ -183,19 +173,22 @@ public class GameManager : Singleton<GameManager>
         ++CurrentStage;
     }
 
-    public void GameManagerAwake()
+    public void GameManagerAwake(Scene scene, LoadSceneMode mode)
     {
-        CharacterAnimationEvent.MonsterDamageEvent = null;
-        MonsterData = null;
-        formationCharacterList.Clear();
-        LevelUpCharacterList.Clear();
-        CharactersCCEnable(true);
-        
-        foreach (var character in playerCharacterList)
+        if(scene.name == "Main")
         {
-            var cc = character.GetComponent<CharacterControll>();
-            cc.CharacterAwake();
-            character.SetActive(false);
+            CharacterAnimationEvent.MonsterDamageEvent = null;
+            MonsterData = null;
+            formationCharacterList.Clear();
+            LevelUpCharacterList.Clear();
+            CharactersCCEnable(true);
+
+            foreach (var character in PlayerCharacterList)
+            {
+                var cc = character.GetComponent<CharacterControll>();
+                cc.CharacterAwake();
+                character.SetActive(false);
+            }
         }
     }
 
@@ -225,7 +218,7 @@ public class GameManager : Singleton<GameManager>
 
     public void CharactersCCEnable(bool isEnable)
     {
-        foreach(var gameObject in playerCharacterList)
+        foreach(var gameObject in PlayerCharacterList)
         {
             var cc = gameObject.GetComponent<CharacterControll>();
             cc.enabled = isEnable;
@@ -244,6 +237,24 @@ public class GameManager : Singleton<GameManager>
         int randomIndex = UnityEngine.Random.Range(0 , count);
 
         return TierCharacterDatasList[(int)tier][randomIndex];
+    }
+    public GameObject CreateCharacter(CharacterData characterData)
+    {
+        GameObject resourcesData = Resources.Load<GameObject>("Characters/" + characterData.Id);
+        if (resourcesData == null) return null;
+
+        var character = Instantiate(resourcesData);
+        var info = character.AddComponent<CharacterInfo>();
+        character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
+
+        info.SetCharacterData(characterData);
+        info.creationTime = System.DateTime.Now;
+        info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
+        character.SetActive(false);
+        DontDestroyOnLoad(character);
+        PlayerCharacterList.Add(character);
+
+        return character;
     }
 
 }

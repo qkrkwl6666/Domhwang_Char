@@ -8,8 +8,10 @@ using UnityEngine.UI;
 
 public class FormationSlot : MonoBehaviour
 {
-    public CardUIInfo card;
+    //public CardUIInfo card;
     public CharacterInfo characterInfo;
+    public CharacterChange CharacterChange { get; private set; }
+
     private Button Button;
 
     //public static event Action<CharacterData> CardEvent;
@@ -17,9 +19,9 @@ public class FormationSlot : MonoBehaviour
     private void Awake()
     {
         Button = GetComponent<Button>();
-        card = GameObject.FindWithTag("SelectCard").GetComponent<CardUIInfo>();
+        //card = GameObject.FindWithTag("SelectCard").GetComponent<CardUIInfo>();
         Button.onClick.AddListener(OnCharacterClick);
-
+        CharacterChange = GetComponentInParent<CharacterChange>();
     }
 
     public void SetData(CharacterInfo characterInfo)
@@ -36,7 +38,10 @@ public class FormationSlot : MonoBehaviour
     {
         // card 에 내 현재 정보 넘기기
         //CardEvent?.Invoke(characterInfo.ConvertCharacterData());
-        card.SetData(characterInfo.ConvertCharacterData());
+        //card.SetData(characterInfo.ConvertCharacterData());
+
+        CharacterChange.ChangeButton.interactable = true;
+        CharacterChange.RemoveCardInfo(characterInfo);
     }
 
 }

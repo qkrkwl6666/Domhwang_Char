@@ -31,11 +31,16 @@ public class BattleSystem : MonoBehaviour
     // Todo : 이곳에서 테이블 가져와서 확률에 따라 몬스터 생성
     private void Awake()
     {
+
+    }
+
+    private void OnEnable()
+    {
         characterList = GameManager.Instance.formationCharacterList;
 
         var go = Resources.Load<GameObject>("Monsters/" + GameManager.Instance.MonsterData.Id.ToString());
         // 몬스터 생성
-        monster = Instantiate(go);    
+        monster = Instantiate(go);
 
         InitializeRoundCharacters(Round);
 

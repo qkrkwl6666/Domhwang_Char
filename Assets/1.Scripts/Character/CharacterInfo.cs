@@ -48,8 +48,6 @@ public class CharacterInfo : MonoBehaviour
         Level = characterInfo.Level;
         Texture = characterInfo.Id;
         InstanceId = characterInfo.InstanceId;
-
-        characterImage = Resources.Load<Sprite>("ChatacterImage/" + Id.ToString() + "Img");
     }
 
     public CharacterData ConvertCharacterData()

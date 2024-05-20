@@ -66,27 +66,26 @@ public class Forming : MonoBehaviour
         for (int i = 0; i < uiCharacterList.Count; i++)
         {
             Destroy(uiCharacterList[i]);
-            uiCharacterList.RemoveAt(i);
         }
 
-        foreach (GameObject character in GameManager.Instance.playerCharacterList)
+        uiCharacterList.Clear();
+
+        foreach (GameObject character in GameManager.Instance.PlayerCharacterList)
         {
             var uiCharacter = Instantiate(UICharacterPrefabs, content.transform);
             CharacterInfo characterInfo = character.GetComponent<CharacterInfo>();
-            // uiCharacter.GetComponent<Image>().sprite = characterInfo.characterImage;
             var resource = Resources.Load("CharacterModel/" + characterInfo.Id) as GameObject;
             var model = Instantiate(resource, uiCharacter.transform);
             model.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector3 (0, -50, 0);
-            Debug.Log(model.transform.position);
             uiCharacter.GetComponent<CharacterSlot>().characterInfo = characterInfo;
-            uiCharacter.GetComponent<CharacterSlot>().characterImage = characterInfo.characterImage;
+            //uiCharacter.GetComponent<CharacterSlot>().characterImage = characterInfo.characterImage;
             uiCharacterList.Add(uiCharacter);
         }
 
-        foreach(GameObject uiCharacterSelect in uiSelectCharacterList)
-        {
-            uiCharacterSelect.GetComponent<Image>().sprite = default;
-        }
+        //foreach(GameObject uiCharacterSelect in uiSelectCharacterList)
+        //{
+        //    uiCharacterSelect.GetComponent<Image>().sprite = default;
+        //}
 
         // 각 스테이지 맞는 몬스터 뽑기
         GameManager.Instance.CreateMonster();
