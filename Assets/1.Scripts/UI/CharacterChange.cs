@@ -52,8 +52,11 @@ public class CharacterChange : MonoBehaviour
 
     public void OnChangeButtonClick()
     {
-        
+
         // 현재 플레이어 리스트 에서 제거
+
+        Destroy(removeCharacterInfo.gameObject);
+
         GameManager.Instance.PlayerCharacterList.Remove(removeCharacterInfo.gameObject);
 
         // 카드 캐릭터 생성 후 플레이어 리스트에 넣기

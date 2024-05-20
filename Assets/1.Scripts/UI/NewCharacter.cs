@@ -20,7 +20,15 @@ public class NewCharacter : MonoBehaviour
 
     private void OnEnable()
     {
+        formationUI.SetActive(false);
+        cardUI.SetActive(true);
+
         charactersData.Clear();
+
+        foreach(Transform t in content.transform)
+        {
+            Destroy(t.gameObject);
+        }
 
         // 등급별 캐릭터 소환
         for (int i = 0; i < newCharacterCount; i++)
