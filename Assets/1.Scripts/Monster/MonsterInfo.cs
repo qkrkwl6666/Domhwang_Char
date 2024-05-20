@@ -1,20 +1,27 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class MonsterInfo : MonoBehaviour
 {
     public Canvas HpSliderPrefabs;
-
     public int Id {  get; private set; }
-    [field:SerializeField] public int Hp {  get; private set; }
+    public string Name { get; private set; }
+    public int Hp {  get; set; }
+    public string Tier { get; private set; }
     public bool isDead { get; private set; } = false;
     public int Feature_Id { get; private set; }
+    public int Round { get; private set; }
     public int Heal { get; private set; }
     public int Reduced_dmg { get; private set; }
+    public bool isInvincible { get; set; }
+    public bool isIncreasedDamage { get; set; }
 
     private BattleSystem battleSystem;
 
     private UnityEngine.UI.Slider hpSlider;
+
+    public int CurrentRound { get; set; }
 
     public bool MonsterAttackEnd { get; private set; } = false;
     private Animator animator;
@@ -51,11 +58,35 @@ public class MonsterInfo : MonoBehaviour
         Feature_Id = monsterData.Feature_Id;
         Heal = monsterData.heal;
         Reduced_dmg = monsterData.reduced_dmg;
+        Name = monsterData.Name;
+        Tier = monsterData.Tier;
+        Round = monsterData.round;
     }
 
     public void Damage(int damage)
     {
-        Hp -= damage;
+        // 엘리트 몬스터 의 경우 첫공격 무효
+        if(Tier == "elite")
+        {
+            if(GetComponent<MonsterEliteSkill>().FirstAttackDefence()) return;
+        }
+
+        if(!isInvincible && !isIncreasedDamage && !battleSystem.RemainingAttack)
+            Hp -= damage;
+
+        else if (isIncreasedDamage)
+        {
+            Hp -= damage * 8;
+        }
+
+        else if (battleSystem.RemainingAttack)
+        {
+            int reducedDmg = damage - Reduced_dmg;
+            if (reducedDmg < 0) { reducedDmg = 0; }
+
+            Hp -= reducedDmg;
+        }
+
         animator.SetTrigger("TakeHit");
 
         if (Hp <= 0)
