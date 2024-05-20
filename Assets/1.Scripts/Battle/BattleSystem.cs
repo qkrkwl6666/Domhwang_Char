@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class BattleSystem : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class BattleSystem : MonoBehaviour
     public bool RemainingAttack { get; private set; } = false;
 
     private GameObject monster;
-    private MonsterInfo monsterInfo;
+    public MonsterInfo MonsterInfo { get; private set; }
 
     // Todo : 이곳에서 테이블 가져와서 확률에 따라 몬스터 생성
     private void Awake()
@@ -44,7 +45,7 @@ public class BattleSystem : MonoBehaviour
         var go = Resources.Load<GameObject>("Monsters/" + GameManager.Instance.MonsterData.Id.ToString());
         // 몬스터 생성
         monster = Instantiate(go);
-        monsterInfo = monster.GetComponent<MonsterInfo>();
+        MonsterInfo = monster.GetComponent<MonsterInfo>();
 
         InitializeRoundCharacters(Round);
 
@@ -67,7 +68,7 @@ public class BattleSystem : MonoBehaviour
         while (currentRound <= Round)
         {
             RemainingAttack = false;
-            monsterInfo.CurrentRound = currentRound;
+            MonsterInfo.CurrentRound = currentRound;
 
             BossSkills();
 
@@ -79,6 +80,7 @@ public class BattleSystem : MonoBehaviour
 
             // 라운드별 캐릭터 스폰  
             BattleSetCharacters(currentRound);
+            ApplyCharacterSkills(currentRound);
 
             SetIdlePosition(currentRound);
 
@@ -86,7 +88,7 @@ public class BattleSystem : MonoBehaviour
             yield return StartCoroutine(WaitForCharactersIdle(true, currentRound));
 
             Stage6BossSkill();
-            monsterInfo.isIncreasedDamage = false;
+            MonsterInfo.isIncreasedDamage = false;
 
             // 남은 병사가 있으면 남은 병사 공격
             RemainingCharactersAttack();
@@ -317,7 +319,7 @@ public class BattleSystem : MonoBehaviour
 
             var ci = character.GetComponent<CharacterInfo>();
 
-            totalAttack += ci.Atk;
+            totalAttack += ci.BattleAttack;
 
             if (monsterInfo.Hp - totalAttack <= 0) continue;
 
@@ -357,7 +359,7 @@ public class BattleSystem : MonoBehaviour
             var characterControll = character.GetComponent<CharacterControll>();
             var ci = character.GetComponent<CharacterInfo>();
 
-            totalAttack += ci.Atk;
+            totalAttack += ci.BattleAttack;
 
             characterControll.AttackMode();
 
@@ -442,9 +444,22 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void ApplyCharacterSkills(int currentRound)
+    {
+        if (currentRound > Round) return;
+
+        var currentRoundCharacters = battleCharacter[currentRound - 1];
+
+        for (int i = 0; i < currentRoundCharacters.Count; i++)
+        {
+            var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
+            characterInfo.ApplySkill(this);
+        }
+    }
+
     public void Stage3BossSkill()
     {
-        if (monsterInfo.Tier == "boss")
+        if (MonsterInfo.Tier == "boss")
         {
             var bossSkill = monster.GetComponent<MonsterBossSkill>();
             bossSkill.FinalRoundHealth();
@@ -453,7 +468,7 @@ public class BattleSystem : MonoBehaviour
 
     public void Stage6BossSkill()
     {
-        if (monsterInfo.Tier == "boss" && monsterInfo.Id == 601)
+        if (MonsterInfo.Tier == "boss" && MonsterInfo.Id == 601)
         {
             RemainingAttack = true;
         }
@@ -461,7 +476,7 @@ public class BattleSystem : MonoBehaviour
 
     public void Stage9BossSkill()
     {
-        if (monsterInfo.Tier == "boss")
+        if (MonsterInfo.Tier == "boss")
         {
             var bossSkill = monster.GetComponent<MonsterBossSkill>();
             bossSkill.NoDamageCurrentRound();
@@ -470,7 +485,7 @@ public class BattleSystem : MonoBehaviour
 
     public void Stage12BossSkill()
     {
-        if (monsterInfo.Tier == "boss")
+        if (MonsterInfo.Tier == "boss")
         {
             var bossSkill = monster.GetComponent<MonsterBossSkill>();
             bossSkill.Stage12BossSkill();

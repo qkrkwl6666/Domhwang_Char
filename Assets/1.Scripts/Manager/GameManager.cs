@@ -92,11 +92,6 @@ public class GameManager : Singleton<GameManager>
         SceneManager.sceneLoaded += GameManagerAwake;
     }   
 
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
