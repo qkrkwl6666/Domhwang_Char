@@ -64,14 +64,13 @@ public class BattleSystem : MonoBehaviour
     // Todo : 중간에 몬스터가 죽으면 보상창 몬스터가 죽지 않았을경우 캐릭터에게 공격 
     IEnumerator CharactersBattleSystem()
     {
-        
-
         while (CurrentRound <= Round)
         {
             RemainingAttack = false;
             MonsterInfo.CurrentRound = CurrentRound;
 
             BossSkills();
+            ApplyInitializeSkill();
 
             roundTextUI.text = CurrentRound.ToString() + " 라운드";
             removeCharacters.Clear();
@@ -395,8 +394,6 @@ public class BattleSystem : MonoBehaviour
                 characterList.Remove(removeCharacter);
             }
         }
-
-        
     }
 
     public void SetIdlePosition(int Round)
@@ -458,6 +455,22 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    // 캐릭터 스폰 전에 스킬 적용
+
+    public void ApplyInitializeSkill()
+    {
+        if (CurrentRound > Round) return;
+
+        var currentRoundCharacters = battleCharacter[CurrentRound - 1];
+
+        for (int i = 0; i < currentRoundCharacters.Count; i++)
+        {
+            var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
+            characterInfo.InitializeSkill(this);
+        }
+    }
+
+    // 캐릭터 isRun and AttackEnd Run 후 스킬 적용
     public void ApplyCharacterSkills(int currentRound)
     {
         if (currentRound > Round) return;
