@@ -8,18 +8,17 @@ public class DataTableMgr : Singleton<DataTableMgr>
 
     private void Awake()
     {
-        DataTable characterTable = new CharacterTable();
-        // characterTable.Load("CharacterData"); 기존 데이터 테이블 비활성화
-        characterTable.Load("CharacterData_Designer");
+        DataTable characterskillTable = new CharacterSkillTable();
+        characterskillTable.Load("CharacterSkillData");
 
-        DataTable skillTable = new SkillTable();
-        skillTable.Load("SkillData");
+        DataTable characterTable = new CharacterTable();
+        characterTable.Load("CharacterData_Designer");
 
         DataTable monsterTable = new MonsterTable();
         monsterTable.Load("MonsterData");
 
         tables.Add("Character", characterTable);
-        tables.Add("Skill", skillTable);
+        tables.Add("CharacterSkill", characterskillTable);
         tables.Add("Monster", monsterTable);
     }
 

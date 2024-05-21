@@ -23,7 +23,7 @@ public class CharacterAnimationEvent : MonoBehaviour
     {
         Debug.Log("AttackDamage");
         // 여기서 몬스터 데미지
-        MonsterDamageEvent?.Invoke(characterInfo.Atk);
+        MonsterDamageEvent?.Invoke(characterInfo.BattleAttack);
     }
 
     private void AttackEnd()

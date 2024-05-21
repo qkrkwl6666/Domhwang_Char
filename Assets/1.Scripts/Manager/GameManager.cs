@@ -92,11 +92,6 @@ public class GameManager : Singleton<GameManager>
         SceneManager.sceneLoaded += GameManagerAwake;
     }   
 
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -187,6 +182,9 @@ public class GameManager : Singleton<GameManager>
             foreach (var character in PlayerCharacterList)
             {
                 var cc = character.GetComponent<CharacterControll>();
+                var cl = character.GetComponent<CharacterInfo>();
+
+                cl.BattleAttack = cl.Atk;
                 cc.CharacterAwake();
                 character.SetActive(false);
             }

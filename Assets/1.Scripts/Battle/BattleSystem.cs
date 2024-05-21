@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class BattleSystem : MonoBehaviour
 {
@@ -25,11 +26,12 @@ public class BattleSystem : MonoBehaviour
 
     private List<Vector3> IdlePoint = new List<Vector3>();
     public int Round { get; private set; } = 3;
+    public int CurrentRound { get; private set; } = 1;
 
     public bool RemainingAttack { get; private set; } = false;
 
     private GameObject monster;
-    private MonsterInfo monsterInfo;
+    public MonsterInfo MonsterInfo { get; private set; }
 
     // Todo : 이곳에서 테이블 가져와서 확률에 따라 몬스터 생성
     private void Awake()
@@ -44,7 +46,7 @@ public class BattleSystem : MonoBehaviour
         var go = Resources.Load<GameObject>("Monsters/" + GameManager.Instance.MonsterData.Id.ToString());
         // 몬스터 생성
         monster = Instantiate(go);
-        monsterInfo = monster.GetComponent<MonsterInfo>();
+        MonsterInfo = monster.GetComponent<MonsterInfo>();
 
         InitializeRoundCharacters(Round);
 
@@ -62,40 +64,41 @@ public class BattleSystem : MonoBehaviour
     // Todo : 중간에 몬스터가 죽으면 보상창 몬스터가 죽지 않았을경우 캐릭터에게 공격 
     IEnumerator CharactersBattleSystem()
     {
-        int currentRound = 1;
+        
 
-        while (currentRound <= Round)
+        while (CurrentRound <= Round)
         {
             RemainingAttack = false;
-            monsterInfo.CurrentRound = currentRound;
+            MonsterInfo.CurrentRound = CurrentRound;
 
             BossSkills();
 
-            roundTextUI.text = currentRound.ToString() + " 라운드";
+            roundTextUI.text = CurrentRound.ToString() + " 라운드";
             removeCharacters.Clear();
 
             // 전 라운드 잔류 병사 추가
             InsertStandRemainingCharacters();
 
             // 라운드별 캐릭터 스폰  
-            BattleSetCharacters(currentRound);
+            BattleSetCharacters(CurrentRound);
+            ApplyCharacterSkills(CurrentRound);
 
-            SetIdlePosition(currentRound);
+            SetIdlePosition(CurrentRound);
 
             // 현재 라운드 공격이 끝났는지 대기
-            yield return StartCoroutine(WaitForCharactersIdle(true, currentRound));
+            yield return StartCoroutine(WaitForCharactersIdle(true, CurrentRound));
 
             Stage6BossSkill();
-            monsterInfo.isIncreasedDamage = false;
+            MonsterInfo.isIncreasedDamage = false;
 
             // 남은 병사가 있으면 남은 병사 공격
             RemainingCharactersAttack();
 
-            SetIdlePosition(currentRound);
+            SetIdlePosition(CurrentRound);
 
             yield return StartCoroutine(WaitForCharactersIdle());
 
-            currentRound++;
+            CurrentRound++;
         }
 
         // 스테이지 끝나고 2초후 공격
@@ -307,6 +310,13 @@ public class BattleSystem : MonoBehaviour
         {
             var characterControll = character.GetComponent<CharacterControll>();
 
+            if(CurrentRound >= Round)
+            {
+                StandRemainingCharacters.Add(character);
+                playingCharacters.Add(character);
+                break;
+            }
+
             characterControll.RunMode(true);
 
             if (characterControll.isRun) 
@@ -317,7 +327,7 @@ public class BattleSystem : MonoBehaviour
 
             var ci = character.GetComponent<CharacterInfo>();
 
-            totalAttack += ci.Atk;
+            totalAttack += ci.BattleAttack;
 
             if (monsterInfo.Hp - totalAttack <= 0) continue;
 
@@ -357,9 +367,15 @@ public class BattleSystem : MonoBehaviour
             var characterControll = character.GetComponent<CharacterControll>();
             var ci = character.GetComponent<CharacterInfo>();
 
-            totalAttack += ci.Atk;
+            totalAttack += ci.BattleAttack;
 
             characterControll.AttackMode();
+
+            if (CurrentRound >= Round)
+            {
+                playingCharacters.Add(character);
+                continue;
+            }
 
             var monsterInfo = monster.GetComponent<MonsterInfo>();
             
@@ -442,9 +458,22 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void ApplyCharacterSkills(int currentRound)
+    {
+        if (currentRound > Round) return;
+
+        var currentRoundCharacters = battleCharacter[currentRound - 1];
+
+        for (int i = 0; i < currentRoundCharacters.Count; i++)
+        {
+            var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
+            characterInfo.ApplySkill(this);
+        }
+    }
+
     public void Stage3BossSkill()
     {
-        if (monsterInfo.Tier == "boss")
+        if (MonsterInfo.Tier == "boss")
         {
             var bossSkill = monster.GetComponent<MonsterBossSkill>();
             bossSkill.FinalRoundHealth();
@@ -453,7 +482,7 @@ public class BattleSystem : MonoBehaviour
 
     public void Stage6BossSkill()
     {
-        if (monsterInfo.Tier == "boss" && monsterInfo.Id == 601)
+        if (MonsterInfo.Tier == "boss" && MonsterInfo.Id == 601)
         {
             RemainingAttack = true;
         }
@@ -461,7 +490,7 @@ public class BattleSystem : MonoBehaviour
 
     public void Stage9BossSkill()
     {
-        if (monsterInfo.Tier == "boss")
+        if (MonsterInfo.Tier == "boss")
         {
             var bossSkill = monster.GetComponent<MonsterBossSkill>();
             bossSkill.NoDamageCurrentRound();
@@ -470,7 +499,7 @@ public class BattleSystem : MonoBehaviour
 
     public void Stage12BossSkill()
     {
-        if (monsterInfo.Tier == "boss")
+        if (MonsterInfo.Tier == "boss")
         {
             var bossSkill = monster.GetComponent<MonsterBossSkill>();
             bossSkill.Stage12BossSkill();

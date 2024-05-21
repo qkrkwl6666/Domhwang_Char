@@ -8,6 +8,7 @@ public class MonsterInfo : MonoBehaviour
     public int Id {  get; private set; }
     public string Name { get; private set; }
     public int Hp {  get; set; }
+    public int MaxHp {  get; set; }
     public string Tier { get; private set; }
     public bool isDead { get; private set; } = false;
     public int Feature_Id { get; private set; }
@@ -55,6 +56,7 @@ public class MonsterInfo : MonoBehaviour
     {
         Id = monsterData.Id;
         Hp = monsterData.Hp;
+        MaxHp = Hp;
         Feature_Id = monsterData.Feature_Id;
         Heal = monsterData.heal;
         Reduced_dmg = monsterData.reduced_dmg;

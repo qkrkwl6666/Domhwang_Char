@@ -1068,6 +1068,7 @@ GameObject:
   - component: {fileID: 8773018680702055846}
   - component: {fileID: 3024116676123176977}
   - component: {fileID: 6206474791457844503}
+  - component: {fileID: 7193025797140491825}
   m_Layer: 0
   m_Name: UnitRoot
   m_TagString: Untagged
@@ -1102,7 +1103,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 2
   m_SortAtRoot: 0
 --- !u!95 &6206474791457844503
 Animator:
@@ -1125,6 +1126,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7193025797140491825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636677578838631961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0919fda73564be24bab275aa9102146a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterInfo: {fileID: 0}
+  monsterInfo: {fileID: 0}
 --- !u!1 &2801799230974549057
 GameObject:
   m_ObjectHideFlags: 0

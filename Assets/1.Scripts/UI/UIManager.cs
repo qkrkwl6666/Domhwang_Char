@@ -15,14 +15,14 @@ public class UIManager : Singleton<UIManager>
         mainPanels = GameObject.FindWithTag("MainPanel").transform;
         canvas = mainPanels.GetComponentInParent<Canvas>();
         
-        Debug.Log("UIManagerAwake");
+        //Debug.Log("UIManagerAwake");
         page = Page.TITLE;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("UIManagerStart");
+        //Debug.Log("UIManagerStart");
         foreach (Transform panel in mainPanels)
         {
             defaultPanels.Add(panel.gameObject);
