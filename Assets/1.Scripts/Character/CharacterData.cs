@@ -17,4 +17,32 @@ public class CharacterData
     public int Texture { get; set; }
     public int Level { get; set; }
 
+    public void LevelUp()
+    {
+        Level++;
+        Atk += Atk_Up;
+        Run -= Run_Up;
+
+        if (Run < 0) Run = 0;
+    }
+
+    public CharacterData GetCharacterData()
+    {
+        CharacterData data = new CharacterData();
+
+        data.Id = Id;
+        data.Name = Name;
+        data.Tier = Tier;
+        data.Atk = Atk;
+        data.Atk_Up = Atk_Up;
+        data.Run = Run;
+        data.Run_Up = Run_Up;
+        data.Skill_Id = Skill_Id;
+        data.Instance_Id = Instance_Id;
+        data.Texture = Texture;
+        data.Level = Level;
+
+        return data;
+    }
+
 }

@@ -43,6 +43,7 @@ public class NewCharacter : MonoBehaviour
         {
             var card = Instantiate(cardPrefab, content);
             card.GetComponent<CharacterCard>().SetData(charactersData[i]);
+            card.GetComponent<CharacterCard>().CardAwake();
         }
     }
 

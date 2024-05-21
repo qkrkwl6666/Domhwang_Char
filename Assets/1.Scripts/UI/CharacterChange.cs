@@ -61,7 +61,7 @@ public class CharacterChange : MonoBehaviour
 
         // 카드 캐릭터 생성 후 플레이어 리스트에 넣기
         GameManager.Instance.CreateCharacter(SelectedCharacter.CharacterData);
-
+        GameManager.Instance.TryCount = 3;
         SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.STAGE);
 

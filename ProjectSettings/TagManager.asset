@@ -10,6 +10,7 @@ TagManager:
   - BattleSystem
   - MainCanvas
   - SelectCard
+  - EffectManager
   layers:
   - Default
   - TransparentFX

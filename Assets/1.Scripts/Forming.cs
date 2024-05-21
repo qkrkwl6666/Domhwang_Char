@@ -78,6 +78,7 @@ public class Forming : MonoBehaviour
             var model = Instantiate(resource, uiCharacter.transform);
             model.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector3 (0, -50, 0);
             uiCharacter.GetComponent<CharacterSlot>().characterInfo = characterInfo;
+            uiCharacter.GetComponent<CharacterSlot>().levelText.text = characterInfo.Level.ToString();
             //uiCharacter.GetComponent<CharacterSlot>().characterImage = characterInfo.characterImage;
             uiCharacterList.Add(uiCharacter);
         }
@@ -152,7 +153,16 @@ public class Forming : MonoBehaviour
         characterSlot.gameObject.SetActive(false);
         
         var characterSlotGo = characterSlot.gameObject;
-        var characterModel = characterSlotGo.transform.GetChild(0);
+        //var characterModel = characterSlotGo.transform.GetChild(0);
+        GameObject characterModel = null;
+        foreach(Transform t in characterSlotGo.transform)
+        {
+            if(t.GetComponent<TextMeshProUGUI>() == null)
+            {
+                characterModel = t.gameObject;
+                break;
+            }
+        }
         var uiSelectGo = uiSelectCharacterList[index];
 
         characterModel.transform.SetParent(uiSelectGo.transform);
