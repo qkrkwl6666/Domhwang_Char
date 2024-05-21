@@ -26,7 +26,10 @@ public class BattleSystem : MonoBehaviour
     private List<Vector3> IdlePoint = new List<Vector3>();
     public int Round { get; private set; } = 3;
 
+    public bool RemainingAttack { get; private set; } = false;
+
     private GameObject monster;
+    private MonsterInfo monsterInfo;
 
     // Todo : 이곳에서 테이블 가져와서 확률에 따라 몬스터 생성
     private void Awake()
@@ -41,6 +44,7 @@ public class BattleSystem : MonoBehaviour
         var go = Resources.Load<GameObject>("Monsters/" + GameManager.Instance.MonsterData.Id.ToString());
         // 몬스터 생성
         monster = Instantiate(go);
+        monsterInfo = monster.GetComponent<MonsterInfo>();
 
         InitializeRoundCharacters(Round);
 
@@ -62,6 +66,11 @@ public class BattleSystem : MonoBehaviour
 
         while (currentRound <= Round)
         {
+            RemainingAttack = false;
+            monsterInfo.CurrentRound = currentRound;
+
+            BossSkills();
+
             roundTextUI.text = currentRound.ToString() + " 라운드";
             removeCharacters.Clear();
 
@@ -75,6 +84,9 @@ public class BattleSystem : MonoBehaviour
 
             // 현재 라운드 공격이 끝났는지 대기
             yield return StartCoroutine(WaitForCharactersIdle(true, currentRound));
+
+            Stage6BossSkill();
+            monsterInfo.isIncreasedDamage = false;
 
             // 남은 병사가 있으면 남은 병사 공격
             RemainingCharactersAttack();
@@ -428,5 +440,47 @@ public class BattleSystem : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void Stage3BossSkill()
+    {
+        if (monsterInfo.Tier == "boss")
+        {
+            var bossSkill = monster.GetComponent<MonsterBossSkill>();
+            bossSkill.FinalRoundHealth();
+        }
+    }
+
+    public void Stage6BossSkill()
+    {
+        if (monsterInfo.Tier == "boss" && monsterInfo.Id == 601)
+        {
+            RemainingAttack = true;
+        }
+    }
+
+    public void Stage9BossSkill()
+    {
+        if (monsterInfo.Tier == "boss")
+        {
+            var bossSkill = monster.GetComponent<MonsterBossSkill>();
+            bossSkill.NoDamageCurrentRound();
+        }
+    }
+
+    public void Stage12BossSkill()
+    {
+        if (monsterInfo.Tier == "boss")
+        {
+            var bossSkill = monster.GetComponent<MonsterBossSkill>();
+            bossSkill.Stage12BossSkill();
+        }
+    }
+
+    public void BossSkills()
+    {
+        Stage3BossSkill();
+        Stage9BossSkill();
+        Stage12BossSkill();
     }
 }

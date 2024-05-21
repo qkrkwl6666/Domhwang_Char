@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public static readonly string pathList = "Characters/";
 
     public readonly int MAX_FORMATION_SIZE = 8;
+    public readonly int MAX_STAGE = 12;
     public Canvas canvas { get; private set; }
 
     // 플레이어 스테이지
