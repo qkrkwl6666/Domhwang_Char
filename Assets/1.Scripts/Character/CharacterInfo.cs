@@ -23,6 +23,41 @@ public class CharacterInfo : MonoBehaviour
     public Sprite characterImage;
     public System.DateTime creationTime;
 
+    public void InitializeSkill(BattleSystem battleSystem)
+    {
+        if (CharacterSkillData == null) return;
+
+        bool conditionMet = false;
+
+        switch (CharacterSkillData.ConditionType)
+        {
+            case 0:
+                conditionMet = true;
+                break;
+            // 해당라운드가 ConditionValue 라운드 일때 
+            case 6:
+                conditionMet = battleSystem.CurrentRound == CharacterSkillData.ConditionValue;
+                break;
+
+            // 해당 라운드에서 캐릭터가 돌격에 성공 할 시
+            case 9:
+                if(CharacterSkillData.ConditionValue == battleSystem.CurrentRound)
+                {
+                    var ci = GetComponent<CharacterControll>();
+                    ci.RunMode(true);
+                    conditionMet = ci.isRun == false;
+                    //InitializeSkill
+                    Debug.Log(conditionMet);
+                }
+                break;
+        }
+
+        if (conditionMet)
+        {
+            SkillType(battleSystem);
+        }
+    }
+
     public void ApplySkill(BattleSystem battleSystem)
     {
         if (CharacterSkillData == null) return;
@@ -42,7 +77,7 @@ public class CharacterInfo : MonoBehaviour
                 conditionMet = battleSystem.StandRemainingCharacters.Contains(gameObject);
                 break;
             case 4:
-                // 현재 내 캐릭터가 잔류 인지 확인 하고 && 동시에 다른 인원이 돌격을 성공했을 경우
+                // 캐릭터가 잔류 인지 확인 하고 && 동시에 다른 인원이 돌격을 성공했을 경우
                 conditionMet = battleSystem.StandRemainingCharacters.Contains(gameObject) && battleSystem.StandRemainingCharacters.Count >= 2;
                 break;
             case 5:
@@ -52,12 +87,34 @@ public class CharacterInfo : MonoBehaviour
         Debug.Log(conditionMet);
         if (conditionMet)
         {
-            switch (CharacterSkillData.EffectType)
-            {
-                case 1:
-                    IncreasedDamage(battleSystem);
-                    break;
-            }
+            SkillType(battleSystem);
+        }
+    }
+
+    public void SkillType(BattleSystem battleSystem)
+    {
+        switch (CharacterSkillData.EffectType)
+        {
+            case 1:
+                IncreasedDamage(battleSystem);
+                break;
+            case 2:
+                chargeForward(battleSystem);
+                break;
+            case 3:
+                RemainingRoundsPass(battleSystem);
+                break;
+            case 4:
+                // 트라이 카운트 소모되지 않음
+                break;
+            case 5:
+                // 반드시 돌격 하며 반드시 잔류 하지 않음
+                ChargeAndRun(battleSystem);
+                break;
+            case 6:
+                // 이 병사의 공격력은, 편성된 인원 중 가장 높은 수치로 복제된다.
+                HighDamage(battleSystem);
+                break;
         }
     }
 
@@ -102,12 +159,20 @@ public class CharacterInfo : MonoBehaviour
                     cc.BattleAttack = DamageCheck(cc);
                 }
                 break;
+            case 5:
+                //해당 라운드의 돌격 인원에게 효과 적용
+                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterInfo>();
+                    cc.BattleAttack = DamageCheck(cc);
+                }
+                break;
         }
     }
 
     public int DamageCheck(CharacterInfo characterInfo)
     {
-        int damage = 0;
+        float damage = 0;
 
         switch (CharacterSkillData.EffectType)
         {
@@ -117,6 +182,12 @@ public class CharacterInfo : MonoBehaviour
                     float multiplier = float.Parse(CharacterSkillData.EffectValue.TrimEnd('x'));
                     damage = (int)multiplier * characterInfo.BattleAttack;
                 }
+                else if (CharacterSkillData.EffectValue.EndsWith("%"))
+                {
+                    float multiplier = float.Parse(CharacterSkillData.EffectValue.TrimEnd('%'));
+                    damage = (int)multiplier * characterInfo.BattleAttack * 0.01f;
+
+                }
                 else
                 {
                     damage = int.Parse(CharacterSkillData.EffectValue) + characterInfo.BattleAttack;
@@ -124,9 +195,229 @@ public class CharacterInfo : MonoBehaviour
                 break;
         }
 
-        return damage;
+        return (int)damage;
     }
 
+    // 무조건 돌격 메서드
+    public void chargeForward(BattleSystem battleSystem)
+    {
+        switch (CharacterSkillData.Target)
+        {
+            case 1:
+                // 자신의 캐릭터에게 효과 적용
+                Debug.Log("자신의 캐릭터에게 효과 적용");
+                GetComponent<CharacterControll>().isPass = true;
+                break;
+            case 2:
+                // 잔류 병사에게 효과 적용
+                Debug.Log("잔류 병사에게 효과 적용");
+                foreach (var character in battleSystem.remainingCharacters)
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isPass = true;
+                }
+                break;
+            case 3:
+                // 모든 인원에게 효과 적용
+                Debug.Log("모든 인원에게 효과 적용");
+                foreach (var characterList in battleSystem.battleCharacter)
+                {
+                    foreach (var character in characterList)
+                    {
+                        var cc = character.GetComponent<CharacterControll>();
+                        cc.isPass = true;
+                    }
+                }
+                break;
+            case 4:
+                //다음 라운드의 돌격 인원에게 효과 적용
+                int nextRound = battleSystem.CurrentRound + 1;
+                if (nextRound > battleSystem.Round) break;
+                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isPass = true;
+                }
+                break;
+            case 5:
+                //해당 라운드의 돌격 인원에게 효과 적용
+                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isPass = true;
+                }
+                break;
+        }
+    }
+
+    public void RemainingRoundsPass(BattleSystem battleSystem)
+    {
+        switch (CharacterSkillData.Target)
+        {
+            case 1:
+                // 자신의 캐릭터에게 효과 적용
+                Debug.Log("자신의 캐릭터에게 효과 적용");
+                GetComponent<CharacterControll>().isAttackEndPass = true;
+                break;
+            case 2:
+                // 잔류 병사에게 효과 적용
+                Debug.Log("잔류 병사에게 효과 적용");
+                foreach (var character in battleSystem.remainingCharacters)
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isAttackEndPass = true;
+                }
+                break;
+            case 3:
+                // 모든 인원에게 효과 적용
+                Debug.Log("모든 인원에게 효과 적용");
+                foreach (var characterList in battleSystem.battleCharacter)
+                {
+                    foreach (var character in characterList)
+                    {
+                        var cc = character.GetComponent<CharacterControll>();
+                        cc.isAttackEndPass = true;
+                    }
+                }
+                break;
+            case 4:
+                //다음 라운드의 돌격 인원에게 효과 적용
+                int nextRound = battleSystem.CurrentRound + 1;
+                if (nextRound > battleSystem.Round) break;
+                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isAttackEndPass = true;
+                }
+                break;
+            case 5:
+                //해당 라운드의 돌격 인원에게 효과 적용
+                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isAttackEndPass = true;
+                }
+                break;
+        }
+    }
+
+    public void ChargeAndRun(BattleSystem battleSystem)
+    {
+        switch (CharacterSkillData.Target)
+        {
+            case 1:
+                // 자신의 캐릭터에게 효과 적용
+                Debug.Log("자신의 캐릭터에게 효과 적용");
+                GetComponent<CharacterControll>().isPass = true;
+                GetComponent<CharacterControll>().confirmAttackEndRun = true;
+                break;
+            case 2:
+                // 잔류 병사에게 효과 적용
+                Debug.Log("잔류 병사에게 효과 적용");
+                foreach (var character in battleSystem.remainingCharacters)
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isPass = true;
+                    cc.confirmAttackEndRun = true;
+                }
+                break;
+            case 3:
+                // 모든 인원에게 효과 적용
+                Debug.Log("모든 인원에게 효과 적용");
+                foreach (var characterList in battleSystem.battleCharacter)
+                {
+                    foreach (var character in characterList)
+                    {
+                        var cc = character.GetComponent<CharacterControll>();
+                        cc.isPass = true;
+                        cc.confirmAttackEndRun = true;
+                    }
+                }
+                break;
+            case 4:
+                //다음 라운드의 돌격 인원에게 효과 적용
+                int nextRound = battleSystem.CurrentRound + 1;
+                if (nextRound > battleSystem.Round) break;
+                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isPass = true;
+                    cc.confirmAttackEndRun = true;
+                }
+                break;
+            case 5:
+                //해당 라운드의 돌격 인원에게 효과 적용
+                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterControll>();
+                    cc.isPass = true;
+                    cc.confirmAttackEndRun = true;
+                }
+                break;
+        }
+    }
+
+    public void HighDamage(BattleSystem battleSystem)
+    {
+        int maxAttack = 0;
+
+        foreach(var characterList in battleSystem.battleCharacter)
+        {
+            foreach(var character in characterList)
+            {
+                var ci = character.GetComponent<CharacterInfo>();
+                if(maxAttack < ci.BattleAttack) maxAttack = ci.BattleAttack;
+            }
+        }
+
+        switch (CharacterSkillData.Target)
+        {
+            case 1:
+                // 자신의 캐릭터에게 효과 적용
+                Debug.Log("자신의 캐릭터에게 효과 적용");
+                BattleAttack = maxAttack;
+                break;
+            case 2:
+                // 잔류 병사에게 효과 적용
+                Debug.Log("잔류 병사에게 효과 적용");
+                foreach (var character in battleSystem.remainingCharacters)
+                {
+                    var cc = character.GetComponent<CharacterInfo>();
+                    cc.BattleAttack = maxAttack;
+                }
+                break;
+            case 3:
+                // 모든 인원에게 효과 적용
+                Debug.Log("모든 인원에게 효과 적용");
+                foreach (var characterList in battleSystem.battleCharacter)
+                {
+                    foreach (var character in characterList)
+                    {
+                        var cc = character.GetComponent<CharacterInfo>();
+                        cc.BattleAttack = maxAttack;
+                    }
+                }
+                break;
+            case 4:
+                //다음 라운드의 돌격 인원에게 효과 적용
+                int nextRound = battleSystem.CurrentRound + 1;
+                if (nextRound > battleSystem.Round) break;
+                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterInfo>();
+                    cc.BattleAttack = maxAttack;
+                }
+                break;
+            case 5:
+                //해당 라운드의 돌격 인원에게 효과 적용
+                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterInfo>();
+                    cc.BattleAttack = maxAttack;
+                }
+                break;
+        }
+    }
 
     public void SetCharacterData(CharacterData data)
     {
@@ -190,11 +481,6 @@ public class CharacterInfo : MonoBehaviour
         Run -= Run_Up;
 
         if (Run < 0) Run = 0;
-    }
-
-    private void Awake()
-    {
-
     }
 
 }

@@ -24,6 +24,15 @@ public class CharacterControll : MonoBehaviour
     public bool isRun = false;
     public bool attackEndRun = false;
 
+    // 무조건 AttackEndRun 이 체크되는 변수
+    public bool confirmAttackEndRun = false;
+
+    // isRun 패스하는 변수
+    public bool isPass = false;
+
+    // attackEndRun 패스하는 변수 잔류 병사
+    public bool isAttackEndPass = false;
+
     private float moveSpeed = 3f;
     private float runSpeed = 12f;
     public static event Action<GameObject> OnCharacterControll;
@@ -49,15 +58,6 @@ public class CharacterControll : MonoBehaviour
         AnimationMove();
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-
-    }
     private void FixedUpdate()
     {
 
@@ -95,7 +95,6 @@ public class CharacterControll : MonoBehaviour
 
         }
     }
-
     public void Flip(bool isFlip)
     {
         //transform.rotation = isFlip ? Quaternion.AngleAxis(-180, Vector3.up) : Quaternion.AngleAxis(0, Vector3.up);
@@ -109,10 +108,17 @@ public class CharacterControll : MonoBehaviour
 
     public void RunMode(bool isRun)
     {
+        if (isPass && isRun) return;
+        else if (!isRun && isAttackEndPass) return;
+
         int randomInt = UnityEngine.Random.Range(0, 101);
+
+        if (this.isRun) return;
 
         if (isRun) this.isRun = randomInt > runPercent ? false : true;
         else attackEndRun = randomInt > runPercent ? false : true;
+
+        if (confirmAttackEndRun) attackEndRun = true;
     }
 
     public void ChangeStatus(Status status)
@@ -230,8 +236,11 @@ public class CharacterControll : MonoBehaviour
 
     public void CharacterAwake()
     {
+        isPass = false;
+        isAttackEndPass = false;
         attackEndRun = false;
         isRun = false;
+        confirmAttackEndRun = false;
         Flip(true);
         ChangeStatus(Status.Move);
         gameObject.transform.position = Vector3.zero;

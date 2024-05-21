@@ -21,7 +21,7 @@ public class CharacterAnimationEvent : MonoBehaviour
 
     private void AttackDamage()
     {
-        Debug.Log("AttackDamage");
+        //Debug.Log("AttackDamage");
         // 여기서 몬스터 데미지
         MonsterDamageEvent?.Invoke(characterInfo.BattleAttack);
     }
