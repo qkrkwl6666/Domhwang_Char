@@ -9,7 +9,7 @@ public class DataTableMgr : Singleton<DataTableMgr>
     private void Awake()
     {
         DataTable characterskillTable = new CharacterSkillTable();
-        characterskillTable.Load("CharacterSkillTable");
+        characterskillTable.Load("CharacterSkillData");
 
         DataTable characterTable = new CharacterTable();
         characterTable.Load("CharacterData_Designer");

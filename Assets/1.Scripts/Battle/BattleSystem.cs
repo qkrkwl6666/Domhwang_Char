@@ -26,6 +26,7 @@ public class BattleSystem : MonoBehaviour
 
     private List<Vector3> IdlePoint = new List<Vector3>();
     public int Round { get; private set; } = 3;
+    public int CurrentRound { get; private set; } = 1;
 
     public bool RemainingAttack { get; private set; } = false;
 
@@ -63,29 +64,29 @@ public class BattleSystem : MonoBehaviour
     // Todo : 중간에 몬스터가 죽으면 보상창 몬스터가 죽지 않았을경우 캐릭터에게 공격 
     IEnumerator CharactersBattleSystem()
     {
-        int currentRound = 1;
+        
 
-        while (currentRound <= Round)
+        while (CurrentRound <= Round)
         {
             RemainingAttack = false;
-            MonsterInfo.CurrentRound = currentRound;
+            MonsterInfo.CurrentRound = CurrentRound;
 
             BossSkills();
 
-            roundTextUI.text = currentRound.ToString() + " 라운드";
+            roundTextUI.text = CurrentRound.ToString() + " 라운드";
             removeCharacters.Clear();
 
             // 전 라운드 잔류 병사 추가
             InsertStandRemainingCharacters();
 
             // 라운드별 캐릭터 스폰  
-            BattleSetCharacters(currentRound);
-            ApplyCharacterSkills(currentRound);
+            BattleSetCharacters(CurrentRound);
+            ApplyCharacterSkills(CurrentRound);
 
-            SetIdlePosition(currentRound);
+            SetIdlePosition(CurrentRound);
 
             // 현재 라운드 공격이 끝났는지 대기
-            yield return StartCoroutine(WaitForCharactersIdle(true, currentRound));
+            yield return StartCoroutine(WaitForCharactersIdle(true, CurrentRound));
 
             Stage6BossSkill();
             MonsterInfo.isIncreasedDamage = false;
@@ -93,11 +94,11 @@ public class BattleSystem : MonoBehaviour
             // 남은 병사가 있으면 남은 병사 공격
             RemainingCharactersAttack();
 
-            SetIdlePosition(currentRound);
+            SetIdlePosition(CurrentRound);
 
             yield return StartCoroutine(WaitForCharactersIdle());
 
-            currentRound++;
+            CurrentRound++;
         }
 
         // 스테이지 끝나고 2초후 공격

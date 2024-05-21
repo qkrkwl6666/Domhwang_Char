@@ -37,7 +37,6 @@ public class CharacterInfo : MonoBehaviour
             case 1:
                 Debug.Log("스킬 1번 발동!!");
                 conditionMet = battleSystem.MonsterInfo.Hp <= battleSystem.MonsterInfo.MaxHp * CharacterSkillData.ConditionValue * 0.01f;
-                conditionMet = true;
                 break;
             case 2:
                 conditionMet = battleSystem.remainingCharacters.Count >= CharacterSkillData.ConditionValue;
@@ -46,7 +45,8 @@ public class CharacterInfo : MonoBehaviour
                 conditionMet = battleSystem.StandRemainingCharacters.Contains(gameObject);
                 break;
             case 4:
-                //conditionMet = battleSystem.playingCharacters.Count > 1;
+                // 현재 내 캐릭터가 잔류 인지 확인 하고 && 동시에 다른 인원이 돌격을 성공했을 경우
+                conditionMet = battleSystem.StandRemainingCharacters.Contains(gameObject) && battleSystem.StandRemainingCharacters.Count >= 2;
                 break;
             case 5:
                 conditionMet = battleSystem.playingCharacters.Count == 1 && battleSystem.playingCharacters[0] == gameObject;
@@ -58,9 +58,7 @@ public class CharacterInfo : MonoBehaviour
             switch (CharacterSkillData.EffectType)
             {
                 case 1:
-                    //Debug.Log($"스킬 발동 전 공격력 : {BattleAttack}");
                     BattleAttack = DamageCheck(this);
-                    //Debug.Log($"스킬 발동 후 공격력 : {BattleAttack}");
                     break;
             }
         }
@@ -94,15 +92,14 @@ public class CharacterInfo : MonoBehaviour
                 }
                 break;
             case 4:
-                // 다음 라운드의 돌격 인원에게 효과 적용
-                //int nextRound = battleSystem.Round + 1;
-                //if (nextRound <= battleSystem.roundsCharacters.Count)
-                //{
-                //    foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
-                //    {
-                //        
-                //    }
-                //}
+                //다음 라운드의 돌격 인원에게 효과 적용
+                int nextRound = battleSystem.CurrentRound + 1;
+                if (nextRound > battleSystem.Round) break;
+                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
+                {
+                    var cc = character.GetComponent<CharacterInfo>();
+                    cc.BattleAttack += DamageCheck(cc);
+                }
                 break;
         }
     }
