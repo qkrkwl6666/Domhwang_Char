@@ -33,7 +33,7 @@ public class CharacterControll : MonoBehaviour
     // attackEndRun 패스하는 변수 잔류 병사
     public bool isAttackEndPass = false;
 
-    private float moveSpeed = 3f;
+    private float moveSpeed = 2f;
     private float runSpeed = 12f;
     public static event Action<GameObject> OnCharacterControll;
     public UnityEngine.Transform MonsterTransform {  get; set; }
