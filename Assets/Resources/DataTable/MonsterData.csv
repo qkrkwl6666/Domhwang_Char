@@ -1,6 +1,6 @@
 ﻿Id,Name,Stage,Hp,Tier,Enc,Feature_Id,round,reduced_dmg,heal
 101,좀도둑,1,30,common,85,0,0,0,0
-102,좀 치는 도둑,1,30,elite,15,1,1,0,0
+102,좀 치는 도둑,1,50,elite,15,1,1,0,0
 201,좀도둑,2,50,common,85,0,0,0,0
 202,좀 치는 도둑,2,50,elite,15,1,1,0,0
 301,공항도둑,3,70,boss,100,2,3,0,25

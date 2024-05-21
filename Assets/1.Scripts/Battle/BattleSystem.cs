@@ -310,6 +310,13 @@ public class BattleSystem : MonoBehaviour
         {
             var characterControll = character.GetComponent<CharacterControll>();
 
+            if(CurrentRound >= Round)
+            {
+                StandRemainingCharacters.Add(character);
+                playingCharacters.Add(character);
+                break;
+            }
+
             characterControll.RunMode(true);
 
             if (characterControll.isRun) 
@@ -363,6 +370,12 @@ public class BattleSystem : MonoBehaviour
             totalAttack += ci.BattleAttack;
 
             characterControll.AttackMode();
+
+            if (CurrentRound >= Round)
+            {
+                playingCharacters.Add(character);
+                continue;
+            }
 
             var monsterInfo = monster.GetComponent<MonsterInfo>();
             

@@ -182,6 +182,9 @@ public class GameManager : Singleton<GameManager>
             foreach (var character in PlayerCharacterList)
             {
                 var cc = character.GetComponent<CharacterControll>();
+                var cl = character.GetComponent<CharacterInfo>();
+
+                cl.BattleAttack = cl.Atk;
                 cc.CharacterAwake();
                 character.SetActive(false);
             }

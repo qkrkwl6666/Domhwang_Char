@@ -23,8 +23,6 @@ public class CharacterInfo : MonoBehaviour
     public Sprite characterImage;
     public System.DateTime creationTime;
 
-    public BattleSystem battleSystem;
-
     public void ApplySkill(BattleSystem battleSystem)
     {
         if (CharacterSkillData == null) return;
@@ -35,7 +33,6 @@ public class CharacterInfo : MonoBehaviour
         switch (CharacterSkillData.ConditionType)
         {
             case 1:
-                Debug.Log("스킬 1번 발동!!");
                 conditionMet = battleSystem.MonsterInfo.Hp <= battleSystem.MonsterInfo.MaxHp * CharacterSkillData.ConditionValue * 0.01f;
                 break;
             case 2:
@@ -52,42 +49,46 @@ public class CharacterInfo : MonoBehaviour
                 conditionMet = battleSystem.playingCharacters.Count == 1 && battleSystem.playingCharacters[0] == gameObject;
                 break;
         }
-
+        Debug.Log(conditionMet);
         if (conditionMet)
         {
             switch (CharacterSkillData.EffectType)
             {
                 case 1:
-                    BattleAttack = DamageCheck(this);
+                    IncreasedDamage(battleSystem);
                     break;
             }
         }
+    }
 
+    public void IncreasedDamage(BattleSystem battleSystem)
+    {
         // 스킬 타겟 선택 및 효과 적용
         switch (CharacterSkillData.Target)
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
                 Debug.Log("자신의 캐릭터에게 효과 적용");
+                BattleAttack = DamageCheck(this);
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
-               Debug.Log("잔류 병사에게 효과 적용");
+                Debug.Log("잔류 병사에게 효과 적용");
                 foreach (var character in battleSystem.remainingCharacters)
                 {
                     var cc = character.GetComponent<CharacterInfo>();
-                    cc.BattleAttack += DamageCheck(cc);
+                    cc.BattleAttack = DamageCheck(cc);
                 }
                 break;
             case 3:
                 // 모든 인원에게 효과 적용
                 Debug.Log("모든 인원에게 효과 적용");
-                foreach (var characterList in battleSystem.roundsCharacters)
+                foreach (var characterList in battleSystem.battleCharacter)
                 {
                     foreach (var character in characterList)
                     {
                         var cc = character.GetComponent<CharacterInfo>();
-                        cc.BattleAttack += DamageCheck(cc);
+                        cc.BattleAttack = DamageCheck(cc);
                     }
                 }
                 break;
@@ -98,7 +99,7 @@ public class CharacterInfo : MonoBehaviour
                 foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
                 {
                     var cc = character.GetComponent<CharacterInfo>();
-                    cc.BattleAttack += DamageCheck(cc);
+                    cc.BattleAttack = DamageCheck(cc);
                 }
                 break;
         }
@@ -106,7 +107,7 @@ public class CharacterInfo : MonoBehaviour
 
     public int DamageCheck(CharacterInfo characterInfo)
     {
-        int damage = characterInfo.BattleAttack;
+        int damage = 0;
 
         switch (CharacterSkillData.EffectType)
         {
@@ -114,11 +115,11 @@ public class CharacterInfo : MonoBehaviour
                 if (CharacterSkillData.EffectValue.EndsWith("x"))
                 {
                     float multiplier = float.Parse(CharacterSkillData.EffectValue.TrimEnd('x'));
-                    damage *= (int)multiplier;
+                    damage = (int)multiplier * characterInfo.BattleAttack;
                 }
                 else
                 {
-                    damage += int.Parse(CharacterSkillData.EffectValue);
+                    damage = int.Parse(CharacterSkillData.EffectValue) + characterInfo.BattleAttack;
                 }
                 break;
         }
