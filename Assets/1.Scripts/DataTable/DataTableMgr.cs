@@ -5,7 +5,6 @@ using UnityEngine;
 public class DataTableMgr : Singleton<DataTableMgr>
 {
     private Dictionary<string, DataTable> tables = new ();
-
     private void Awake()
     {
         DataTable characterskillTable = new CharacterSkillTable();

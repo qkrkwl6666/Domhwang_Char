@@ -17,6 +17,8 @@ public class GameManager : Singleton<GameManager>
     public readonly int MAX_STAGE = 12;
     public Canvas canvas { get; private set; }
 
+    public int TryCount { get; set; } = 3;
+
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
     // 몬스터 
@@ -36,7 +38,6 @@ public class GameManager : Singleton<GameManager>
 
     // 레벨업 리스트
     public List<CharacterInfo> LevelUpCharacterList { get; private set; } = new List<CharacterInfo>();
-
     private void Awake()
     {
         // 캐릭터 데이터 가져오기
@@ -109,8 +110,12 @@ public class GameManager : Singleton<GameManager>
 
             Debug.Log("Save");
         }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            TryCount--;
+        }
 
-        if(Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             // Load
             SaveData1 save = SaveLoadSystem.Load() as SaveData1;
@@ -120,6 +125,14 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.E))
         {
             StageClear();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            foreach(var character in formationCharacterList)
+            {
+                character.GetComponent<CharacterInfo>().BattleAttack = 1000;
+            }
         }
     }
 
@@ -212,6 +225,12 @@ public class GameManager : Singleton<GameManager>
 
     public void GameLose()
     {
+        TryCount--;
+        if(TryCount == 0)
+        {
+            // 게임 재시작 및 UI 띄우기 
+        }
+
         UIManager.Instance.OpenUI(Page.LOSE);
     }
 
