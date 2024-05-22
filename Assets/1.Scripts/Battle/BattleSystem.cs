@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -33,6 +34,9 @@ public class BattleSystem : MonoBehaviour
     private GameObject monster;
     public MonsterInfo MonsterInfo { get; private set; }
 
+    // 이펙트 
+    public EffectManager EffectManager { get; private set; }
+
     // Todo : 이곳에서 테이블 가져와서 확률에 따라 몬스터 생성
     private void Awake()
     {
@@ -53,6 +57,10 @@ public class BattleSystem : MonoBehaviour
         CharacterControll.OnCharacterControll += IdleToEvent;
 
         SetIdlePoint();
+
+        // 이펙트 매니저 생성
+        var effect = new GameObject();
+        EffectManager = effect.AddComponent<EffectManager>();
     }
 
     // Start is called before the first frame update    
