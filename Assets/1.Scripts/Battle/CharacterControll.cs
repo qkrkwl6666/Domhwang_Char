@@ -37,6 +37,7 @@ public class CharacterControll : MonoBehaviour
     private float runSpeed = 12f;
     public static event Action<GameObject> OnCharacterControll;
     public UnityEngine.Transform MonsterTransform {  get; set; }
+    public RectTransform skillCanvasRectTransform { get; set; }
 
     // Todo : 게임 패배후 재시작시 캐릭터 애니메이션 상태 전환 해줘야함
     // 버그 : 게임 패배후 편성 창 가면 캐릭터가 하나 증가되는 버그
@@ -48,6 +49,7 @@ public class CharacterControll : MonoBehaviour
 
         animator = GetComponentInChildren<Animator>();
 
+        skillCanvasRectTransform = GetComponentInChildren<Canvas>().GetComponent<RectTransform>();
         // 기본 상태 오른쪽 보게 하기
         Flip(true);
     }
@@ -101,7 +103,9 @@ public class CharacterControll : MonoBehaviour
 
         Quaternion quaternion = Quaternion.identity;
         quaternion.eulerAngles = isFlip ? new Vector3(0f, -180, 0) : Vector3.zero;
+
         transform.rotation = quaternion;
+        skillCanvasRectTransform.rotation = quaternion;
 
         //transform.localScale = isFlip ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
     }
