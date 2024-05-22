@@ -19,11 +19,14 @@ public class DataTableMgr : Singleton<DataTableMgr>
         DataTable monsterTable = new MonsterTable();
         monsterTable.Load("MonsterData");
 
+        DataTable stageTable = new StageTable();
+        stageTable.Load("StageData");
+
         tables.Add("Effect", effectTable);
         tables.Add("Character", characterTable);
         tables.Add("CharacterSkill", characterskillTable);
         tables.Add("Monster", monsterTable);
-
+        tables.Add("Stage", stageTable);
     }
 
     public T Get<T>(string id) where T : DataTable
