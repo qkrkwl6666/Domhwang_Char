@@ -15,8 +15,10 @@ public class MonsterInfo : MonoBehaviour
     public int Round { get; private set; }
     public int Heal { get; private set; }
     public int Reduced_dmg { get; private set; }
+    public int Atk_Effect_Id { get; set; }
     public bool isInvincible { get; set; }
     public bool isIncreasedDamage { get; set; }
+
 
     private BattleSystem battleSystem;
 
@@ -63,6 +65,7 @@ public class MonsterInfo : MonoBehaviour
         Name = monsterData.Name;
         Tier = monsterData.Tier;
         Round = monsterData.round;
+        Atk_Effect_Id = monsterData.Atk_Effect_Id;
     }
 
     public void Damage(int damage)

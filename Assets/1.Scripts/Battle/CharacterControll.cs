@@ -24,25 +24,25 @@ public class CharacterControll : MonoBehaviour
     public bool isRun = false;
     public bool attackEndRun = false;
 
-    // ¹«Á¶°Ç AttackEndRun ÀÌ Ã¼Å©µÇ´Â º¯¼ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AttackEndRun ï¿½ï¿½ Ã¼Å©ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool confirmAttackEndRun = false;
 
-    // isRun ÆÐ½ºÇÏ´Â º¯¼ö
+    // isRun ï¿½Ð½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool isPass = false;
 
-    // attackEndRun ÆÐ½ºÇÏ´Â º¯¼ö ÀÜ·ù º´»ç
+    // attackEndRun ï¿½Ð½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ü·ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool isAttackEndPass = false;
 
     private float moveSpeed = 2f;
-    private float runSpeed = 1f;
+    private float runSpeed = 14f;
     public static event Action<GameObject> OnCharacterControll;
     public UnityEngine.Transform MonsterTransform {  get; set; }
     public RectTransform skillCanvasRectTransform { get; private set; }
 
     public CharacterEffect characterEffect { get; private set; }
 
-    // Todo : °ÔÀÓ ÆÐ¹èÈÄ Àç½ÃÀÛ½Ã Ä³¸¯ÅÍ ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ ÀüÈ¯ ÇØÁà¾ßÇÔ
-    // ¹ö±× : °ÔÀÓ ÆÐ¹èÈÄ Æí¼º Ã¢ °¡¸é Ä³¸¯ÅÍ°¡ ÇÏ³ª Áõ°¡µÇ´Â ¹ö±×
+    // Todo : ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Û½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     public Vector3 StopPosition = Vector3.zero;
     private void Awake()
@@ -53,7 +53,7 @@ public class CharacterControll : MonoBehaviour
 
         skillCanvasRectTransform = GetComponentInChildren<Canvas>().GetComponent<RectTransform>();
         characterEffect = GetComponent<CharacterEffect>();
-        // ±âº» »óÅÂ ¿À¸¥ÂÊ º¸°Ô ÇÏ±â
+        // ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½
         Flip(true);
     }
 
@@ -139,8 +139,7 @@ public class CharacterControll : MonoBehaviour
 
         Flip(false);
         status = Status.Run;
-        characterEffect.CryParticle.Play();
-        characterEffect.RunParticle.Play();
+        characterEffect.PlayCryParticle();
 
         AnimationMove();
     }
@@ -159,8 +158,7 @@ public class CharacterControll : MonoBehaviour
 
         Flip(false);
         status = Status.Run;
-        characterEffect.CryParticle.Play();
-        characterEffect.RunParticle.Play();
+        characterEffect.PlayCryParticle();
 
         AnimationMove();
     }
@@ -170,12 +168,12 @@ public class CharacterControll : MonoBehaviour
         // Run 
         if (other.tag == "RunCollider")
         {
-            // float randomTime = UnityEngine.Random.Range(0.5f, 1f); (¼öÁ¤ Àü) ·£´ýÇÑ µµ¸Á Å¸ÀÌ¹Ö »êÃâ
-            float randomTime = UnityEngine.Random.Range(0, 2); // (¼öÁ¤ ÈÄ) Æ¯Á¤ÇÑ µÎ Å¸ÀÌ¹Ö »êÃâ
+            // float randomTime = UnityEngine.Random.Range(0.5f, 1f); (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½
+            float randomTime = UnityEngine.Random.Range(0, 2); // (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½) Æ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å¸ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½
             Invoke("RunModeChange", randomTime);
         }
 
-        // ¸ó½ºÅÍ
+        // ï¿½ï¿½ï¿½ï¿½
         if (other.tag == "Monster")
         {
             status = Status.Attack;
@@ -216,7 +214,7 @@ public class CharacterControll : MonoBehaviour
 
         transform.Translate(flyDir * Time.deltaTime * 10f, Space.World);
 
-        // Todo : È¸Àü Ãß°¡
+        // Todo : È¸ï¿½ï¿½ ï¿½ß°ï¿½
 
         Vector3 currentRotation = transform.rotation.eulerAngles;
         currentRotation.z += Time.deltaTime * 720f;

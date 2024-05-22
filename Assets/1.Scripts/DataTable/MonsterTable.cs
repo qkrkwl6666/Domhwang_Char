@@ -17,6 +17,7 @@ public class MonsterData
     public int round { get; set; }
     public int reduced_dmg { get; set; }
     public int heal { get; set; }
+    public int Atk_Effect_Id { get; set; }
     [Ignore] public float weight {  get; set; }
 }
 

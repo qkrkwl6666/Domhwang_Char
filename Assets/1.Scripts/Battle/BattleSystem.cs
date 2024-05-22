@@ -455,6 +455,9 @@ public class BattleSystem : MonoBehaviour
         Animator monsterAnimator = monster.GetComponent<Animator>();
         monsterAnimator.SetTrigger("Attack");
 
+        // Todo : 일단 임시로 여기서 호출 나중에 애니메이션 이벤트 만들어서 마지막 프레임에 호출하기
+        monster.GetComponent<MonsterEffect>().AttackParticle.Play();
+
         var monsterInfo = monster.GetComponent<MonsterInfo>();
 
         // 몬스터의 공격이 끝날때 까지 대기

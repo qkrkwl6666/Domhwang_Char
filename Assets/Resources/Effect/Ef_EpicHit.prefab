@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6846817570176300725}
   - component: {fileID: 6846817570176300730}
   m_Layer: 0
-  m_Name: Ef_EpicEx
+  m_Name: Ef_EpicHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

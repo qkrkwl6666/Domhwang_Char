@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8061257759293581328}
   - component: {fileID: 7559271835607458264}
   - component: {fileID: 2021150071951910001}
+  - component: {fileID: 1356843066993911341}
   m_Layer: 0
   m_Name: 501
   m_TagString: Monster
@@ -170,4 +171,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpSliderPrefabs: {fileID: 1280854428539982601, guid: 0810c14966daf894792235f331c3b045, type: 3}
-  <Hp>k__BackingField: 0
+--- !u!114 &1356843066993911341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4937357026567745469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810d3ebe81414024d843d8c605544410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

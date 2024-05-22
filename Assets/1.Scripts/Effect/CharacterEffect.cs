@@ -7,13 +7,14 @@ public class CharacterEffect : MonoBehaviour
     public static readonly string Effect = "Effect/";
     public ParticleSystem AttackParticle {  get; private set; }
     public ParticleSystem RunParticle { get; private set; }
-    public ParticleSystem CryParticle { get; private set; }
+    public ParticleSystem LeftCryParticle { get; private set; }
+    public ParticleSystem RightCryParticle { get; private set; }
 
     private void Awake()
     {
         //attackParticle = 
     }
-    public void EffectAwake()
+    public void EffectInitialiAwake()
     {
         int atkEffectId = GetComponent<CharacterInfo>().Atk_Effect_Id;
         int runEffectId = GetComponent<CharacterInfo>().Run_Effect_Id;
@@ -34,13 +35,30 @@ public class CharacterEffect : MonoBehaviour
         RunParticle.transform.position = new Vector3(-0.4f, 0.2f, 0f); 
 
         go = Instantiate(Resources.Load<GameObject>(Effect + cryPath), transform);
-        CryParticle = go.GetComponent<ParticleSystem>();
-        CryParticle.transform.position = new Vector3(0.4f, 0.2f, 0f);
+        LeftCryParticle = go.GetComponent<ParticleSystem>();
+        LeftCryParticle.transform.position = new Vector3(0.37f, 0.3f, 0f);
+
+        go = Instantiate(Resources.Load<GameObject>(Effect + cryPath), transform);
+        RightCryParticle = go.GetComponent<ParticleSystem>();
+
+        RightCryParticle.transform.localScale = new Vector3(-0.05f, 0.05f, 0.05f);
+        RightCryParticle.transform.position = new Vector3(-0.3f, 0.3f, 0f);
     }
 
-    public void Flip(bool isFlip)
+    public void PlayCryParticle()
     {
+        LeftCryParticle.Play();
+        RightCryParticle.Play();
+        RunParticle.Play();
+    }
 
+
+    public void EffectAwake()
+    {
+        AttackParticle.Stop();
+        RunParticle.Stop();
+        LeftCryParticle.Stop();
+        RightCryParticle.Stop();
     }
 
 }
