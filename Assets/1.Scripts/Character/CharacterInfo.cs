@@ -127,6 +127,7 @@ public class CharacterInfo : MonoBehaviour
                 // 자신의 캐릭터에게 효과 적용
                 Debug.Log("자신의 캐릭터에게 효과 적용");
                 BattleAttack = DamageCheck(this);
+                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
@@ -135,6 +136,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterInfo>();
                     cc.BattleAttack = DamageCheck(cc);
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 3:
@@ -146,6 +148,7 @@ public class CharacterInfo : MonoBehaviour
                     {
                         var cc = character.GetComponent<CharacterInfo>();
                         cc.BattleAttack = DamageCheck(cc);
+                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                     }
                 }
                 break;
@@ -157,6 +160,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterInfo>();
                     cc.BattleAttack = DamageCheck(cc);
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 5:
@@ -165,6 +169,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterInfo>();
                     cc.BattleAttack = DamageCheck(cc);
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
         }
@@ -207,6 +212,7 @@ public class CharacterInfo : MonoBehaviour
                 // 자신의 캐릭터에게 효과 적용
                 Debug.Log("자신의 캐릭터에게 효과 적용");
                 GetComponent<CharacterControll>().isPass = true;
+                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
@@ -215,6 +221,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isPass = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 3:
@@ -226,6 +233,7 @@ public class CharacterInfo : MonoBehaviour
                     {
                         var cc = character.GetComponent<CharacterControll>();
                         cc.isPass = true;
+                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                     }
                 }
                 break;
@@ -237,6 +245,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isPass = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 5:
@@ -245,6 +254,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isPass = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
         }
@@ -258,6 +268,7 @@ public class CharacterInfo : MonoBehaviour
                 // 자신의 캐릭터에게 효과 적용
                 Debug.Log("자신의 캐릭터에게 효과 적용");
                 GetComponent<CharacterControll>().isAttackEndPass = true;
+                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
@@ -266,6 +277,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isAttackEndPass = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 3:
@@ -277,6 +289,7 @@ public class CharacterInfo : MonoBehaviour
                     {
                         var cc = character.GetComponent<CharacterControll>();
                         cc.isAttackEndPass = true;
+                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                     }
                 }
                 break;
@@ -288,6 +301,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isAttackEndPass = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 5:
@@ -296,6 +310,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isAttackEndPass = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
         }
@@ -310,6 +325,7 @@ public class CharacterInfo : MonoBehaviour
                 Debug.Log("자신의 캐릭터에게 효과 적용");
                 GetComponent<CharacterControll>().isPass = true;
                 GetComponent<CharacterControll>().confirmAttackEndRun = true;
+                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
@@ -319,6 +335,7 @@ public class CharacterInfo : MonoBehaviour
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isPass = true;
                     cc.confirmAttackEndRun = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 3:
@@ -331,6 +348,7 @@ public class CharacterInfo : MonoBehaviour
                         var cc = character.GetComponent<CharacterControll>();
                         cc.isPass = true;
                         cc.confirmAttackEndRun = true;
+                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                     }
                 }
                 break;
@@ -343,6 +361,7 @@ public class CharacterInfo : MonoBehaviour
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isPass = true;
                     cc.confirmAttackEndRun = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 5:
@@ -352,6 +371,7 @@ public class CharacterInfo : MonoBehaviour
                     var cc = character.GetComponent<CharacterControll>();
                     cc.isPass = true;
                     cc.confirmAttackEndRun = true;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
         }
@@ -376,6 +396,7 @@ public class CharacterInfo : MonoBehaviour
                 // 자신의 캐릭터에게 효과 적용
                 Debug.Log("자신의 캐릭터에게 효과 적용");
                 BattleAttack = maxAttack;
+                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
@@ -384,6 +405,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterInfo>();
                     cc.BattleAttack = maxAttack;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 3:
@@ -395,6 +417,7 @@ public class CharacterInfo : MonoBehaviour
                     {
                         var cc = character.GetComponent<CharacterInfo>();
                         cc.BattleAttack = maxAttack;
+                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                     }
                 }
                 break;
@@ -406,6 +429,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterInfo>();
                     cc.BattleAttack = maxAttack;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
             case 5:
@@ -414,6 +438,7 @@ public class CharacterInfo : MonoBehaviour
                 {
                     var cc = character.GetComponent<CharacterInfo>();
                     cc.BattleAttack = maxAttack;
+                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 }
                 break;
         }
