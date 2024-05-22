@@ -2,7 +2,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
 public class MonsterInfo : MonoBehaviour
 {
     public Canvas HpSliderPrefabs;

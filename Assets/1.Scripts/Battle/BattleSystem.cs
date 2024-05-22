@@ -62,8 +62,8 @@ public class BattleSystem : MonoBehaviour
 
         // 이펙트 매니저 생성
         var effect = new GameObject();
-        effect.name = EffectManager.EffectManagerName;
-        EffectManager = effect.AddComponent<EffectManager>();
+        //effect.name = EffectManager.EffectManagerName;
+        //EffectManager = effect.AddComponent<EffectManager>();
     }
 
     // Start is called before the first frame update    

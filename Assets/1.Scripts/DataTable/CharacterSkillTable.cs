@@ -14,6 +14,7 @@ public class CharacterSkillData
     public string EffectValue { get; set; }
     public int EffectDuration { get; set; }
     public int Target { get; set; }
+    public string Skill_Icon { get; set; }
     public string Desc { get; set; }
 }
 public class CharacterSkillTable : DataTable
