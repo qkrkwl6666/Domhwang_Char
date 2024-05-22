@@ -34,10 +34,12 @@ public class CharacterControll : MonoBehaviour
     public bool isAttackEndPass = false;
 
     private float moveSpeed = 2f;
-    private float runSpeed = 12f;
+    private float runSpeed = 1f;
     public static event Action<GameObject> OnCharacterControll;
     public UnityEngine.Transform MonsterTransform {  get; set; }
-    public RectTransform skillCanvasRectTransform { get; set; }
+    public RectTransform skillCanvasRectTransform { get; private set; }
+
+    public CharacterEffect characterEffect { get; private set; }
 
     // Todo : 게임 패배후 재시작시 캐릭터 애니메이션 상태 전환 해줘야함
     // 버그 : 게임 패배후 편성 창 가면 캐릭터가 하나 증가되는 버그
@@ -50,6 +52,7 @@ public class CharacterControll : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         skillCanvasRectTransform = GetComponentInChildren<Canvas>().GetComponent<RectTransform>();
+        characterEffect = GetComponent<CharacterEffect>();
         // 기본 상태 오른쪽 보게 하기
         Flip(true);
     }
@@ -136,6 +139,8 @@ public class CharacterControll : MonoBehaviour
 
         Flip(false);
         status = Status.Run;
+        characterEffect.CryParticle.Play();
+        characterEffect.RunParticle.Play();
 
         AnimationMove();
     }
@@ -154,6 +159,8 @@ public class CharacterControll : MonoBehaviour
 
         Flip(false);
         status = Status.Run;
+        characterEffect.CryParticle.Play();
+        characterEffect.RunParticle.Play();
 
         AnimationMove();
     }

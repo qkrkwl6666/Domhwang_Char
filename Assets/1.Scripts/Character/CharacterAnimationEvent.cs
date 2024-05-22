@@ -7,6 +7,7 @@ public class CharacterAnimationEvent : MonoBehaviour
 {
     private Animator animator;
     private CharacterControll characterControll;
+    private CharacterEffect characterEffect;
 
     public CharacterInfo characterInfo;
 
@@ -17,12 +18,16 @@ public class CharacterAnimationEvent : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         characterControll = GetComponentInParent<CharacterControll>();
+        characterEffect = GetComponentInParent<CharacterEffect>();
     }
 
     private void AttackDamage()
     {
         //Debug.Log("AttackDamage");
         // 여기서 몬스터 데미지
+        //AttackParticle
+
+        characterEffect.AttackParticle.Play();
         MonsterDamageEvent?.Invoke(characterInfo.BattleAttack);
     }
 

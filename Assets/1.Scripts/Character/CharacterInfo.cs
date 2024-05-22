@@ -17,6 +17,9 @@ public class CharacterInfo : MonoBehaviour
     [field: SerializeField] public int Texture { get; set; }
     [field: SerializeField] public int Level { get; set; }
     [field: SerializeField] public int BattleAttack { get; set; }
+    [field: SerializeField] public int Atk_Effect_Id { get; set; }
+    [field: SerializeField] public int Cry_Effect_Id { get; set; }
+    [field: SerializeField] public int Run_Effect_Id { get; set; }
 
     [field: SerializeField] public CharacterSkillData CharacterSkillData { get; set; }
 
@@ -456,9 +459,12 @@ public class CharacterInfo : MonoBehaviour
         Skill_Id = data.Skill_Id;
         Level = data.Level;
         Texture = data.Id;
-        CharacterSkillData = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill").Get(Skill_Id.ToString());
         BattleAttack = data.Atk;
+        Atk_Effect_Id = data.Atk_Effect_Id;
+        Cry_Effect_Id = data.Cry_Effect_Id;
+        Run_Effect_Id = data.Run_Effect_Id;
 
+        CharacterSkillData = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill").Get(Skill_Id.ToString());
         //characterImage = Resources.Load<Sprite>("ChatacterImage/" + Id.ToString() + "Img");
     }
 
@@ -476,6 +482,10 @@ public class CharacterInfo : MonoBehaviour
         Texture = characterInfo.Id;
         InstanceId = characterInfo.InstanceId;
         BattleAttack = characterInfo.Atk;
+        Atk_Effect_Id = characterInfo.Atk_Effect_Id;
+        Cry_Effect_Id = characterInfo.Cry_Effect_Id;
+        Run_Effect_Id = characterInfo.Run_Effect_Id;
+
 
         CharacterSkillData = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill").Get(Skill_Id.ToString());
         //CharacterSkillData = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill").Get(Skill_Id.ToString());
@@ -495,6 +505,9 @@ public class CharacterInfo : MonoBehaviour
         characterData.Skill_Id = Skill_Id;
         characterData.Level = Level;
         characterData.Instance_Id = InstanceId;
+        characterData.Atk_Effect_Id = Atk_Effect_Id;
+        characterData.Cry_Effect_Id = Atk_Effect_Id;
+        characterData.Run_Effect_Id = Atk_Effect_Id;
 
         return characterData;
     }

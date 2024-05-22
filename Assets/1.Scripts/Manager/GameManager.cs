@@ -77,6 +77,7 @@ public class GameManager : Singleton<GameManager>
                 var info = character.AddComponent<CharacterInfo>();
                 character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
                 info.SetCharacterInfo(go);
+                character.GetComponent<CharacterEffect>().EffectAwake();
                 DontDestroyOnLoad(character);
                 character.SetActive(false);
                 PlayerCharacterList.Add(character);
@@ -260,6 +261,7 @@ public class GameManager : Singleton<GameManager>
         character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
 
         info.SetCharacterData(characterData);
+        character.GetComponent<CharacterEffect>().EffectAwake();
         info.creationTime = System.DateTime.Now;
         info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
         character.SetActive(false);

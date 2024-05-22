@@ -1,0 +1,9 @@
+﻿Id,Name,Pos,ConditionType,Tier,File
+101,눈물,1,1,0,Ef_Tear
+102,먼지날림,2,1,0,Ef_Dust
+201,일반공격,3,2,1,Ef_NormalHit
+202,레어공격,3,2,2,Ef_RareHit
+203,에픽공격,3,2,3,Ef_EpicHit
+301,일반폭발,4,3,4,Ef_NormalEx
+302,엘리트폭발,4,3,5,Ef_EliteEx
+303,보스폭발,4,3,6,Ef_BossEx

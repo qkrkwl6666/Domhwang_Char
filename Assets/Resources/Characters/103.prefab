@@ -3274,6 +3274,7 @@ GameObject:
   - component: {fileID: 1678758330302219122}
   - component: {fileID: 4536337439538321041}
   - component: {fileID: -4331462161701375428}
+  - component: {fileID: 7612304116527853084}
   m_Layer: 0
   m_Name: 103
   m_TagString: Untagged
@@ -3354,6 +3355,21 @@ MonoBehaviour:
   SkillIconPrefab: {fileID: 2808921111583639323, guid: 2bf810a491ef5534db85febaf49c415a, type: 3}
   Content: {fileID: 0}
   image: {fileID: 0}
+--- !u!114 &7612304116527853084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266053520075135683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e739c5e7e6863824493cb99086df34e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackParticle: {fileID: 0}
+  runParticle: {fileID: 0}
+  cryParticle: {fileID: 0}
 --- !u!1 &8379383513574655257
 GameObject:
   m_ObjectHideFlags: 0

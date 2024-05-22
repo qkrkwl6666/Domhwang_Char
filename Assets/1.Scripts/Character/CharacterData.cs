@@ -16,6 +16,9 @@ public class CharacterData
     public int Instance_Id { get; set; }
     public int Texture { get; set; }
     public int Level { get; set; }
+    public int Atk_Effect_Id { get; set; }
+    public int Cry_Effect_Id { get; set; }
+    public int Run_Effect_Id { get; set; }
 
     public void LevelUp()
     {
@@ -41,6 +44,9 @@ public class CharacterData
         data.Instance_Id = Instance_Id;
         data.Texture = Texture;
         data.Level = Level;
+        data.Atk_Effect_Id = Atk_Effect_Id;
+        data.Cry_Effect_Id = Cry_Effect_Id;
+        data.Run_Effect_Id = Run_Effect_Id;
 
         return data;
     }

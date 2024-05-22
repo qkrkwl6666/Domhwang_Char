@@ -7,6 +7,9 @@ public class DataTableMgr : Singleton<DataTableMgr>
     private Dictionary<string, DataTable> tables = new ();
     private void Awake()
     {
+        DataTable effectTable = new EffectTable();
+        effectTable.Load("EffectsData");
+
         DataTable characterskillTable = new CharacterSkillTable();
         characterskillTable.Load("CharacterSkillData");
 
@@ -16,9 +19,11 @@ public class DataTableMgr : Singleton<DataTableMgr>
         DataTable monsterTable = new MonsterTable();
         monsterTable.Load("MonsterData");
 
+        tables.Add("Effect", effectTable);
         tables.Add("Character", characterTable);
         tables.Add("CharacterSkill", characterskillTable);
         tables.Add("Monster", monsterTable);
+
     }
 
     public T Get<T>(string id) where T : DataTable
