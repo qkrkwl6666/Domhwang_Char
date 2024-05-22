@@ -6,6 +6,7 @@ public class EffectManager : MonoBehaviour
 {
     public static readonly string DamageSkin = "DamageSkin";
     public static readonly string DamageSkinPath = "Effect/DamageSkin";
+    public static readonly string EffectManagerName = "EffectManager";
 
     // 데미지 스킨 
     public GameObject DamageSkinPrefab;
@@ -21,7 +22,7 @@ public class EffectManager : MonoBehaviour
         DamageSkinParent.name = DamageSkin;
 
         for (int i = 0; i < DamageSkinInitialcount; i++)
-        {
+        {   
             var skin = Instantiate(DamageSkinPrefab, DamageSkinParent.transform);
             skin.SetActive(false);
             DamageSkinsInactive.Add(skin);

@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class MonsterInfo : MonoBehaviour
@@ -74,11 +75,21 @@ public class MonsterInfo : MonoBehaviour
         }
 
         if(!isInvincible && !isIncreasedDamage && !battleSystem.RemainingAttack)
+        {
             Hp -= damage;
+            //DynamicTextManager manager = battleSystem.textManager.GetComponent<DynamicTextManager>();
+            //manager.c
+
+            Vector2 position = transform.position + new Vector3(-1f , 2.5f, 0f);
+
+            DynamicTextManager.CreateText2D(position, damage.ToString(), DynamicTextManager.defaultData);
+        }
 
         else if (isIncreasedDamage)
         {
             Hp -= damage * 8;
+            Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
+            DynamicTextManager.CreateText2D(position, damage.ToString(), DynamicTextManager.defaultData);
         }
 
         else if (battleSystem.RemainingAttack)
