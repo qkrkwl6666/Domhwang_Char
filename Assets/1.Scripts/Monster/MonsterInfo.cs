@@ -109,6 +109,7 @@ public class MonsterInfo : MonoBehaviour
             Hp = 0;
             isDead = true;
             GameManager.Instance.CharactersCCEnable(false);
+            GameManager.Instance.LevelUpCharacterList = battleSystem.battleCharacter[battleSystem.CurrentRound - 1];
             battleSystem.StopAllCoroutines();
             animator.SetTrigger("Death");
         }

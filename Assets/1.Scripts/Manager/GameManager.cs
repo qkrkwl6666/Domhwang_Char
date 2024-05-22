@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     public List<GameObject> formationCharacterList = new List<GameObject>();
 
     // 레벨업 리스트
-    public List<CharacterInfo> LevelUpCharacterList { get; private set; } = new List<CharacterInfo>();
+    public List<GameObject> LevelUpCharacterList { get; set; } = new List<GameObject>();
     private void Awake()
     {
         // 캐릭터 데이터 가져오기
@@ -206,15 +206,20 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("GameWin");
         StageClear();
 
-        foreach (var character in formationCharacterList)
+        //foreach (var character in formationCharacterList)
+        //{
+        //    var cc = character.GetComponent<CharacterControll>();
+        //    if(!cc.isRun && !cc.attackEndRun)
+        //    {
+        //        var ci = character.GetComponent<CharacterInfo>();
+        //        ci.LevelUp();
+        //        LevelUpCharacterList.Add(ci);
+        //    }
+        //}
+
+        foreach(var character in LevelUpCharacterList)
         {
-            var cc = character.GetComponent<CharacterControll>();
-            if(!cc.isRun && !cc.attackEndRun)
-            {
-                var ci = character.GetComponent<CharacterInfo>();
-                ci.LevelUp();
-                LevelUpCharacterList.Add(ci);
-            }
+            character.GetComponent<CharacterInfo>().LevelUp();
         }
 
         UIManager.Instance.OpenUI(Page.LEVELUP);
