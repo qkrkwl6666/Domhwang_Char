@@ -1,12 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using UnityEngine.TextCore.Text;
-using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Numerics;
+using UnityEngine.UI;
 using Vector3 = UnityEngine.Vector3;
 
 public class Forming : MonoBehaviour

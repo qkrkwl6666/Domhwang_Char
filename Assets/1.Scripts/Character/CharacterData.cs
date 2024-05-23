@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Diagnostics.CodeAnalysis;
-
 public class CharacterData
 {
     public int Id { get; set; }

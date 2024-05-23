@@ -1,9 +1,12 @@
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterCard : MonoBehaviour
 {
+
+
     public GameObject Cardback;
     private CharacterData characterData;
     private Button button;
@@ -35,6 +38,7 @@ public class CharacterCard : MonoBehaviour
 
     public void CardAwake()
     {
+        // 하드 코딩 바꿔야 함
         switch (GameManager.Instance.CurrentStage)
         {
             case 1:
@@ -72,11 +76,26 @@ public class CharacterCard : MonoBehaviour
         switch (GameManager.Instance.TryCount)
         {
             case 1:
+                Cardback.GetComponent<Image>().sprite = Resources.Load<Sprite>(Defines.CardPath + Defines.Card_Unknown);
                 Cardback.SetActive(true);
                 break;
             case 2:
                 Cardback.SetActive(true);
-                Cardback.GetComponent<Image>().color = GetTierColor(characterData.Tier);
+                switch (characterData.Tier)
+                {
+                    case "normal":
+                        Cardback.GetComponent<Image>().sprite = Resources.Load<Sprite>(Defines.CardPath + Defines.Card_Normal);
+                        break;
+                    case "rare":
+                        Cardback.GetComponent<Image>().sprite = Resources.Load<Sprite>(Defines.CardPath + Defines.Card_Rare);
+                        break;
+                    case "epic":
+                        Cardback.GetComponent<Image>().sprite = Resources.Load<Sprite>(Defines.CardPath + Defines.Card_Epic);
+                        break;
+                }
+
+                
+                //Cardback.GetComponent<Image>().color = GetTierColor(characterData.Tier);
                 break;
             case 3:
                 var go = Resources.Load("CharacterModel/" + characterData.Id.ToString()) as GameObject;

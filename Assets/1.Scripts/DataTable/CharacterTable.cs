@@ -1,11 +1,9 @@
-using System.Collections;
+using CsvHelper;
+using CsvHelper.Configuration;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using UnityEngine;
-using CsvHelper;
-using System.Globalization;
-using CsvHelper.Configuration;
-using System.Runtime;
 public class CharacterTable : DataTable
 {
     public Dictionary<string, CharacterData> characterTable {get; private set; } = new Dictionary<string, CharacterData>();
