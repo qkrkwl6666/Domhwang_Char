@@ -67,21 +67,12 @@ public class GameManager : Singleton<GameManager>
 
                 CreateCharacter(characterData);
             }
-            
+
+            Save();
         }// 세이브 데이터가 있다면 캐릭터 Load
         else if (PlayerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
         {
-            foreach (CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
-            {
-                var character = Instantiate(Resources.Load<GameObject>("Characters/" + go.Id));
-                var info = character.AddComponent<CharacterInfo>();
-                character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
-                info.SetCharacterInfo(go);
-                character.GetComponent<CharacterEffect>().EffectInitialiAwake();
-                DontDestroyOnLoad(character);
-                character.SetActive(false);
-                PlayerCharacterList.Add(character);
-            }
+            Load();
         }
 
         canvas = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>();
@@ -179,6 +170,10 @@ public class GameManager : Singleton<GameManager>
 
     public void GameManagerAwake(Scene scene, LoadSceneMode mode)
     {
+        if(TryCount != 0)
+        {
+            Save();
+        }
         if(scene.name == "Main")
         {
             CharacterAnimationEvent.MonsterDamageEvent = null;
@@ -276,6 +271,43 @@ public class GameManager : Singleton<GameManager>
         PlayerCharacterList.Add(character);
 
         return character;
+    }
+
+    public void Save()
+    {
+        SaveData1 saveData1 = new SaveData1();
+        List<CharacterInfo> list = new List<CharacterInfo>();
+
+        saveData1.currentStage = CurrentStage;
+        saveData1.tryCount = TryCount;
+
+        foreach (var character in PlayerCharacterList)
+        {
+            list.Add(character.GetComponent<CharacterInfo>());
+        }
+        saveData1.characterDataList = list;
+        SaveLoadSystem.Save(-1, saveData1);
+
+        Debug.Log("Save");
+    }
+
+    public void Load()
+    {
+        CurrentStage = SaveLoadSystem.CurrentData.currentStage;
+        TryCount = SaveLoadSystem.CurrentData.tryCount;
+
+        foreach (CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
+        {
+            var character = Instantiate(Resources.Load<GameObject>("Characters/" + go.Id));
+            var info = character.AddComponent<CharacterInfo>();
+            character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
+            info.SetCharacterInfo(go);
+            character.GetComponent<CharacterEffect>().EffectInitialiAwake();
+
+            DontDestroyOnLoad(character);
+            character.SetActive(false);
+            PlayerCharacterList.Add(character);
+        }
     }
 
 }
