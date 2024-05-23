@@ -36,6 +36,7 @@ public class CharacterSlot : MonoBehaviour
 
     public void CharacterOnClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         OnCharacterUIInfo?.Invoke(characterInfo, this);
         OnCharacterUISelect?.Invoke(characterInfo, this);
     }

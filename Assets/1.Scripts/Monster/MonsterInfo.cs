@@ -92,7 +92,7 @@ public class MonsterInfo : MonoBehaviour
         {
             Hp -= damage * 8;
             Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
-            DynamicTextManager.CreateText2D(position, damage.ToString(), DynamicTextManager.defaultData);
+            DynamicTextManager.CreateText2D(position, (damage * 8).ToString(), DynamicTextManager.defaultData);
         }
 
         else if (battleSystem.RemainingAttack)
@@ -127,5 +127,6 @@ public class MonsterInfo : MonoBehaviour
     {
         // Todo : 여기서 게임 우승 메서드 호출
         GameManager.Instance.GameWin();
+        GameObject.FindWithTag("BackgroundBGM").GetComponent<AudioSource>().Stop();
     }
 }

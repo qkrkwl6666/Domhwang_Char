@@ -11,6 +11,7 @@ TagManager:
   - MainCanvas
   - SelectCard
   - EffectManager
+  - BackgroundBGM
   layers:
   - Default
   - TransparentFX

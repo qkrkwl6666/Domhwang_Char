@@ -70,7 +70,7 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(CharactersBattleSystem());
     }
 
-    // Todo : 중간에 몬스터가 죽으면 보상창 몬스터가 죽지 않았을경우 캐릭터에게 공격 
+    
     IEnumerator CharactersBattleSystem()
     {
         while (CurrentRound <= Round)
@@ -470,7 +470,27 @@ public class BattleSystem : MonoBehaviour
     public void monsterAtkEffect()
     {
         if (monster == null) return;
+
         monster.GetComponent<MonsterEffect>().AttackParticle.Play();
+
+        string path;
+        switch (MonsterInfo.Tier)
+        {
+            case "common":
+                path = "Sound/Ex_Normal";
+                break;
+            case "elite":
+                path = "Sound/Hit_Rare";
+                break;
+            case "boss":
+                path = "Sound/Ex_Elite";
+                break;
+            default:
+                path = "Sound/Ex_Boss";
+                break;
+        }
+
+        GameManager.Instance.AudioSource.PlayOneShot(Resources.Load<AudioClip>(path));
     }
 
     // 캐릭터 스폰 전에 스킬 적용

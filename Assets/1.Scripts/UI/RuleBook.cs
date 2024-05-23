@@ -49,6 +49,8 @@ public class RuleBook : MonoBehaviour
 
     public void OnExitButtonClick()
     {
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
         UIManager.Instance.OpenUI(Page.TITLE);
     }
 }

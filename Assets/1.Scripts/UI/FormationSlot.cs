@@ -31,6 +31,7 @@ public class FormationSlot : MonoBehaviour
 
     public void OnCharacterClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         // card 에 내 현재 정보 넘기기
         //CardEvent?.Invoke(characterInfo.ConvertCharacterData());
         //card.SetData(characterInfo.ConvertCharacterData());

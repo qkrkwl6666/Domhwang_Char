@@ -49,7 +49,7 @@ public class CharacterChange : MonoBehaviour
 
     public void OnChangeButtonClick()
     {
-
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         // 현재 플레이어 리스트 에서 제거
 
         Destroy(removeCharacterInfo.gameObject);
@@ -61,13 +61,18 @@ public class CharacterChange : MonoBehaviour
         GameManager.Instance.TryCount = 3;
         SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.STAGE);
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
 
     }
 
     public void OnCencelButtonClick()
     {
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.CencelClip);
         GameManager.Instance.TryCount = 3;
         SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.STAGE);
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
     }
 }
