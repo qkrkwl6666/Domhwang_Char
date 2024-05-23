@@ -39,6 +39,8 @@ public class GameManager : Singleton<GameManager>
 
     // Attack 파티클 리스트
     public List<GameObject> AtkParticleSystemList { get; set; } = new List<GameObject>();
+    
+    public string LoadSceneName {  get; private set; }
 
     // 오디오 부분
     public AudioSource AudioSource { get; private set; }
@@ -419,5 +421,15 @@ public class GameManager : Singleton<GameManager>
         CencelClip = Resources.Load<AudioClip>("Sound/Cancel");
         LoseClip = Resources.Load<AudioClip>("Sound/Lose");
         VictoryClip = Resources.Load<AudioClip>("Sound/Victory");
-}
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene("Loading");
+
+        // 로딩 씬에서 필요한 씬을 로드하기 위해 sceneName을 저장합니다.
+        PlayerPrefs.SetString("NextScene", sceneName);
+    }
+
+
 }

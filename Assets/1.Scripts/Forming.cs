@@ -61,11 +61,17 @@ public class Forming : MonoBehaviour
         monsterShowUiButton.onClick.AddListener(OnMonsterUiButtonClick);
         SkillInfoButton.onClick.AddListener(OnButtonSkillIconClick);
 
-        SceneManager.sceneLoaded += FormingUiAwake;
-    }   
+        //SceneManager.sceneLoaded += FormingUiAwake;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= FormingUiAwake;
+    }
 
     private void OnEnable()
     {
+        SceneManager.sceneLoaded += FormingUiAwake;
         GameManager.Instance.formationCharacterList.Clear();
 
         for (int i = 0; i < 6; i++)
@@ -246,6 +252,7 @@ public class Forming : MonoBehaviour
         GameManager.Instance.BackgroundAudioSource.Stop();
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         SceneManager.LoadScene("Battle");
+        //GameManager.Instance.LoadScene("Battle");
 
         UIManager.Instance.AllClose();
         

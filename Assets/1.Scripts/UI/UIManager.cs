@@ -21,7 +21,17 @@ public class UIManager : Singleton<UIManager>
 
         DontDestroyOnLoad(canvas.gameObject);
 
+        //SceneManager.sceneLoaded += CanvasRemove;
+    }
+
+    void OnEnable()
+    {
         SceneManager.sceneLoaded += CanvasRemove;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= CanvasRemove;
     }
 
     // Start is called before the first frame update
