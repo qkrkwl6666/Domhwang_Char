@@ -113,9 +113,9 @@ public class CharacterCard : MonoBehaviour
     {
         switch (tier)
         {
-            case "normal": return Color.gray;
-            case "rare": return Color.green;
-            case "epic": return Color.blue;
+            case "normal": return new Color(255f / 255f, 255f / 255f, 235f / 255f, 1);
+            case "rare": return new Color(50f / 255f, 62f / 255f, 79f / 255f, 1);
+            case "epic": return new Color(150f / 255f, 66f / 255f, 83f/ 255f, 1);
             default : return Color.white;
         }
     }
