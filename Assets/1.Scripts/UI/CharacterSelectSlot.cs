@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CharacterSelectSlot : MonoBehaviour
@@ -16,6 +17,8 @@ public class CharacterSelectSlot : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+
+        SceneManager.sceneLoaded += OnAwake;
     }
 
     void Start()
@@ -24,10 +27,19 @@ public class CharacterSelectSlot : MonoBehaviour
     }
     private void OnEnable()
     {
-        foreach(Transform child in transform)
+
+    }
+
+    public void OnAwake(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name == "Battle")
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
+
     }
 
     public void OnRemoveButton()

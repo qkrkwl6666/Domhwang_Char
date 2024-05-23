@@ -23,8 +23,12 @@ public class Forming : MonoBehaviour
     public TMPro.TextMeshProUGUI rare;
 
     // MonsterUI
+    public GameObject monsterUi;
+    public Button monsterShowUiButton;
     public TMPro.TextMeshProUGUI monsterName;
     public TMPro.TextMeshProUGUI monsterHp;
+    public Transform monsterContent;
+    public TextMeshProUGUI monsterDesc;
 
     // GameStartUI
     public Button gameStartButton;
@@ -51,6 +55,9 @@ public class Forming : MonoBehaviour
 
         gameStartButton.interactable = false;
         gameStartButton.onClick.AddListener(OnClickGameStart);
+        monsterShowUiButton.onClick.AddListener(OnMonsterUiButtonClick);
+
+        SceneManager.sceneLoaded += FormingUiAwake;
     }   
 
     private void OnEnable()
@@ -94,6 +101,12 @@ public class Forming : MonoBehaviour
         // MonsterUI
         monsterName.text = GameManager.Instance.MonsterData.Name;
         monsterHp.text = "Hp : " + GameManager.Instance.MonsterData.Hp.ToString();
+        monsterDesc.text = GameManager.Instance.MonsterData.Desc.ToString();
+
+        // 몬스터 모델 생성 Todo Battle 씬 이동시 파괴
+        var monster = Resources.Load<GameObject>("MonsterModel/" + GameManager.Instance.MonsterData.Id);
+        var monsterModel = Instantiate(monster, monsterContent.transform);
+        monsterModel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -50f, 0f);
 
         // 게임 시작 버튼 비활성화
         gameStartButton.interactable = false;
@@ -201,6 +214,39 @@ public class Forming : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void OnMonsterUiButtonClick()
+    {
+        monsterUi.SetActive(monsterUi.activeSelf ? false : true);
+
+        if(monsterUi.activeSelf)
+        {
+            foreach(var item in uiSelectCharacterList)
+            {
+                item.SetActive(false);
+                gameStartButton.interactable = false;
+            }
+        }
+        else
+        {
+            foreach (var item in uiSelectCharacterList)
+            {
+                item.SetActive(true);
+                gameStartButton.interactable = true;
+            }
+        }
+
+    }
+    public void FormingUiAwake(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name == "Battle")
+        {
+            foreach(Transform t in monsterContent)
+            {
+                Destroy(t.gameObject);
+            }
+        }
     }
 
 }
