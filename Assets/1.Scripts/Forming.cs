@@ -26,6 +26,11 @@ public class Forming : MonoBehaviour
     public Transform monsterContent;
     public TextMeshProUGUI monsterDesc;
 
+    // characterInfoIO
+    public GameObject infoDesc;
+    public Button SkillInfoButton;
+    public TextMeshProUGUI infoDescText;
+
     // GameStartUI
     public Button gameStartButton;
 
@@ -52,6 +57,7 @@ public class Forming : MonoBehaviour
         gameStartButton.interactable = false;
         gameStartButton.onClick.AddListener(OnClickGameStart);
         monsterShowUiButton.onClick.AddListener(OnMonsterUiButtonClick);
+        SkillInfoButton.onClick.AddListener(OnButtonSkillIconClick);
 
         SceneManager.sceneLoaded += FormingUiAwake;
     }   
@@ -106,6 +112,10 @@ public class Forming : MonoBehaviour
 
         // 게임 시작 버튼 비활성화
         gameStartButton.interactable = false;
+
+
+        // 캐릭터 Info Ui
+        infoDesc.SetActive(false);
     }
 
     private void Start()
@@ -139,6 +149,17 @@ public class Forming : MonoBehaviour
         run.text = characterInfo.Run.ToString();
         skill.text = characterInfo.Skill_Id.ToString();
         rare.text = characterInfo.Tier;
+        if(characterInfo.Skill_Id == 0)
+        {
+            infoDescText.text = "이 친구는 무능력자 입니다";
+        }
+        else
+        {
+            var table = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill");
+            var data = table.Get(characterInfo.Skill_Id.ToString());
+            infoDescText.text = data.Desc;
+        }
+
     }
         
     public void OnCharacterSelect(CharacterInfo characterInfo , CharacterSlot characterSlot)
@@ -209,6 +230,8 @@ public class Forming : MonoBehaviour
             if (list[i] == null) return false;
         }
 
+        if (monsterUi.activeSelf || infoDesc.activeSelf) return false;
+
         return true;
     }
 
@@ -216,7 +239,7 @@ public class Forming : MonoBehaviour
     {
         monsterUi.SetActive(monsterUi.activeSelf ? false : true);
 
-        if(monsterUi.activeSelf)
+        if (monsterUi.activeSelf)
         {
             foreach(var item in uiSelectCharacterList)
             {
@@ -229,7 +252,7 @@ public class Forming : MonoBehaviour
             foreach (var item in uiSelectCharacterList)
             {
                 item.SetActive(true);
-                gameStartButton.interactable = true;
+                gameStartButton.interactable = GameStartCheck();
             }
         }
 
@@ -243,6 +266,27 @@ public class Forming : MonoBehaviour
                 Destroy(t.gameObject);
             }
         }
+    }
+
+    public void OnButtonSkillIconClick()
+    {
+        //bool isActive = infoDesc.activeSelf ? false : true;
+
+        if (infoDesc.activeSelf)
+        {
+            infoDesc.SetActive(false);
+            gameStartButton.interactable = GameStartCheck();
+        }
+        else
+        {
+            infoDesc.SetActive(true);
+            gameStartButton.interactable = false;
+        }
+
+       
+
+        //infoDescText.text = 
+
     }
 
 }

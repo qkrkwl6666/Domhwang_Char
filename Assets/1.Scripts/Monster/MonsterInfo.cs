@@ -27,6 +27,9 @@ public class MonsterInfo : MonoBehaviour
     public bool MonsterAttackEnd { get; private set; } = false;
     private Animator animator;
 
+    public AudioSource audioSource;
+    public AudioClip hitAudio;
+
     private void Awake()
     {
         battleSystem = GameObject.FindWithTag("BattleSystem").GetComponent<BattleSystem>();
