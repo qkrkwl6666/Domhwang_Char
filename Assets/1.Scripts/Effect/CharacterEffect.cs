@@ -25,6 +25,8 @@ public class CharacterEffect : MonoBehaviour
         var go = Instantiate(Resources.Load<GameObject>(Effect + atkPath), new Vector3(3.2f, 0.9f , 0), Quaternion.identity);
         DontDestroyOnLoad(go);
 
+        GameManager.Instance.AtkParticleSystemList.Add(go);
+
         AttackParticle = go.GetComponent<ParticleSystem>();
 
         go = Instantiate(Resources.Load<GameObject>(Effect + runPath), transform);

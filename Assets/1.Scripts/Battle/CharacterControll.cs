@@ -258,4 +258,9 @@ public class CharacterControll : MonoBehaviour
         transform.rotation = Quaternion.identity;
     }
 
+    public void GameRestart()
+    {
+        OnCharacterControll = null;
+    }
+
 }

@@ -13,8 +13,13 @@ public class Lose : MonoBehaviour
 
     public void OnClickOpenMainMenu()
     {
-        SceneManager.LoadScene("Main");
+        //SceneManager.LoadScene("Main");
         
         UIManager.Instance.OpenUI(Page.TITLE);
+        if(GameManager.Instance.gameRestart)
+        {
+            GameManager.Instance.GameRestart();
+        }
+        
     }
 }

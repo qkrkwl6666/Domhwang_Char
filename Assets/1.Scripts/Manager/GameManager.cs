@@ -1,6 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -10,13 +13,14 @@ public class GameManager : Singleton<GameManager>
     public readonly int MAX_FORMATION_SIZE = 8;
     public readonly int MAX_STAGE = 12;
     public Canvas canvas { get; private set; }
-
     public int TryCount { get; set; } = 3;
 
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
     // 몬스터 
     public MonsterData MonsterData { get; private set; }
+
+    public bool gameRestart = false;
 
     // 전체 캐릭터 데이터 리스트
     public List<CharacterData> AllCharacterDataList { get; private set; } = new List<CharacterData>();
@@ -32,6 +36,9 @@ public class GameManager : Singleton<GameManager>
 
     // 레벨업 리스트
     public List<GameObject> LevelUpCharacterList { get; set; } = new List<GameObject>();
+
+    // Attack 파티클 리스트
+    public List<GameObject> AtkParticleSystemList { get; set; } = new List<GameObject>();
     private void Awake()
     {
         // 캐릭터 데이터 가져오기
@@ -41,39 +48,7 @@ public class GameManager : Singleton<GameManager>
 
         TierCharacterDatasList = characterDatas.GetTierCharacterDatasList();
 
-        if (SaveLoadSystem.Load() == null)
-        {
-            int normalListCount = TierCharacterDatasList[(int)CharacterTier.NORMAL].Count;
-            int rarelListCount = TierCharacterDatasList[(int)CharacterTier.RARE].Count;
-            int randomIndex;
-            int id;
-            CharacterData characterData;
-            // 세이브 데이터가 없다면 기본 캐릭터 지급 일반 7명, 레어 1명 랜덤
-            for (int i = 0; i < MAX_FORMATION_SIZE; i++) // 7명 랜덤 뽑기
-            {
-                if(i == MAX_FORMATION_SIZE - 1) // 레어 뽑기
-                {
-                    randomIndex = UnityEngine.Random.Range(0, rarelListCount);
-                    characterData = TierCharacterDatasList[(int)CharacterTier.RARE][randomIndex];
-                    id = characterData.Id;
-
-                }
-                else
-                {
-                    randomIndex = UnityEngine.Random.Range(0, normalListCount);
-                    characterData = TierCharacterDatasList[(int)CharacterTier.NORMAL][randomIndex];
-                    id = characterData.Id;
-                }
-
-                CreateCharacter(characterData);
-            }
-
-            Save();
-        }// 세이브 데이터가 있다면 캐릭터 Load
-        else if (PlayerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
-        {
-            Load();
-        }
+        InitialGameStart();
 
         canvas = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>();
         SceneManager.sceneLoaded += GameManagerAwake;
@@ -201,17 +176,6 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("GameWin");
         StageClear();
 
-        //foreach (var character in formationCharacterList)
-        //{
-        //    var cc = character.GetComponent<CharacterControll>();
-        //    if(!cc.isRun && !cc.attackEndRun)
-        //    {
-        //        var ci = character.GetComponent<CharacterInfo>();
-        //        ci.LevelUp();
-        //        LevelUpCharacterList.Add(ci);
-        //    }
-        //}
-
         foreach(var character in LevelUpCharacterList)
         {
             character.GetComponent<CharacterInfo>().LevelUp();
@@ -223,18 +187,53 @@ public class GameManager : Singleton<GameManager>
     public void GameLose()
     {
         TryCount--;
+
         if(TryCount == 0)
         {
-            // 게임 재시작 및 UI 띄우기 
+            Debug.Log("게임 초기화");
+
+            gameRestart = true;
         }
 
+        SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.LOSE);
+    }
+
+    public void GameRestart()
+    {
+        foreach (var atkPrticle in AtkParticleSystemList)
+        {
+            atkPrticle.SetActive(true);
+            Destroy(atkPrticle);
+        }
+        AtkParticleSystemList.Clear();
+
+        // 게임 재시작 및 UI 띄우기 
+        foreach (var character in PlayerCharacterList)
+        {
+            character.SetActive(true);
+            Destroy(character);
+        }
+
+        formationCharacterList.Clear();
+        PlayerCharacterList.Clear();
+        LevelUpCharacterList.Clear();
+
+        InitialCharacterCreate();
+
+        TryCount = 3;
+        CurrentStage = 0;
+        gameRestart = false;
     }
 
     public void CharactersCCEnable(bool isEnable)
     {
+        if (PlayerCharacterList == null) return;
+
         foreach(var gameObject in PlayerCharacterList)
         {
+            if (gameObject == null) continue;
+
             var cc = gameObject.GetComponent<CharacterControll>();
             cc.enabled = isEnable;
         }
@@ -310,4 +309,70 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void InitialGameStart()
+    {
+        if (SaveLoadSystem.Load() == null)
+        {
+            int normalListCount = TierCharacterDatasList[(int)CharacterTier.NORMAL].Count;
+            int rarelListCount = TierCharacterDatasList[(int)CharacterTier.RARE].Count;
+            int randomIndex;
+            int id;
+            CharacterData characterData;
+            // 세이브 데이터가 없다면 기본 캐릭터 지급 일반 7명, 레어 1명 랜덤
+            for (int i = 0; i < MAX_FORMATION_SIZE; i++) // 7명 랜덤 뽑기
+            {
+                if (i == MAX_FORMATION_SIZE - 1) // 레어 뽑기
+                {
+                    randomIndex = UnityEngine.Random.Range(0, rarelListCount);
+                    characterData = TierCharacterDatasList[(int)CharacterTier.RARE][randomIndex];
+                    id = characterData.Id;
+
+                }
+                else
+                {
+                    randomIndex = UnityEngine.Random.Range(0, normalListCount);
+                    characterData = TierCharacterDatasList[(int)CharacterTier.NORMAL][randomIndex];
+                    id = characterData.Id;
+                }
+
+                CreateCharacter(characterData);
+            }
+
+            Save();
+        }// 세이브 데이터가 있다면 캐릭터 Load
+        else if (PlayerCharacterList.Count == 0)// 세이브 데이터 기반 캐릭터 생성
+        {
+            Load();
+        }
+    }
+
+    public void InitialCharacterCreate()
+    {
+        int normalListCount = TierCharacterDatasList[(int)CharacterTier.NORMAL].Count;
+        int rarelListCount = TierCharacterDatasList[(int)CharacterTier.RARE].Count;
+        int randomIndex;
+        int id;
+        CharacterData characterData;
+        // 세이브 데이터가 없다면 기본 캐릭터 지급 일반 7명, 레어 1명 랜덤
+        for (int i = 0; i < MAX_FORMATION_SIZE; i++) // 7명 랜덤 뽑기
+        {
+            if (i == MAX_FORMATION_SIZE - 1) // 레어 뽑기
+            {
+                randomIndex = UnityEngine.Random.Range(0, rarelListCount);
+                characterData = TierCharacterDatasList[(int)CharacterTier.RARE][randomIndex];
+                id = characterData.Id;
+
+            }
+            else
+            {
+                randomIndex = UnityEngine.Random.Range(0, normalListCount);
+                characterData = TierCharacterDatasList[(int)CharacterTier.NORMAL][randomIndex];
+                id = characterData.Id;
+            }
+
+            CreateCharacter(characterData);
+        }
+
+        Save();
+    }
 }
