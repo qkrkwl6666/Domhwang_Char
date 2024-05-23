@@ -33,8 +33,8 @@ public class CharacterControll : MonoBehaviour
     // attackEndRun �н��ϴ� ���� �ܷ� ����
     public bool isAttackEndPass = false;
 
-    private float moveSpeed = 2f;
-    private float runSpeed = 14f;
+    private float moveSpeed = 3f;
+    private float runSpeed = 6f;
     public static event Action<GameObject> OnCharacterControll;
     public UnityEngine.Transform MonsterTransform {  get; set; }
     public RectTransform skillCanvasRectTransform { get; private set; }
