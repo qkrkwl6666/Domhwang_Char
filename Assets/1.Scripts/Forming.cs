@@ -31,6 +31,8 @@ public class Forming : MonoBehaviour
     public Button SkillInfoButton;
     public TextMeshProUGUI infoDescText;
 
+    public CharacterInfo InfoCharacter;
+
     // GameStartUI
     public Button gameStartButton;
 
@@ -116,12 +118,24 @@ public class Forming : MonoBehaviour
 
         // Ä³¸¯ÅÍ Info Ui
         infoDesc.SetActive(false);
+
+        foreach (Transform transform in selectedCharacter.transform)
+        {
+            Destroy(transform.gameObject);
+        }
+
+        characterName.text = "";
+        attack.text = "";
+        run.text = "";
+        skill.text = "";
+        rare.text = "";
+        infoDescText.text = "";
     }
 
     private void Start()
     {
         CharacterSlot.OnCharacterUIInfo += UICharacterInfo;
-        CharacterSlot.OnCharacterUISelect += OnCharacterSelect;
+        //CharacterSlot.OnCharacterUISelect += OnCharacterSelect;
     }
 
     private void Update()
@@ -129,11 +143,35 @@ public class Forming : MonoBehaviour
 
     }
 
-    public void UICharacterInfo(CharacterInfo characterInfo)
+    public void UICharacterInfo(CharacterInfo characterInfo, CharacterSlot characterSlot)
     {
-        if (MultiTouchManager.Instance.LongTap == false) return;
+        //if (MultiTouchManager.Instance.LongTap == false) return;
 
-        foreach(Transform transform in selectedCharacter.transform)
+        if (MultiTouchManager.Instance.Tap == false) return;
+
+        if (characterInfo == InfoCharacter)
+        {
+            OnCharacterSelect(characterInfo, characterSlot);
+            InfoCharacter = null;
+
+            foreach (Transform transform in selectedCharacter.transform)
+            {
+                Destroy(transform.gameObject);
+            }
+
+            characterName.text = "";
+            attack.text = "";
+            run.text = "";
+            skill.text = "";
+            rare.text = "";
+            infoDescText.text = "";
+
+            return;
+        }
+
+        InfoCharacter = characterInfo;
+
+        foreach (Transform transform in selectedCharacter.transform)
         {
             Destroy(transform.gameObject);
         }
@@ -164,7 +202,7 @@ public class Forming : MonoBehaviour
         
     public void OnCharacterSelect(CharacterInfo characterInfo , CharacterSlot characterSlot)
     {
-        if (MultiTouchManager.Instance.Tap == false) return;
+        //if (MultiTouchManager.Instance.Tap == false) return;
 
         List<GameObject> list = GameManager.Instance.formationCharacterList;
         int index = -1;

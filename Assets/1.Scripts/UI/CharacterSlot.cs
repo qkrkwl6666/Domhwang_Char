@@ -8,7 +8,7 @@ public class CharacterSlot : MonoBehaviour
     public Sprite characterImage;
     public TextMeshProUGUI levelText;
 
-    public static event Action<CharacterInfo> OnCharacterUIInfo;
+    public static event Action<CharacterInfo, CharacterSlot> OnCharacterUIInfo;
     public static event Action<CharacterInfo, CharacterSlot> OnCharacterUISelect;
 
     private void OnEnable()
@@ -36,7 +36,7 @@ public class CharacterSlot : MonoBehaviour
 
     public void CharacterOnClick()
     {
-        OnCharacterUIInfo?.Invoke(characterInfo);
+        OnCharacterUIInfo?.Invoke(characterInfo, this);
         OnCharacterUISelect?.Invoke(characterInfo, this);
     }
 }
