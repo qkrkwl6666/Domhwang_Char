@@ -453,8 +453,8 @@ public class BattleSystem : MonoBehaviour
         Animator monsterAnimator = monster.GetComponent<Animator>();
         monsterAnimator.SetTrigger("Attack");
 
-        // Todo : 일단 임시로 여기서 호출 나중에 애니메이션 이벤트 만들어서 마지막 프레임에 호출하기
-        monster.GetComponent<MonsterEffect>().AttackParticle.Play();
+        // Todo : 일단 임시
+        Invoke("monsterAtkEffect", 0.3f);
 
         var monsterInfo = monster.GetComponent<MonsterInfo>();
 
@@ -465,6 +465,12 @@ public class BattleSystem : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void monsterAtkEffect()
+    {
+        if (monster == null) return;
+        monster.GetComponent<MonsterEffect>().AttackParticle.Play();
     }
 
     // 캐릭터 스폰 전에 스킬 적용

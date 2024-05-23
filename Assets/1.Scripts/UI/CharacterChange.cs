@@ -66,6 +66,7 @@ public class CharacterChange : MonoBehaviour
 
     public void OnCencelButtonClick()
     {
+        GameManager.Instance.TryCount = 3;
         SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.STAGE);
     }

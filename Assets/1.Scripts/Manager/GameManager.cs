@@ -145,7 +145,7 @@ public class GameManager : Singleton<GameManager>
 
     public void GameManagerAwake(Scene scene, LoadSceneMode mode)
     {
-        if(TryCount != 0)
+        if(TryCount != 0 && scene.name == "Main")
         {
             Save();
         }
