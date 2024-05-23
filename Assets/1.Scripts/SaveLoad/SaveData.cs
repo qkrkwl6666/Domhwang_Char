@@ -16,6 +16,7 @@ public class SaveData1 : SaveData
     // 플레이어가 보유중인 플레이어 데이터
     public List<CharacterInfo> characterDataList;
     public int currentStage = 0;
+    public int tryCount = 0;
 
     public SaveData1()
     {

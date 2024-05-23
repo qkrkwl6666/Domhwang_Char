@@ -124,6 +124,9 @@ public class CharacterInfoConverter : JsonConverter<CharacterInfo>
         v.Level = (int)jo["Level"];
         v.InstanceId = (int)jo["InstanceId"];
         v.Texture = (int)jo["Texture"];
+        v.Atk_Effect_Id = (int)jo["Atk_Effect_Id"];
+        v.Run_Effect_Id = (int)jo["Run_Effect_Id"];
+        v.Cry_Effect_Id = (int)jo["Cry_Effect_Id"];
 
         return v;
     }
@@ -153,6 +156,12 @@ public class CharacterInfoConverter : JsonConverter<CharacterInfo>
         writer.WriteValue(value.InstanceId);
         writer.WritePropertyName("Texture");
         writer.WriteValue(value.Texture);
+        writer.WritePropertyName("Atk_Effect_Id");
+        writer.WriteValue(value.Atk_Effect_Id);
+        writer.WritePropertyName("Run_Effect_Id");
+        writer.WriteValue(value.Run_Effect_Id);
+        writer.WritePropertyName("Cry_Effect_Id");
+        writer.WriteValue(value.Cry_Effect_Id);
         writer.WriteEndObject();
     }
 }
