@@ -7,6 +7,7 @@ public class MainCanvas : MonoBehaviour
 
     private void Awake()
     {
+
         canvas = GetComponentInParent<Canvas>();
         SceneManager.sceneLoaded += FindCanvasChangeScene;
     }
@@ -14,6 +15,7 @@ public class MainCanvas : MonoBehaviour
     private void OnEnable()
     {
         canvas.worldCamera = Camera.main;
+        
     }
 
     public void FindCanvasChangeScene(Scene scene, LoadSceneMode mode)

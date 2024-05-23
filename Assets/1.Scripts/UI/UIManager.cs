@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -16,6 +18,10 @@ public class UIManager : Singleton<UIManager>
         
         //Debug.Log("UIManagerAwake");
         page = Page.TITLE;
+
+        DontDestroyOnLoad(canvas.gameObject);
+
+        SceneManager.sceneLoaded += CanvasRemove;
     }
 
     // Start is called before the first frame update
@@ -29,7 +35,7 @@ public class UIManager : Singleton<UIManager>
         }
 
         defaultPanels[(int)page].SetActive(true);
-        DontDestroyOnLoad(canvas.gameObject);
+        //DontDestroyOnLoad(canvas.gameObject);
     }
 
     // Update is called once per frame
@@ -50,6 +56,22 @@ public class UIManager : Singleton<UIManager>
         for(int i = 0; i < defaultPanels.Count; i++)
         {
             defaultPanels[i].SetActive(false);
+        }
+    }
+
+    public void CanvasRemove(UnityEngine.SceneManagement.Scene scene , LoadSceneMode mode)
+    {
+        if(scene.name == "Main")
+        {
+            GameObject[] objects = GameObject.FindGameObjectsWithTag("MainCanvas");
+
+            foreach(GameObject obj in objects)
+            {
+                if(obj.GetComponent<Canvas>() != canvas) 
+                {
+                    Destroy(obj);
+                }
+            }
         }
     }
 }
