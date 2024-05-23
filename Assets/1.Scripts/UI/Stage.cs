@@ -36,6 +36,9 @@ public class Stage : MonoBehaviour
 
     private void OpenForamtion()
     {
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/Forming"));
+
         UIManager.Instance.OpenUI(Page.FORMATION);
     }
 }

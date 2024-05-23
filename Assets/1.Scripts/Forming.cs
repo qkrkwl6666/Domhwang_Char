@@ -243,6 +243,8 @@ public class Forming : MonoBehaviour
 
     public void OnClickGameStart()
     {
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         SceneManager.LoadScene("Battle");
 
         UIManager.Instance.AllClose();
@@ -309,7 +311,6 @@ public class Forming : MonoBehaviour
     public void OnButtonSkillIconClick()
     {
         //bool isActive = infoDesc.activeSelf ? false : true;
-
         if (infoDesc.activeSelf)
         {
             infoDesc.SetActive(false);

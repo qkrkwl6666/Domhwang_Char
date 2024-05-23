@@ -24,7 +24,24 @@ public class CharacterAnimationEvent : MonoBehaviour
         //Debug.Log("AttackDamage");
         // 여기서 몬스터 데미지
         //AttackParticle
+        string path;
+        switch (characterInfo.Tier)
+        {
+            case "normal":
+                path = "Sound/Hit_Normal";
+                break;
+            case "rare":
+                path = "Sound/Hit_Rare";
+                break;
+            case "epic":
+                path = "Sound/Hit_Epic";
+                break;
+            default:
+                path = "Sound/Hit_Normal";
+                break;
+        }
 
+        GameManager.Instance.AudioSource.PlayOneShot(Resources.Load<AudioClip>(path));
         characterEffect.AttackParticle.Play();
         MonsterDamageEvent?.Invoke(characterInfo.BattleAttack);
     }

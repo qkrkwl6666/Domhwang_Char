@@ -39,6 +39,17 @@ public class GameManager : Singleton<GameManager>
 
     // Attack 파티클 리스트
     public List<GameObject> AtkParticleSystemList { get; set; } = new List<GameObject>();
+
+    // 오디오 부분
+    public AudioSource AudioSource { get; private set; }
+    public AudioClip OkClip { get; private set; }
+    public AudioClip CencelClip { get; private set; }
+    public AudioClip LoseClip { get; private set; }
+    public AudioClip VictoryClip { get; private set; }
+
+    public AudioSource BackgroundAudioSource { get; private set; }
+
+
     private void Awake()
     {
         // 캐릭터 데이터 가져오기
@@ -52,6 +63,18 @@ public class GameManager : Singleton<GameManager>
 
         canvas = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>();
         SceneManager.sceneLoaded += GameManagerAwake;
+
+        AudioSource = gameObject.AddComponent<AudioSource>();
+        AudioSource.volume = 0.1f;
+
+        AudioClipLoad();
+
+        BackgroundAudioSource = gameObject.AddComponent<AudioSource>();
+        BackgroundAudioSource.volume = 0.05f;
+        BackgroundAudioSource.loop = true;
+
+        BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
+
     }   
 
     // Update is called once per frame
@@ -145,7 +168,7 @@ public class GameManager : Singleton<GameManager>
 
     public void GameManagerAwake(Scene scene, LoadSceneMode mode)
     {
-        if(TryCount != 0)
+        if(TryCount != 0 && scene.name == "Main")
         {
             Save();
         }
@@ -174,6 +197,13 @@ public class GameManager : Singleton<GameManager>
     public void GameWin()
     {
         Debug.Log("GameWin");
+
+        AudioSource.Stop();
+        AudioSource.PlayOneShot(VictoryClip);
+
+        BackgroundAudioSource.Stop();
+        BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/Forming"));
+
         StageClear();
 
         foreach(var character in LevelUpCharacterList)
@@ -187,12 +217,19 @@ public class GameManager : Singleton<GameManager>
     public void GameLose()
     {
         TryCount--;
+        GameObject.FindWithTag("BackgroundBGM").GetComponent<AudioSource>().Stop();
 
-        if(TryCount == 0)
+        if (TryCount == 0)
         {
             Debug.Log("게임 초기화");
-
             gameRestart = true;
+            AudioSource.Stop();
+            AudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/GameOver"));
+        }
+        else
+        {
+            AudioSource.Stop();
+            AudioSource.PlayOneShot(LoseClip);
         }
 
         SceneManager.LoadScene("Main");
@@ -375,4 +412,12 @@ public class GameManager : Singleton<GameManager>
 
         Save();
     }
+
+    public void AudioClipLoad()
+    {
+        OkClip = Resources.Load<AudioClip>("Sound/OK");
+        CencelClip = Resources.Load<AudioClip>("Sound/Cancel");
+        LoseClip = Resources.Load<AudioClip>("Sound/Lose");
+        VictoryClip = Resources.Load<AudioClip>("Sound/Victory");
+}
 }

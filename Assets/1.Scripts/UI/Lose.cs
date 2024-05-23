@@ -13,10 +13,12 @@ public class Lose : MonoBehaviour
 
     public void OnClickOpenMainMenu()
     {
+        GameManager.Instance.BackgroundAudioSource.Stop();
         //SceneManager.LoadScene("Main");
-        
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         UIManager.Instance.OpenUI(Page.TITLE);
-        if(GameManager.Instance.gameRestart)
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
+        if (GameManager.Instance.gameRestart)
         {
             GameManager.Instance.GameRestart();
         }

@@ -29,12 +29,16 @@ public class Title : MonoBehaviour
 
     private void StartButton()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
         UIManager.Instance.OpenUI(Page.STAGE);
     }
 
     private void OptionButton()
     {
         //UIManager.Instance.OpenUI(Page.OPTION);
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         UIManager.Instance.OpenUI(Page.RULEBOOK);
     }
 
