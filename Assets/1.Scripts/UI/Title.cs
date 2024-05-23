@@ -34,7 +34,8 @@ public class Title : MonoBehaviour
 
     private void OptionButton()
     {
-        UIManager.Instance.OpenUI(Page.OPTION);
+        //UIManager.Instance.OpenUI(Page.OPTION);
+        UIManager.Instance.OpenUI(Page.RULEBOOK);
     }
 
     private void ExitButton()

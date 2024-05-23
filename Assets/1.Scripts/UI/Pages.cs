@@ -8,5 +8,5 @@ public enum Page
     LEVELUP,
     NEWHERO,
     LOSE,
-
+    RULEBOOK,
 }
