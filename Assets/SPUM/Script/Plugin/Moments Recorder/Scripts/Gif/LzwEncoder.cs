@@ -18,7 +18,7 @@ using System.IO;
 
 namespace Moments.Encoder
 {
-	public class LzwEncoder
+    public class LzwEncoder
 	{
 		private static readonly int EOF = -1;
 

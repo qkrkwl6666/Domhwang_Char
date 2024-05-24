@@ -317,20 +317,20 @@ public class BattleSystem : MonoBehaviour
         foreach (var character in charactersList)
         {
             var characterControll = character.GetComponent<CharacterControll>();
-
-            if(CurrentRound >= Round)
-            {
-                StandRemainingCharacters.Add(character);
-                playingCharacters.Add(character);
-                break;
-            }
-
+            
             characterControll.RunMode(true);
 
             if (characterControll.isRun) 
             {
                 removeCharacters.Add(character);
                 continue;
+            }
+
+            if (CurrentRound >= Round && !characterControll.isRun)
+            {
+                StandRemainingCharacters.Add(character);
+                playingCharacters.Add(character);
+                break;
             }
 
             var ci = character.GetComponent<CharacterInfo>();

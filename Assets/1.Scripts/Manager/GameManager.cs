@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -14,6 +11,8 @@ public class GameManager : Singleton<GameManager>
     public readonly int MAX_STAGE = 12;
     public Canvas canvas { get; private set; }
     public int TryCount { get; set; } = 3;
+
+    public bool isPassTryCount = false;
 
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
@@ -427,8 +426,7 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene("Loading");
 
-        // 로딩 씬에서 필요한 씬을 로드하기 위해 sceneName을 저장합니다.
-        PlayerPrefs.SetString("NextScene", sceneName);
+
     }
 
 

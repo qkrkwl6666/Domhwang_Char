@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace Moments.Encoder
 {
-	public class GifFrame
+    public class GifFrame
 	{
 		public int Width;
 		public int Height;

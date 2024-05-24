@@ -113,14 +113,18 @@ public class Forming : MonoBehaviour
         monsterHp.text = "Hp : " + GameManager.Instance.MonsterData.Hp.ToString();
         monsterDesc.text = GameManager.Instance.MonsterData.Desc.ToString();
 
+        foreach(Transform t in monsterContent)
+        {
+            Destroy(t.gameObject);
+        }
+
         // 몬스터 모델 생성 Todo Battle 씬 이동시 파괴
         var monster = Resources.Load<GameObject>("MonsterModel/" + GameManager.Instance.MonsterData.Id);
-        var monsterModel = Instantiate(monster, monsterContent.transform);
+        var monsterModel = Instantiate(monster, monsterContent);
         monsterModel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -50f, 0f);
 
         // 게임 시작 버튼 비활성화
         gameStartButton.interactable = false;
-
 
         // 캐릭터 Info Ui
         infoDesc.SetActive(false);

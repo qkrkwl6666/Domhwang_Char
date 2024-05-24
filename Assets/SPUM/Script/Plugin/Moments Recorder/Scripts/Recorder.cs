@@ -30,9 +30,9 @@ using ThreadPriority = System.Threading.ThreadPriority;
 
 namespace Moments
 {
-	using UnityObject = UnityEngine.Object;
+    using UnityObject = UnityEngine.Object;
 
-	public enum RecorderState
+    public enum RecorderState
 	{
 		Recording,
 		Paused,

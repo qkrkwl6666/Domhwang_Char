@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Moments.Encoder
 {
-	public class GifEncoder
+    public class GifEncoder
 	{
 		protected int m_Width;
 		protected int m_Height;

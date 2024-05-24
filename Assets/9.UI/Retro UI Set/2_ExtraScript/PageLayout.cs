@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // This script was created to show the sample scene and is not intended to be used as a resource for actual assets.

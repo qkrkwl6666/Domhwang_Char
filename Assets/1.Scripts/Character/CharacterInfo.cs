@@ -46,7 +46,6 @@ public class CharacterInfo : MonoBehaviour
                     var ci = GetComponent<CharacterControll>();
                     ci.RunMode(true);
                     conditionMet = ci.isRun == false;
-                    //InitializeSkill
                     Debug.Log(conditionMet);
                 }
                 break;
@@ -82,6 +81,9 @@ public class CharacterInfo : MonoBehaviour
                 break;
             case 5:
                 conditionMet = battleSystem.playingCharacters.Count == 1 && battleSystem.playingCharacters[0] == gameObject;
+                break;
+            case 8:
+                conditionMet = battleSystem.CurrentRound == CharacterSkillData.ConditionValue && GetComponent<CharacterControll>().isRun;
                 break;
         }
         Debug.Log(conditionMet);
@@ -442,6 +444,11 @@ public class CharacterInfo : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void TryCountPass()
+    {
+        GameManager.Instance.isPassTryCount = true;
     }
 
     public void SetCharacterData(CharacterData data)

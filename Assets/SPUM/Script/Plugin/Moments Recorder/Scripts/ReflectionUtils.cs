@@ -28,7 +28,7 @@ using System.Reflection;
 
 namespace Moments
 {
-	public class ReflectionUtils<T> where T : class, new()
+    public class ReflectionUtils<T> where T : class, new()
 	{
 		readonly T _Instance;
 

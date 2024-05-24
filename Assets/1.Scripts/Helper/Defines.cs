@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public static class Defines
 {
     public static readonly string Card_Epic = "Card_Epic";
