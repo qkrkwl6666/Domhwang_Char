@@ -146,7 +146,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator WaitForCharactersIdle(bool firstRound = false, int currentRound = -1)
     {
-        if(playingCharacters.Count == 0 && !firstRound && currentRound == -1) { yield break; }
+        if(playingCharacters.Count == 0 && !firstRound && currentRound == -1) { yield return StartCoroutine(WaitFor2Sec()); }
         else if (playingCharacters.Count == 0 && firstRound)
         {
             bool isPass = false;
