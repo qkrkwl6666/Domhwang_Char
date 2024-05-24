@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class CharacterCard : MonoBehaviour
 {
-
-
     public GameObject Cardback;
     private CharacterData characterData;
     private Button button;
@@ -75,12 +73,13 @@ public class CharacterCard : MonoBehaviour
 
         switch (GameManager.Instance.TryCount)
         {
+            case 0:
             case 1:
+            case 2:
                 Cardback.GetComponent<Image>().sprite = Resources.Load<Sprite>(Defines.CardPath + Defines.Card_Unknown);
                 Cardback.SetActive(true);
                 break;
-            case 2:
-                Cardback.SetActive(true);
+            case 3:
                 switch (characterData.Tier)
                 {
                     case "normal":
@@ -93,19 +92,9 @@ public class CharacterCard : MonoBehaviour
                         Cardback.GetComponent<Image>().sprite = Resources.Load<Sprite>(Defines.CardPath + Defines.Card_Epic);
                         break;
                 }
-
+                Cardback.SetActive(true);
+                break;
                 
-                //Cardback.GetComponent<Image>().color = GetTierColor(characterData.Tier);
-                break;
-            case 3:
-                var go = Resources.Load("CharacterModel/" + characterData.Id.ToString()) as GameObject;
-
-                var model = Instantiate(go, character);
-
-                model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -50f, 0f);
-                Cardback.SetActive(false);
-                character.gameObject.GetComponent<Image>().color = GetTierColor(characterData.Tier);
-                break;
         }
     }
 
