@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5571035115619552892}
   - component: {fileID: 7604101907566215982}
   - component: {fileID: 7361282424456596050}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: 702
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 8120618243405634079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

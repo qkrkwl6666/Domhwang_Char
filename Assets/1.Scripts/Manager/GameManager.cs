@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,12 @@ public class GameManager : Singleton<GameManager>
 
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
-    // 몬스터 
+    public int UiStage { get; set; } = 0;
+
+    // 전체 몬스터 데이터 리스트
+    public List<MonsterData> AllMonsterData { get; private set; } = new List<MonsterData>();
+
+    // 현재 스테이지 몬스터 데이터
     public MonsterData MonsterData { get; private set; }
 
     public bool gameRestart = false;
@@ -76,6 +82,20 @@ public class GameManager : Singleton<GameManager>
 
         BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
 
+        // 현재 스테이지 맞는 몬스터 생성
+        CreateMonster();
+
+        int i = 1;
+
+        MonsterTable monsterTable = DataTableMgr.Instance.Get<MonsterTable>("Monster");
+        foreach (KeyValuePair<string, MonsterData> data in monsterTable.monsterTable)
+        {
+            if(data.Value.Stage == i)
+            {
+                AllMonsterData.Add(data.Value);
+                i++;
+            }
+        }
     }   
 
     // Update is called once per frame
@@ -175,8 +195,9 @@ public class GameManager : Singleton<GameManager>
         }
         if(scene.name == "Main")
         {
+            UiStage = CurrentStage;
             CharacterAnimationEvent.MonsterDamageEvent = null;
-            MonsterData = null;
+            //MonsterData = null;
             formationCharacterList.Clear();
             LevelUpCharacterList.Clear();
             CharactersCCEnable(true);
@@ -426,7 +447,7 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene("Loading");
 
-
+        LoadSceneName = sceneName;
     }
 
 

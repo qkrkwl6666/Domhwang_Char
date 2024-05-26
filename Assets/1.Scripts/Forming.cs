@@ -255,10 +255,13 @@ public class Forming : MonoBehaviour
     {
         GameManager.Instance.BackgroundAudioSource.Stop();
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
+
+        UIManager.Instance.OpenUI(Page.LOADING);
+
         SceneManager.LoadScene("Battle");
         //GameManager.Instance.LoadScene("Battle");
 
-        UIManager.Instance.AllClose();
+        //UIManager.Instance.AllClose();
         
     }
 

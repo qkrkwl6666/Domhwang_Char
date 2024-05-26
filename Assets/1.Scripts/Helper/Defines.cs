@@ -1,5 +1,6 @@
 public static class Defines
 {
+    public static readonly string ResourcesBossModel = "MonsterModel/";
     public static readonly string Card_Epic = "Card_Epic";
     public static readonly string CardPath = "Card/";
     public static readonly string Card_Normal = "Card_Normal";

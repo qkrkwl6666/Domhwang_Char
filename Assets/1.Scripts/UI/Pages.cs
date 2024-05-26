@@ -1,6 +1,6 @@
 public enum Page
 {
-    TITLE,
+    MAIN,
     LOADING,
     OPTION,
     STAGE,
@@ -9,4 +9,5 @@ public enum Page
     NEWHERO,
     LOSE,
     RULEBOOK,
+    FORMATION2,
 }

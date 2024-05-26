@@ -15,7 +15,7 @@ public class Lose : MonoBehaviour
         GameManager.Instance.BackgroundAudioSource.Stop();
         //SceneManager.LoadScene("Main");
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
-        UIManager.Instance.OpenUI(Page.TITLE);
+        UIManager.Instance.OpenUI(Page.MAIN);
         GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
         if (GameManager.Instance.gameRestart)
         {

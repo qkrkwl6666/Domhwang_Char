@@ -16,7 +16,7 @@ public class UIManager : Singleton<UIManager>
         canvas = mainPanels.GetComponentInParent<Canvas>();
         
         //Debug.Log("UIManagerAwake");
-        page = Page.TITLE;
+        page = Page.MAIN;
 
         DontDestroyOnLoad(canvas.gameObject);
 
