@@ -27,12 +27,12 @@ public class BossRender : MonoBehaviour
             mossModels.Add(go.name, go);
         }
 
-        Main.OnMonsterData += OnMonsterModelChange;
+        //Main.OnMonsterData += OnMonsterModelChange;
     }
 
     private void OnDestroy()
     {
-        Main.OnMonsterData -= OnMonsterModelChange; 
+        //Main.OnMonsterData -= OnMonsterModelChange; 
     }
 
     private void OnEnable()

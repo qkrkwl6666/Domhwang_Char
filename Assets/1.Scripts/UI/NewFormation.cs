@@ -25,6 +25,16 @@ public class NewFormation : MonoBehaviour
         formationRoundButtons[0].onClick.AddListener(OnRound1ButtonClick);
         formationRoundButtons[1].onClick.AddListener(OnRound2ButtonClick);
         formationRoundButtons[2].onClick.AddListener(OnRound3ButtonClick);
+
+        foreach (Button button in characterFormation)
+        {
+            button.onClick.AddListener(OnButtonCharacterClick);
+        }
+    }
+
+    public void OnButtonCharacterClick()
+    {
+        UIManager.Instance.OpenUI(Page.CHARACTERSELECT);
     }
 
     public void OnExitButtonClick()

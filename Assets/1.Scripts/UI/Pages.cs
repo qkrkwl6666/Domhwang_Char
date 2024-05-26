@@ -10,4 +10,5 @@ public enum Page
     LOSE,
     RULEBOOK,
     FORMATION2,
+    CHARACTERSELECT,
 }
