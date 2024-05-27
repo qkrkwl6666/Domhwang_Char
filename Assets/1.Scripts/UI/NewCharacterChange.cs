@@ -65,6 +65,9 @@ public class NewCharacterChange : MonoBehaviour
         {
             Destroy(t.gameObject);
         }
+
+        currentCharacterInfo.DelectNewCharacterInfo();
+        changeCharacterInfo.DelectNewCharacterInfo();
     }
 
     public void OnChangeButtonClick()
@@ -91,7 +94,7 @@ public class NewCharacterChange : MonoBehaviour
 
         GameManager.Instance.TryCount = 3;
         SceneManager.LoadScene("Main");
-        UIManager.Instance.OpenUI(Page.MAIN);
+        UIManager.Instance.OpenUI(Page.LOADING);
         GameManager.Instance.BackgroundAudioSource.Stop();
         GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
     }
@@ -103,7 +106,7 @@ public class NewCharacterChange : MonoBehaviour
         // Todo : 데이터 테이블 연동
         GameManager.Instance.TryCount = 3;
         SceneManager.LoadScene("Main");
-        UIManager.Instance.OpenUI(Page.MAIN);
+        UIManager.Instance.OpenUI(Page.LOADING);
         GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
     }
 }

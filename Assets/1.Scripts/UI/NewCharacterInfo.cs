@@ -47,6 +47,19 @@ public class NewCharacterInfo : MonoBehaviour
             var data = table.Get(characterInfo.Skill_Id.ToString());
             skillText.text = $"{data.Desc}";
         }
+
+        switch (characterInfo.Tier)
+        {
+            case "normal":
+                panelImage.sprite = Resources.Load<Sprite>(Defines.NormalPanel);
+                break;
+            case "rare":
+                panelImage.sprite = Resources.Load<Sprite>(Defines.RarePanel);
+                break;
+            case "epic":
+                panelImage.sprite = Resources.Load<Sprite>(Defines.EpicPanel);
+                break;
+        }
     }
 
     public void SetCharacterDataUI(CharacterData cd)
@@ -73,11 +86,41 @@ public class NewCharacterInfo : MonoBehaviour
             skillText.text = $"{data.Desc}";
         }
 
+        switch(cd.Tier)
+        {
+            case "normal":
+                panelImage.sprite = Resources.Load<Sprite>(Defines.NormalPanel);
+                break;
+            case "rare":
+                panelImage.sprite = Resources.Load<Sprite>(Defines.RarePanel);
+                break;
+            case "epic":
+                panelImage.sprite = Resources.Load<Sprite>(Defines.EpicPanel);
+                break;
+        }
+
     }
 
     private void OnDisable()
     {
         characterInfo = null;
+    }
+
+    public void DelectNewCharacterInfo()
+    {
+        foreach (Transform t in modelContent)
+        {
+            Destroy(t.gameObject);
+        }
+
+        attackText.text = string.Empty;
+        runText.text = string.Empty;
+        skillText.text = string.Empty;
+        levelText.text = string.Empty;
+
+        characterInfo = null;
+
+        panelImage.sprite = Resources.Load<Sprite>(Defines.NormalPanel);
     }
 
 }

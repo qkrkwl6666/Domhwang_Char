@@ -124,29 +124,38 @@ public class Main : MonoBehaviour
         {
             Destroy(t.gameObject);
         }
+        
+        stageDesc.text = $"{GameManager.Instance.CurrentStage + 1} 스테이지";
+        bossName.text = $"{GameManager.Instance.MonsterData.Name}";
+        bossDesc.text = $"{GameManager.Instance.MonsterData.Desc}";
 
-        if(GameManager.Instance.UiStage == GameManager.Instance.CurrentStage)
-        {
-            stageDesc.text = $"{GameManager.Instance.CurrentStage + 1} 스테이지";
-            bossName.text = $"{GameManager.Instance.MonsterData.Name}";
-            bossDesc.text = $"{GameManager.Instance.MonsterData.Desc}";
+        GameObject Model = Resources.Load<GameObject>($"MonsterModel/{GameManager.Instance.MonsterData.Id}");
+        var go = Instantiate(Model, bossContent);
+        go.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -100f, 0f);
 
-            GameObject Model = Resources.Load<GameObject>($"MonsterModel/{GameManager.Instance.MonsterData.Id}");
-            var go = Instantiate(Model, bossContent);
-            go.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -100f, 0f);
-            //OnMonsterData?.Invoke(GameManager.Instance.MonsterData);
-        }
-        else
-        {
-            stageDesc.text = $"{GameManager.Instance.UiStage + 1} 스테이지";
-            bossName.text = $"{GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage].Name}";
-            bossDesc.text = $"{GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage].Desc}";
+        // 좌우 이동 기능 
+        //if(GameManager.Instance.UiStage == GameManager.Instance.CurrentStage)
+        //{
+        //    stageDesc.text = $"{GameManager.Instance.CurrentStage + 1} 스테이지";
+        //    bossName.text = $"{GameManager.Instance.MonsterData.Name}";
+        //    bossDesc.text = $"{GameManager.Instance.MonsterData.Desc}";
 
-            GameObject Model = Resources.Load<GameObject>($"MonsterModel/{GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage].Id}");
-            Instantiate(Model, bossContent);
+        //    GameObject Model = Resources.Load<GameObject>($"MonsterModel/{GameManager.Instance.MonsterData.Id}");
+        //    var go = Instantiate(Model, bossContent);
+        //    go.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -100f, 0f);
+        //    //OnMonsterData?.Invoke(GameManager.Instance.MonsterData);
+        //}
+        //else
+        //{
+        //    stageDesc.text = $"{GameManager.Instance.UiStage + 1} 스테이지";
+        //    bossName.text = $"{GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage].Name}";
+        //    bossDesc.text = $"{GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage].Desc}";
 
-            //OnMonsterData?.Invoke(GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage]);
-        }
+        //    GameObject Model = Resources.Load<GameObject>($"MonsterModel/{GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage].Id}");
+        //    Instantiate(Model, bossContent);
+
+        //    //OnMonsterData?.Invoke(GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage]);
+        //}
 
     }
 }

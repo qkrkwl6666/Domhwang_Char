@@ -43,7 +43,6 @@ public class GameManager : Singleton<GameManager>
 
     // Attack 파티클 리스트
     public List<GameObject> AtkParticleSystemList { get; set; } = new List<GameObject>();
-    
     public string LoadSceneName {  get; private set; }
 
     // 오디오 부분
@@ -201,8 +200,8 @@ public class GameManager : Singleton<GameManager>
         {
             UiStage = CurrentStage;
             CharacterAnimationEvent.MonsterDamageEvent = null;
-            //MonsterData = null;
-            //formationCharacterList.Clear();
+            CreateMonster();
+            
             LevelUpCharacterList.Clear();
             CharactersCCEnable(true);
 
@@ -217,13 +216,13 @@ public class GameManager : Singleton<GameManager>
                 ce.EffectAwake();
                 character.SetActive(false);
             }
+
+            UIManager.Instance.OpenUI(Page.MAIN);
         }
     }
 
     public void GameWin()
     {
-        Debug.Log("GameWin");
-
         AudioSource.Stop();
         AudioSource.PlayOneShot(VictoryClip);
 
@@ -258,7 +257,6 @@ public class GameManager : Singleton<GameManager>
             AudioSource.PlayOneShot(LoseClip);
         }
 
-        SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.LOSE);
     }
 
@@ -278,7 +276,11 @@ public class GameManager : Singleton<GameManager>
             Destroy(character);
         }
 
-        formationCharacterList.Clear();
+        for (int j = 0; j < 6; j++)
+        {
+            formationCharacterList.Add(null);
+        }
+
         PlayerCharacterList.Clear();
         LevelUpCharacterList.Clear();
 

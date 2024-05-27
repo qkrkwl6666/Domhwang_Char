@@ -10,4 +10,8 @@ public static class Defines
     public static readonly string normal = "normal";
     public static readonly string rare = "rare";
     public static readonly string epic = "Epic";
+
+    public static readonly string EpicPanel = "Texture/EpicPanel";
+    public static readonly string NormalPanel = "Texture/NormalPanel";
+    public static readonly string RarePanel = "Texture/NormalPanel";
 }
