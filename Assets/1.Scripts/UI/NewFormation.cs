@@ -9,12 +9,19 @@ public class NewFormation : MonoBehaviour
     public List<GameObject> formationsUI = new List<GameObject>();
 
     public List<Button> characterFormation = new List<Button>();
+    public NewFormationSlot selectedFormationSlot;
+
+    public int selectIndex = -1;
 
     public Button exitButton;
 
     private void OnEnable()
     {
-        ActiveFormationUI(0);
+        for(int i = 0; i < characterFormation.Count; i++)
+        {
+            var nfs = characterFormation[i].GetComponent<NewFormationSlot>();
+            nfs.SetFormationSlot(GameManager.Instance.formationCharacterList[i]);
+        }
     }
 
     private void Awake()
@@ -25,15 +32,11 @@ public class NewFormation : MonoBehaviour
         formationRoundButtons[0].onClick.AddListener(OnRound1ButtonClick);
         formationRoundButtons[1].onClick.AddListener(OnRound2ButtonClick);
         formationRoundButtons[2].onClick.AddListener(OnRound3ButtonClick);
-
-        foreach (Button button in characterFormation)
-        {
-            button.onClick.AddListener(OnButtonCharacterClick);
-        }
     }
 
-    public void OnButtonCharacterClick()
+    public void OnButtonCharacterClick(NewFormationSlot newFormationSlot)
     {
+        selectedFormationSlot = newFormationSlot;
         UIManager.Instance.OpenUI(Page.CHARACTERSELECT);
     }
 

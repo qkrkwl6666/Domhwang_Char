@@ -35,7 +35,7 @@ public class CharacterNewSlot : MonoBehaviour
 
     public void OnCharacterButtonClick()
     {
-        characterSelect.UpdateCharacterDescUI(characterInfo);
+        characterSelect.UpdateCharacterDescUI(gameObject);
     }
 
 }

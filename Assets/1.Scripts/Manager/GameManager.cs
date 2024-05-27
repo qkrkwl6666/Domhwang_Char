@@ -38,7 +38,6 @@ public class GameManager : Singleton<GameManager>
 
     // 편성 선택한 캐릭터 리스트
     public List<GameObject> formationCharacterList = new List<GameObject>();
-
     // 레벨업 리스트
     public List<GameObject> LevelUpCharacterList { get; set; } = new List<GameObject>();
 
@@ -59,6 +58,11 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
+        for(int j = 0; j < 6; j ++)
+        {
+            formationCharacterList.Add(null);
+        }
+
         // 캐릭터 데이터 가져오기
         var characterDatas = DataTableMgr.Instance.Get<CharacterTable>("Character");
 
@@ -198,7 +202,7 @@ public class GameManager : Singleton<GameManager>
             UiStage = CurrentStage;
             CharacterAnimationEvent.MonsterDamageEvent = null;
             //MonsterData = null;
-            formationCharacterList.Clear();
+            //formationCharacterList.Clear();
             LevelUpCharacterList.Clear();
             CharactersCCEnable(true);
 

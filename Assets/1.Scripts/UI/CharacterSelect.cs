@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class CharacterSelect : MonoBehaviour
 {
+    public CharacterInfo characterInfo;
+    public NewFormation newFormation;
+
     enum Desc
     {
         TIER,
@@ -26,7 +29,7 @@ public class CharacterSelect : MonoBehaviour
     public Button cencelButton;
     public Button changeButton;
 
-    public static event Action<CharacterInfo> OnCharacterUIClick;
+    //public static event Action<GameObject> OnCharacterUIClick;
 
     private void OnEnable()
     {
@@ -38,11 +41,13 @@ public class CharacterSelect : MonoBehaviour
         UpdateCharacterUI();
         //SceneManager.sceneLoaded += AwakeCharacterUI;
         exitButton.onClick.AddListener(OnExitButtonClick);
-        OnCharacterUIClick += UpdateCharacterDescUI;
+        //OnCharacterUIClick += UpdateCharacterDescUI;
+        changeButton.onClick.AddListener(OnChangeButtonClick);
     }
 
     public void OnExitButtonClick()
     {
+        characterInfo = null;
         UIManager.Instance.OpenUI(Page.FORMATION2);
     }
 
@@ -81,23 +86,26 @@ public class CharacterSelect : MonoBehaviour
         }
     }
 
-    public void UpdateCharacterDescUI(CharacterInfo ci)
+    public void UpdateCharacterDescUI(GameObject go)
     {
-        characterDescTexts[(int)Desc.TIER].text = $"티어 : {ci.Tier}";
-        characterDescTexts[(int)Desc.ATTACK].text = $"공격력 : {ci.Atk}";
-        characterDescTexts[(int)Desc.RUN].text = $"도망 확률 : {ci.Run}%";
+        var cns = go.GetComponent<CharacterNewSlot>();
 
-        if (ci.Skill_Id == 0)
+        characterInfo = cns.characterInfo;
+
+        characterDescTexts[(int)Desc.TIER].text = $"티어 : {cns.characterInfo.Tier}";
+        characterDescTexts[(int)Desc.ATTACK].text = $"공격력 : {cns.characterInfo.Atk}";
+        characterDescTexts[(int)Desc.RUN].text = $"도망 확률 : {cns.characterInfo.Run}%";
+
+        if (cns.characterInfo.Skill_Id == 0)
         {
             characterDescTexts[(int)Desc.SKILL].text = "이 친구는 무능력자 입니다";
         }
         else
         {
             var table = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill");
-            var data = table.Get(ci.Skill_Id.ToString());
+            var data = table.Get(cns.characterInfo.Skill_Id.ToString());
             characterDescTexts[(int)Desc.SKILL].text = $"스킬 : {data.Desc}";
         }
-
     }
 
     public void CharacterUIDestory(Scene scene, LoadSceneMode mode)
@@ -110,4 +118,17 @@ public class CharacterSelect : MonoBehaviour
             }
         }
     }
+
+    public void OnChangeButtonClick()
+    {
+        if (characterInfo == null) return;
+
+        int index = newFormation.selectedFormationSlot.slotIndex;
+
+        GameManager.Instance.formationCharacterList[index] = characterInfo.gameObject;
+
+        characterInfo = null;
+        UIManager.Instance.OpenUI(Page.FORMATION2);
+    }
+
 }

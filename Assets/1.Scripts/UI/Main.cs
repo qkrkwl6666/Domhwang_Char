@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Main : MonoBehaviour
@@ -81,8 +82,19 @@ public class Main : MonoBehaviour
     private void StartButton()
     {
         if (GameManager.Instance.UiStage != GameManager.Instance.CurrentStage) return;
+        
+        foreach(var character in GameManager.Instance.formationCharacterList)
+        {
+            if (character == null)
+            {
+                Debug.Log("캐릭터 편성 필수");
+                return;
+            }
+        }
 
-        Debug.Log("시작");
+        UIManager.Instance.OpenUI(Page.LOADING);
+
+        SceneManager.LoadScene("Battle");
 
         // GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         // GameManager.Instance.BackgroundAudioSource.Stop();
