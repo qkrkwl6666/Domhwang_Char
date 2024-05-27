@@ -12,6 +12,7 @@ public class CharacterChange : MonoBehaviour
     public Button CencelButton;
 
     public CardUIInfo removeCharacterCard;
+
     private CharacterInfo removeCharacterInfo;
 
     private void Awake()

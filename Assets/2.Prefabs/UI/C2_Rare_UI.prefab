@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 4573281856924323299}
   - component: {fileID: 8870199908999643379}
   - component: {fileID: 6382450155581635756}
+  - component: {fileID: 2787891902300333287}
   m_Layer: 5
   m_Name: C2_Rare_UI
   m_TagString: Untagged
@@ -404,6 +405,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2787891902300333287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680175552244230307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba56472a67f09a48ae65265bebbe234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterInfo: {fileID: 0}
+  modelContent: {fileID: 4703549718306827510}
+  levelText: {fileID: 9153282771316476145}
+  roundTeamText: {fileID: 6306047525829809846}
+  characterButton: {fileID: 6382450155581635756}
+  characterChange: {fileID: 0}
 --- !u!1 &5922035625611503769
 GameObject:
   m_ObjectHideFlags: 0

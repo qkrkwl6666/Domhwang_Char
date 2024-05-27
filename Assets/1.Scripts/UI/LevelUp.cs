@@ -42,8 +42,8 @@ public class LevelUp : MonoBehaviour
     {
         //GameManager.Instance.GameManagerAwake();
         //SceneManager.LoadScene("Main");
-        //UIManager.Instance.OpenUI(Page.NEWHERO);
-        UIManager.Instance.OpenUI(Page.CHARACTERCHANGE);
+        UIManager.Instance.OpenUI(Page.NEWCHARACTER);
+        //UIManager.Instance.OpenUI(Page.CHARACTERCHANGE);
 
     }
 }

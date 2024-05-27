@@ -549,6 +549,7 @@ GameObject:
   - component: {fileID: 5365607077226399954}
   - component: {fileID: 1565982863737988276}
   - component: {fileID: 8269634437430342792}
+  - component: {fileID: -7537407774628835857}
   m_Layer: 5
   m_Name: C2_Normal_UI
   m_TagString: Untagged
@@ -658,6 +659,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-7537407774628835857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4947460002233034423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba56472a67f09a48ae65265bebbe234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterInfo: {fileID: 0}
+  modelContent: {fileID: 5368947542947389375}
+  levelText: {fileID: 7528784733510481383}
+  roundTeamText: {fileID: 7378284506444007579}
+  characterButton: {fileID: 8269634437430342792}
+  characterChange: {fileID: 0}
 --- !u!1 &5813562163719204047
 GameObject:
   m_ObjectHideFlags: 0

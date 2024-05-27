@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: 4403190083366742942}
   - component: {fileID: 598337422647337576}
   - component: {fileID: 326422194151153876}
+  - component: {fileID: 6378602702976143439}
   m_Layer: 5
   m_Name: C2_Epic_UI
   m_TagString: Untagged
@@ -646,6 +647,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6378602702976143439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8865495653750137113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba56472a67f09a48ae65265bebbe234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterInfo: {fileID: 0}
+  modelContent: {fileID: 8283965638407167907}
+  levelText: {fileID: 1467222295111409400}
+  roundTeamText: {fileID: 8235051646701167931}
+  characterButton: {fileID: 326422194151153876}
+  characterSelect: {fileID: 0}
 --- !u!1 &8965315839372895460
 GameObject:
   m_ObjectHideFlags: 0

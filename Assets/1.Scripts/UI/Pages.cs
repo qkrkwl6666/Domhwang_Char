@@ -12,4 +12,5 @@ public enum Page
     FORMATION2,
     CHARACTERSELECT,
     CHARACTERCHANGE,
+    NEWCHARACTER,
 }
