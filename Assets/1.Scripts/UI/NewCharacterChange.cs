@@ -17,18 +17,18 @@ public class NewCharacterChange : MonoBehaviour
 
     public CharacterData selectCharacterData;
 
-    private CharacterInfo removeCharacterInfo;
-
     public Button changeButton;
     public Button cencelButton;
 
     private void Awake()
     {
+        changeButton.onClick.AddListener(OnChangeButtonClick);
         cencelButton.onClick.AddListener(OnCencelButtonClick);
     }
 
     private void OnEnable()
     {
+        changeButton.interactable = false;
         characters.Clear();
 
         foreach (GameObject character in GameManager.Instance.PlayerCharacterList)
@@ -60,8 +60,6 @@ public class NewCharacterChange : MonoBehaviour
     private void OnDisable()
     {
         selectCharacterData = null;
-        changeButton.interactable = false;
-        removeCharacterInfo = null;
 
         foreach (Transform t in characterUIContent)
         {
@@ -74,17 +72,28 @@ public class NewCharacterChange : MonoBehaviour
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         // 현재 플레이어 리스트 에서 제거
 
-        // Destroy(removeCharacterInfo.gameObject);
-        // 
-        // GameManager.Instance.PlayerCharacterList.Remove(removeCharacterInfo.gameObject);
-        // 
-        // // 카드 캐릭터 생성 후 플레이어 리스트에 넣기
-        // GameManager.Instance.CreateCharacter(SelectedCharacter.CharacterData);
-        // GameManager.Instance.TryCount = 3;
-        // SceneManager.LoadScene("Main");
-        // UIManager.Instance.OpenUI(Page.STAGE);
-        // GameManager.Instance.BackgroundAudioSource.Stop();
-        // GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
+        GameManager.Instance.PlayerCharacterList.Remove(currentCharacterInfo.characterInfo.gameObject);
+
+        for(int i = 0; i < GameManager.Instance.formationCharacterList.Count; i++)
+        {
+            if(currentCharacterInfo.characterInfo == GameManager.Instance.formationCharacterList[i])
+            {
+                GameManager.Instance.formationCharacterList[i] = null;
+                break;
+            }
+        }
+
+        Destroy(currentCharacterInfo.characterInfo.gameObject);
+
+        // 카드 캐릭터 생성 후 플레이어 리스트에 넣기
+
+        GameManager.Instance.CreateCharacter(changeCharacterInfo.characterData);
+
+        GameManager.Instance.TryCount = 3;
+        SceneManager.LoadScene("Main");
+        UIManager.Instance.OpenUI(Page.MAIN);
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
     }
 
     public void OnCencelButtonClick()

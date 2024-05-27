@@ -34,7 +34,7 @@ public class CharacterSelect : MonoBehaviour
 
     private void OnEnable()
     {
-        
+        UpdateCharacterUI();
     }
 
     private void Awake()
@@ -63,6 +63,11 @@ public class CharacterSelect : MonoBehaviour
 
     public void UpdateCharacterUI()
     {
+        foreach(Transform character in characterUIContent)
+        {
+            Destroy(character.gameObject);
+        }
+
         characters.Clear();
 
         foreach (GameObject character in GameManager.Instance.PlayerCharacterList)

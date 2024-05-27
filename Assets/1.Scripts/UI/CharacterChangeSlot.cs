@@ -89,5 +89,6 @@ public class CharacterChangeSlot : MonoBehaviour
     public void OnCharacterButtonClick()
     {
         characterChange.currentCharacterInfo.SetCharacterDataUI(characterInfo);
+        characterChange.changeButton.interactable = true;
     }
 }

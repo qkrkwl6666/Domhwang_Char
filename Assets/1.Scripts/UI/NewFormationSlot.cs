@@ -25,7 +25,20 @@ public class NewFormationSlot : MonoBehaviour
     }
     public void SetFormationSlot(GameObject character)
     {
-        if (character == null) return;
+        if (character == null)
+        {
+            attackText.text = "";
+            runText.text = "";
+            skillText.text = "";
+            level.text = "";
+
+            foreach(Transform t in modelContent)
+            {
+                Destroy(t.gameObject);
+            }
+
+            return;
+        }
 
         CharacterInfo = character.GetComponent<CharacterInfo>();
 
