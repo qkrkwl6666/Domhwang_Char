@@ -11,7 +11,6 @@ public class CharacterSelect : MonoBehaviour
 {
     public CharacterInfo characterInfo;
     public NewFormation newFormation;
-
     enum Desc
     {
         TIER,

@@ -11,4 +11,5 @@ public enum Page
     RULEBOOK,
     FORMATION2,
     CHARACTERSELECT,
+    CHARACTERCHANGE,
 }
