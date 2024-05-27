@@ -14,7 +14,6 @@ public class Main : MonoBehaviour
 
     public Button nextButton;
     public Button prevButton;
-
     public int StageUI {  get; private set; }
 
     public TextMeshProUGUI bossName;

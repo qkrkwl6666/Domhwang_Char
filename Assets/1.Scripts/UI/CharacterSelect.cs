@@ -29,6 +29,8 @@ public class CharacterSelect : MonoBehaviour
     public Button cencelButton;
     public Button changeButton;
 
+    public List<GameObject> characters = new List<GameObject>();
+
     //public static event Action<GameObject> OnCharacterUIClick;
 
     private void OnEnable()
@@ -62,6 +64,8 @@ public class CharacterSelect : MonoBehaviour
 
     public void UpdateCharacterUI()
     {
+        characters.Clear();
+
         foreach (GameObject character in GameManager.Instance.PlayerCharacterList)
         {
             var cc = character.GetComponent<CharacterInfo>();
@@ -82,7 +86,16 @@ public class CharacterSelect : MonoBehaviour
             }
 
             var go = Instantiate(characterUIPrefabs[index], characterUIContent);
+            characters.Add(go);
             go.GetComponent<CharacterNewSlot>().SetCharacterSlot(character.GetComponent<CharacterInfo>());
+        }
+    }
+
+    public void UpdateCharacterShowTeam()
+    {
+        foreach(var character in characters)
+        {
+            character.GetComponent<CharacterNewSlot>().UpdateTeamTextUI();
         }
     }
 
@@ -124,6 +137,17 @@ public class CharacterSelect : MonoBehaviour
         if (characterInfo == null) return;
 
         int index = newFormation.selectedFormationSlot.slotIndex;
+
+        for (int i = 0; i < newFormation.characterFormation.Count; i ++)
+        {
+            var slot = newFormation.characterFormation[i].GetComponent<NewFormationSlot>();
+            if (i == index) continue;
+            else if (i != index && slot.CharacterInfo == characterInfo)
+            {
+                GameManager.Instance.formationCharacterList[i] = null;
+                slot.DelectFormationSlot();
+            }
+        }
 
         GameManager.Instance.formationCharacterList[index] = characterInfo.gameObject;
 

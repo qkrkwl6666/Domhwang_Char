@@ -11,6 +11,8 @@ public class NewFormation : MonoBehaviour
     public List<Button> characterFormation = new List<Button>();
     public NewFormationSlot selectedFormationSlot;
 
+    public CharacterSelect characterSelect;
+
     public int selectIndex = -1;
 
     public Button exitButton;
@@ -37,6 +39,7 @@ public class NewFormation : MonoBehaviour
     public void OnButtonCharacterClick(NewFormationSlot newFormationSlot)
     {
         selectedFormationSlot = newFormationSlot;
+        characterSelect.UpdateCharacterShowTeam();
         UIManager.Instance.OpenUI(Page.CHARACTERSELECT);
     }
 
