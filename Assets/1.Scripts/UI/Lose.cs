@@ -23,6 +23,5 @@ public class Lose : MonoBehaviour
         {
             GameManager.Instance.GameRestart();
         }
-        
     }
 }

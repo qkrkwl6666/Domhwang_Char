@@ -11,4 +11,5 @@ public enum Page
     CHARACTERCHANGE,
     NEWCHARACTER,
     CHARACTERBOOK,
+    GAMEOVER,
 }

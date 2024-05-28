@@ -241,6 +241,8 @@ public class GameManager : Singleton<GameManager>
             gameRestart = true;
             AudioSource.Stop();
             AudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/GameOver"));
+            UIManager.Instance.OpenUI(Page.GAMEOVER);
+            return;
         }
         else
         {
