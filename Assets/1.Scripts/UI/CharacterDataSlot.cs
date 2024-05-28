@@ -29,6 +29,7 @@ public class CharacterDataSlot : MonoBehaviour
 
     public void OnCharacterButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         characterSelect.UpdateCharacterDescUI(characterData);
     }
 
