@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,6 +51,7 @@ public class Main : MonoBehaviour
         prevButton.onClick.AddListener(OnPrevButtonClick);
         formationButton.onClick.AddListener(OnFormationButtonClick);
         guideButton.onClick.AddListener(OnGuideButtonClick);
+        characterButton.onClick.AddListener(OnCharacterBookButtonClick);
 
         // optionButton.onClick.AddListener(OptionButton);
         // exitButton.onClick.AddListener(ExitButton);
@@ -177,6 +177,11 @@ public class Main : MonoBehaviour
     public void OnGuideButtonClick()
     {
         UIManager.Instance.OpenUI(Page.RULEBOOK);
+    }
+
+    public void OnCharacterBookButtonClick()
+    {
+        UIManager.Instance.OpenUI(Page.CHARACTERBOOK);
     }
 
 }

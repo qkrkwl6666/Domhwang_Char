@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +44,9 @@ public class NewFormation : MonoBehaviour
 
     public void OnExitButtonClick()
     {
+        // 편성 저장
+        GameManager.Instance.Save();
+
         UIManager.Instance.OpenUI(Page.MAIN);
     }
 

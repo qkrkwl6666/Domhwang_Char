@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -111,7 +109,7 @@ public class CharacterSelect : MonoBehaviour
 
         characterInfo = cns.characterInfo;
 
-        characterDescTexts[(int)Desc.TIER].text = $"티어 : {cns.characterInfo.Tier}";
+        characterDescTexts[(int)Desc.TIER].text = $"이름 : {cns.characterInfo.Name}";
         characterDescTexts[(int)Desc.ATTACK].text = $"공격력 : {cns.characterInfo.Atk}";
         characterDescTexts[(int)Desc.RUN].text = $"도망 확률 : {cns.characterInfo.Run}%";
 
