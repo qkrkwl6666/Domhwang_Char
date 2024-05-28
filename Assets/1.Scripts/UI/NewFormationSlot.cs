@@ -10,6 +10,7 @@ public class NewFormationSlot : MonoBehaviour
     public Transform modelContent;
     public TextMeshProUGUI level;
     public Image image;
+    public GameObject add;
     
     public int slotIndex = -1;
 
@@ -35,7 +36,7 @@ public class NewFormationSlot : MonoBehaviour
             {
                 Destroy(t.gameObject);
             }
-
+            add.SetActive(true);
             return;
         }
 
@@ -53,6 +54,8 @@ public class NewFormationSlot : MonoBehaviour
                 image.sprite = LineSprites[2];
                 break;
         }
+
+        add.SetActive(false);
 
         level.text = $"Level{CharacterInfo.Level}";
 
@@ -93,5 +96,7 @@ public class NewFormationSlot : MonoBehaviour
         attackText.text = "";
         runText.text = "";
         skillText.text = "";
+
+        add.SetActive(true);
     }
 }
