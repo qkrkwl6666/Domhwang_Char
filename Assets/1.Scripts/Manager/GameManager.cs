@@ -270,6 +270,7 @@ public class GameManager : Singleton<GameManager>
             Destroy(character);
         }
 
+        formationCharacterList.Clear();
         for (int j = 0; j < 6; j++)
         {
             formationCharacterList.Add(null);
@@ -345,7 +346,8 @@ public class GameManager : Singleton<GameManager>
             playerList.Add(character.GetComponent<CharacterInfo>());
         }
 
-        foreach(var character in formationCharacterList)
+
+        foreach (var character in formationCharacterList)
         {
             if(character == null)
             {

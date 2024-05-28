@@ -21,6 +21,7 @@ public class NewFormationSlot : MonoBehaviour
     {
         
     }
+
     public void SetFormationSlot(GameObject character)
     {
         if (character == null)
