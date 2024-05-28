@@ -48,6 +48,8 @@ public class NewFormation : MonoBehaviour
         GameManager.Instance.Save();
 
         UIManager.Instance.OpenUI(Page.MAIN);
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
     }
 
     public void OnRound1ButtonClick()

@@ -107,7 +107,7 @@ public class Main : MonoBehaviour
         }
 
         UIManager.Instance.OpenUI(Page.LOADING);
-
+        GameManager.Instance.BackgroundAudioSource.Stop();
         SceneManager.LoadScene("Battle");
 
         // GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
@@ -130,6 +130,8 @@ public class Main : MonoBehaviour
 
     public void OnFormationButtonClick()
     {
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/Forming"));
         UIManager.Instance.OpenUI(Page.FORMATION2);
     }
 

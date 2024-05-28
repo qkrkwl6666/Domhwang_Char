@@ -12,32 +12,32 @@ public class BackgroundBgm : MonoBehaviour
 
         switch (GameManager.Instance.CurrentStage)
         {
+            case 0:
             case 1:
-            case 2:
                 audio = AudioClipList[0];
                 break;
-            case 3:
+            case 2:
                 audio = AudioClipList[1];
                 break;
+            case 3:
             case 4:
-            case 5:
                 audio = AudioClipList[2];
                 break;
-            case 6:
+            case 5:
                 audio = AudioClipList[3];
                 break;
+            case 6:
             case 7:
-            case 8:
                 audio = AudioClipList[4];
                 break;
-            case 9:
+            case 8:
                 audio = AudioClipList[5];
                 break;
+            case 9:
             case 10:
-            case 11:
                 audio = AudioClipList[6];
                 break;
-            case 12:
+            case 11:
                 audio = AudioClipList[7];
                 break;
             default:
