@@ -94,7 +94,7 @@ public class NewCharacterChange : MonoBehaviour
         SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.LOADING);
         GameManager.Instance.BackgroundAudioSource.Stop();
-        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/StageSelect"));
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
     }
 
     public void OnCencelButtonClick()

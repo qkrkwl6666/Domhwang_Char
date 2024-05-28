@@ -95,6 +95,8 @@ public class Main : MonoBehaviour
 
     private void StartButton()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
+
         if (GameManager.Instance.UiStage != GameManager.Instance.CurrentStage) return;
         
         foreach(var character in GameManager.Instance.formationCharacterList)
@@ -130,6 +132,7 @@ public class Main : MonoBehaviour
 
     public void OnFormationButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         GameManager.Instance.BackgroundAudioSource.Stop();
         GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/Forming"));
         UIManager.Instance.OpenUI(Page.FORMATION2);
@@ -178,11 +181,13 @@ public class Main : MonoBehaviour
 
     public void OnGuideButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         UIManager.Instance.OpenUI(Page.RULEBOOK);
     }
 
     public void OnCharacterBookButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         UIManager.Instance.OpenUI(Page.CHARACTERBOOK);
     }
 

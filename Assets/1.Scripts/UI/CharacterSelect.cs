@@ -29,7 +29,6 @@ public class CharacterSelect : MonoBehaviour
     public List<GameObject> characters = new List<GameObject>();
 
     //public static event Action<GameObject> OnCharacterUIClick;
-
     private void OnEnable()
     {
         UpdateCharacterUI();
@@ -48,6 +47,7 @@ public class CharacterSelect : MonoBehaviour
 
     public void OnExitButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         characterInfo = null;
         UIManager.Instance.OpenUI(Page.FORMATION2);
     }
@@ -138,6 +138,7 @@ public class CharacterSelect : MonoBehaviour
 
     public void OnChangeButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         if (characterInfo == null) return;
 
         int index = newFormation.selectedFormationSlot.slotIndex;
@@ -161,6 +162,7 @@ public class CharacterSelect : MonoBehaviour
 
     public void OnCencelButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         int index = newFormation.selectedFormationSlot.slotIndex;
 
         var slot = newFormation.characterFormation[index].GetComponent<NewFormationSlot>();

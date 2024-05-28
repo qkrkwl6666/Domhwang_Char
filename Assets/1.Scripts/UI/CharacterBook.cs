@@ -73,6 +73,7 @@ public class CharacterBook : MonoBehaviour
 
     public void OnExitButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         UIManager.Instance.OpenUI(Page.MAIN);
     }
 }

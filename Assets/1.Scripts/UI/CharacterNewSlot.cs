@@ -78,6 +78,7 @@ public class CharacterNewSlot : MonoBehaviour
 
     public void OnCharacterButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         characterSelect.UpdateCharacterDescUI(gameObject);
     }
 

@@ -37,6 +37,7 @@ public class NewFormation : MonoBehaviour
 
     public void OnButtonCharacterClick(NewFormationSlot newFormationSlot)
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         selectedFormationSlot = newFormationSlot;
         characterSelect.UpdateCharacterShowTeam();
         UIManager.Instance.OpenUI(Page.CHARACTERSELECT);
@@ -44,6 +45,7 @@ public class NewFormation : MonoBehaviour
 
     public void OnExitButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         // 편성 저장
         GameManager.Instance.Save();
 
@@ -54,16 +56,19 @@ public class NewFormation : MonoBehaviour
 
     public void OnRound1ButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         ActiveFormationUI(0);
     }
 
     public void OnRound2ButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         ActiveFormationUI(1);
     }
 
     public void OnRound3ButtonClick()
     {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         ActiveFormationUI(2);
     }
 

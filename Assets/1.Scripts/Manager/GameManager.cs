@@ -220,9 +220,6 @@ public class GameManager : Singleton<GameManager>
         AudioSource.Stop();
         AudioSource.PlayOneShot(VictoryClip);
 
-        BackgroundAudioSource.Stop();
-        BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/Forming"));
-
         StageClear();
 
         foreach(var character in LevelUpCharacterList)

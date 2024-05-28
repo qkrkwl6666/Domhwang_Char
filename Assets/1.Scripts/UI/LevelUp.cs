@@ -43,6 +43,8 @@ public class LevelUp : MonoBehaviour
         //GameManager.Instance.GameManagerAwake();
         //SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.NEWCHARACTER);
+        GameManager.Instance.BackgroundAudioSource.Stop();
+        GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/Forming"));
         //UIManager.Instance.OpenUI(Page.CHARACTERCHANGE);
 
     }
