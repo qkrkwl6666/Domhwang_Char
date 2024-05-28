@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager>
 
     // 편성 선택한 캐릭터 리스트
     public List<GameObject> formationCharacterList = new List<GameObject>();
+
     // 레벨업 리스트
     public List<GameObject> LevelUpCharacterList { get; set; } = new List<GameObject>();
 
@@ -51,17 +52,11 @@ public class GameManager : Singleton<GameManager>
     public AudioClip CencelClip { get; private set; }
     public AudioClip LoseClip { get; private set; }
     public AudioClip VictoryClip { get; private set; }
-
     public AudioSource BackgroundAudioSource { get; private set; }
 
 
     private void Awake()
     {
-        for(int j = 0; j < 6; j ++)
-        {
-            formationCharacterList.Add(null);
-        }
-
         // 캐릭터 데이터 가져오기
         var characterDatas = DataTableMgr.Instance.Get<CharacterTable>("Character");
 
@@ -340,16 +335,32 @@ public class GameManager : Singleton<GameManager>
     public void Save()
     {
         SaveData1 saveData1 = new SaveData1();
-        List<CharacterInfo> list = new List<CharacterInfo>();
+        List<CharacterInfo> playerList = new List<CharacterInfo>();
+        List<CharacterInfo> formationList = new List<CharacterInfo>();
 
         saveData1.currentStage = CurrentStage;
         saveData1.tryCount = TryCount;
 
         foreach (var character in PlayerCharacterList)
         {
-            list.Add(character.GetComponent<CharacterInfo>());
+            playerList.Add(character.GetComponent<CharacterInfo>());
         }
-        saveData1.characterDataList = list;
+
+        foreach(var character in formationCharacterList)
+        {
+            if(character == null)
+            {
+                formationList.Add(null);
+            }
+            else
+            {
+                formationList.Add(character.GetComponent<CharacterInfo>());
+            }
+        }
+
+        saveData1.characterDataList = playerList;
+        saveData1.formationDataList = formationList;
+
         SaveLoadSystem.Save(-1, saveData1);
 
         Debug.Log("Save");
@@ -360,6 +371,7 @@ public class GameManager : Singleton<GameManager>
         CurrentStage = SaveLoadSystem.CurrentData.currentStage;
         TryCount = SaveLoadSystem.CurrentData.tryCount;
 
+        // 캐릭터 데이터 로드
         foreach (CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
         {
             var character = Instantiate(Resources.Load<GameObject>("Characters/" + go.Id));
@@ -372,7 +384,32 @@ public class GameManager : Singleton<GameManager>
             character.SetActive(false);
             PlayerCharacterList.Add(character);
         }
-    }
+
+        // 포메이션 정보 로드
+        foreach (CharacterInfo go in SaveLoadSystem.CurrentData.formationDataList)
+        {
+            //if (go == null)
+            //{
+            //    formationCharacterList.Add(null);
+            //    continue;
+            //}    
+
+            for(int i = 0; i < PlayerCharacterList.Count; i ++)
+            {
+
+            }
+            foreach(var character in PlayerCharacterList)
+            {
+                var ci = character.GetComponent<CharacterInfo>();
+                if(go.InstanceId == ci.InstanceId)
+                {
+                    formationCharacterList.Add(ci.gameObject);
+                    continue;
+                }
+            }
+        }
+
+     }
 
     public void InitialGameStart()
     {
@@ -401,6 +438,11 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 CreateCharacter(characterData);
+            }
+
+            for (int j = 0; j < 6; j++)
+            {
+                formationCharacterList.Add(null);
             }
 
             Save();

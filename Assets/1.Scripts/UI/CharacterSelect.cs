@@ -43,7 +43,9 @@ public class CharacterSelect : MonoBehaviour
         //SceneManager.sceneLoaded += AwakeCharacterUI;
         exitButton.onClick.AddListener(OnExitButtonClick);
         //OnCharacterUIClick += UpdateCharacterDescUI;
+        
         changeButton.onClick.AddListener(OnChangeButtonClick);
+        cencelButton.onClick.AddListener(OnCencelButtonClick);
     }
 
     public void OnExitButtonClick()
@@ -142,7 +144,7 @@ public class CharacterSelect : MonoBehaviour
 
         int index = newFormation.selectedFormationSlot.slotIndex;
 
-        for (int i = 0; i < newFormation.characterFormation.Count; i ++)
+        for (int i = 0; i < newFormation.characterFormation.Count; i++)
         {
             var slot = newFormation.characterFormation[i].GetComponent<NewFormationSlot>();
             if (i == index) continue;
@@ -156,6 +158,18 @@ public class CharacterSelect : MonoBehaviour
         GameManager.Instance.formationCharacterList[index] = characterInfo.gameObject;
 
         characterInfo = null;
+        UIManager.Instance.OpenUI(Page.FORMATION2);
+    }
+
+    public void OnCencelButtonClick()
+    {
+        int index = newFormation.selectedFormationSlot.slotIndex;
+
+        var slot = newFormation.characterFormation[index].GetComponent<NewFormationSlot>();
+        GameManager.Instance.formationCharacterList[index] = null;
+        slot.DelectFormationSlot();
+        characterInfo = null;
+
         UIManager.Instance.OpenUI(Page.FORMATION2);
     }
 

@@ -22,6 +22,9 @@ public class Main : MonoBehaviour
 
     public Transform bossContent;
 
+    public Transform tryContent;
+    public GameObject tryCountPrefab;
+
     //public static event Action <MonsterData> OnMonsterData;
 
     private void OnEnable()
@@ -29,10 +32,22 @@ public class Main : MonoBehaviour
         //OnMonsterData = null;
 
         BossUIUpdate();
+
+        // todo 
+        foreach (Transform t in tryContent)
+        {
+            Destroy(t.gameObject);
+        }
+
+        for (int i = 0; i < GameManager.Instance.TryCount; i++)
+        {
+            Instantiate(tryCountPrefab, tryContent);
+        }
     }
 
     private void Awake()
     {
+
         startButton.onClick.AddListener(StartButton);
         nextButton.onClick.AddListener(OnNextButtonClick);
         prevButton.onClick.AddListener(OnPrevButtonClick);
@@ -158,4 +173,5 @@ public class Main : MonoBehaviour
         //}
 
     }
+
 }
