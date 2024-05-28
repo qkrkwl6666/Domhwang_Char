@@ -47,11 +47,11 @@ public class Main : MonoBehaviour
 
     private void Awake()
     {
-
         startButton.onClick.AddListener(StartButton);
         nextButton.onClick.AddListener(OnNextButtonClick);
         prevButton.onClick.AddListener(OnPrevButtonClick);
         formationButton.onClick.AddListener(OnFormationButtonClick);
+        guideButton.onClick.AddListener(OnGuideButtonClick);
 
         // optionButton.onClick.AddListener(OptionButton);
         // exitButton.onClick.AddListener(ExitButton);
@@ -172,6 +172,11 @@ public class Main : MonoBehaviour
         //    //OnMonsterData?.Invoke(GameManager.Instance.AllMonsterData[GameManager.Instance.UiStage]);
         //}
 
+    }
+
+    public void OnGuideButtonClick()
+    {
+        UIManager.Instance.OpenUI(Page.RULEBOOK);
     }
 
 }

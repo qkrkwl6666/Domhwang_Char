@@ -31,8 +31,8 @@ public class NewFormationSlot : MonoBehaviour
             runText.text = "";
             skillText.text = "";
             level.text = "";
-
-            foreach(Transform t in modelContent)
+            image.sprite = LineSprites[0];
+            foreach (Transform t in modelContent)
             {
                 Destroy(t.gameObject);
             }
