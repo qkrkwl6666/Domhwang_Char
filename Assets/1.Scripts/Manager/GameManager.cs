@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -16,7 +18,12 @@ public class GameManager : Singleton<GameManager>
 
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
-    // 몬스터 
+    public int UiStage { get; set; } = 0;
+
+    // 전체 몬스터 데이터 리스트
+    public List<MonsterData> AllMonsterData { get; private set; } = new List<MonsterData>();
+
+    // 현재 스테이지 몬스터 데이터
     public MonsterData MonsterData { get; private set; }
 
     public bool gameRestart = false;
@@ -38,7 +45,6 @@ public class GameManager : Singleton<GameManager>
 
     // Attack 파티클 리스트
     public List<GameObject> AtkParticleSystemList { get; set; } = new List<GameObject>();
-    
     public string LoadSceneName {  get; private set; }
 
     // 오디오 부분
@@ -47,7 +53,6 @@ public class GameManager : Singleton<GameManager>
     public AudioClip CencelClip { get; private set; }
     public AudioClip LoseClip { get; private set; }
     public AudioClip VictoryClip { get; private set; }
-
     public AudioSource BackgroundAudioSource { get; private set; }
 
 
@@ -76,6 +81,20 @@ public class GameManager : Singleton<GameManager>
 
         BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
 
+        // 현재 스테이지 맞는 몬스터 생성
+        CreateMonster();
+
+        int i = 1;
+
+        MonsterTable monsterTable = DataTableMgr.Instance.Get<MonsterTable>("Monster");
+        foreach (KeyValuePair<string, MonsterData> data in monsterTable.monsterTable)
+        {
+            if(data.Value.Stage == i)
+            {
+                AllMonsterData.Add(data.Value);
+                i++;
+            }
+        }
     }   
 
     // Update is called once per frame
@@ -175,9 +194,10 @@ public class GameManager : Singleton<GameManager>
         }
         if(scene.name == "Main")
         {
+            UiStage = CurrentStage;
             CharacterAnimationEvent.MonsterDamageEvent = null;
-            MonsterData = null;
-            formationCharacterList.Clear();
+            CreateMonster();
+            
             LevelUpCharacterList.Clear();
             CharactersCCEnable(true);
 
@@ -192,13 +212,13 @@ public class GameManager : Singleton<GameManager>
                 ce.EffectAwake();
                 character.SetActive(false);
             }
+
+            UIManager.Instance.OpenUI(Page.MAIN);
         }
     }
 
     public void GameWin()
     {
-        Debug.Log("GameWin");
-
         AudioSource.Stop();
         AudioSource.PlayOneShot(VictoryClip);
 
@@ -233,7 +253,6 @@ public class GameManager : Singleton<GameManager>
             AudioSource.PlayOneShot(LoseClip);
         }
 
-        SceneManager.LoadScene("Main");
         UIManager.Instance.OpenUI(Page.LOSE);
     }
 
@@ -253,7 +272,11 @@ public class GameManager : Singleton<GameManager>
             Destroy(character);
         }
 
-        formationCharacterList.Clear();
+        for (int j = 0; j < 6; j++)
+        {
+            formationCharacterList.Add(null);
+        }
+
         PlayerCharacterList.Clear();
         LevelUpCharacterList.Clear();
 
@@ -313,16 +336,32 @@ public class GameManager : Singleton<GameManager>
     public void Save()
     {
         SaveData1 saveData1 = new SaveData1();
-        List<CharacterInfo> list = new List<CharacterInfo>();
+        List<CharacterInfo> playerList = new List<CharacterInfo>();
+        List<int> formationDataList = new List<int>();
 
         saveData1.currentStage = CurrentStage;
         saveData1.tryCount = TryCount;
 
         foreach (var character in PlayerCharacterList)
         {
-            list.Add(character.GetComponent<CharacterInfo>());
+            playerList.Add(character.GetComponent<CharacterInfo>());
         }
-        saveData1.characterDataList = list;
+
+        foreach(var character in formationCharacterList)
+        {
+            if(character == null)
+            {
+                formationDataList.Add(0);
+            }
+            else
+            {
+                formationDataList.Add(character.GetComponent<CharacterInfo>().InstanceId);
+            }
+        }
+
+        saveData1.characterDataList = playerList;
+        saveData1.formationInstanceList = formationDataList;
+
         SaveLoadSystem.Save(-1, saveData1);
 
         Debug.Log("Save");
@@ -333,6 +372,7 @@ public class GameManager : Singleton<GameManager>
         CurrentStage = SaveLoadSystem.CurrentData.currentStage;
         TryCount = SaveLoadSystem.CurrentData.tryCount;
 
+        // 캐릭터 데이터 로드
         foreach (CharacterInfo go in SaveLoadSystem.CurrentData.characterDataList)
         {
             var character = Instantiate(Resources.Load<GameObject>("Characters/" + go.Id));
@@ -345,7 +385,34 @@ public class GameManager : Singleton<GameManager>
             character.SetActive(false);
             PlayerCharacterList.Add(character);
         }
-    }
+
+        //포메이션 정보 로드
+        foreach (int instanceId in SaveLoadSystem.CurrentData.formationInstanceList)
+        {  
+            if(instanceId == 0)
+            {
+                formationCharacterList.Add(null);
+                continue;
+            }
+           
+            for(int i = 0; i < PlayerCharacterList.Count; i ++)
+            {
+                var ci = PlayerCharacterList[i].GetComponent<CharacterInfo>();
+
+                if (instanceId == ci.InstanceId)
+                {
+                    formationCharacterList.Add(ci.gameObject);
+                    break;
+                }
+                else if (i == PlayerCharacterList.Count - 1)
+                {
+                    formationCharacterList.Add(null);
+                }
+            }
+
+        }
+
+     }
 
     public void InitialGameStart()
     {
@@ -374,6 +441,11 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 CreateCharacter(characterData);
+            }
+
+            for (int j = 0; j < 6; j++)
+            {
+                formationCharacterList.Add(null);
             }
 
             Save();
@@ -426,7 +498,7 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene("Loading");
 
-
+        LoadSceneName = sceneName;
     }
 
 

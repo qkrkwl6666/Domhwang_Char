@@ -12,6 +12,8 @@ public class SaveData1 : SaveData
 {
     // 플레이어가 보유중인 플레이어 데이터
     public List<CharacterInfo> characterDataList;
+    // 편성 저장 데이터 인스턴스Id 저장
+    public List<int> formationInstanceList;
     public int currentStage = 0;
     public int tryCount = 0;
 
@@ -19,7 +21,9 @@ public class SaveData1 : SaveData
     {
         Version = 1;
         characterDataList = new List<CharacterInfo>();
+        formationInstanceList = new List<int>();
     }
+
     public override SaveData VersionDown()
     {
         return null;

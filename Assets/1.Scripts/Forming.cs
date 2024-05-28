@@ -197,6 +197,7 @@ public class Forming : MonoBehaviour
         run.text = characterInfo.Run.ToString();
         skill.text = characterInfo.Skill_Id.ToString();
         rare.text = characterInfo.Tier;
+
         if(characterInfo.Skill_Id == 0)
         {
             infoDescText.text = "이 친구는 무능력자 입니다";
@@ -255,10 +256,13 @@ public class Forming : MonoBehaviour
     {
         GameManager.Instance.BackgroundAudioSource.Stop();
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
+
+        UIManager.Instance.OpenUI(Page.LOADING);
+
         SceneManager.LoadScene("Battle");
         //GameManager.Instance.LoadScene("Battle");
 
-        UIManager.Instance.AllClose();
+        //UIManager.Instance.AllClose();
         
     }
 

@@ -1,5 +1,6 @@
 public static class Defines
 {
+    public static readonly string ResourcesBossModel = "MonsterModel/";
     public static readonly string Card_Epic = "Card_Epic";
     public static readonly string CardPath = "Card/";
     public static readonly string Card_Normal = "Card_Normal";
@@ -9,4 +10,8 @@ public static class Defines
     public static readonly string normal = "normal";
     public static readonly string rare = "rare";
     public static readonly string epic = "Epic";
+
+    public static readonly string EpicPanel = "Texture/EpicPanel";
+    public static readonly string NormalPanel = "Texture/NormalPanel";
+    public static readonly string RarePanel = "Texture/NormalPanel";
 }

@@ -16,15 +16,17 @@ public class LevelUp : MonoBehaviour
 
             var ci = character.GetComponent<CharacterInfo>();
 
-            //uiPrefab.characterImage.sprite = character.characterImage;
-            var go = Resources.Load("CharacterModel/" + ci.Id.ToString()) as GameObject;
-            var model = Instantiate(go, uiPrefab.characterModel.transform);
-            model.transform.localScale = new Vector3(100f, 100f, 100f);
-            model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -40f, 0f);
+            uiPrefab.SetLevelUpUI(ci);
 
-            uiPrefab.levelText.text = $"{ci.Level}";
-            uiPrefab.attackText.text = $"{ci.Atk} +{ci.Atk_Up}";
-            uiPrefab.runText.text = $"{ci.Run} -{ci.Run_Up}";
+            //uiPrefab.characterImage.sprite = character.characterImage;
+            //var go = Resources.Load("CharacterModel/" + ci.Id.ToString()) as GameObject;
+            //var model = Instantiate(go, uiPrefab.characterModel.transform);
+            //model.transform.localScale = new Vector3(100f, 100f, 100f);
+            //model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -40f, 0f);
+
+            //uiPrefab.levelText.text = $"{ci.Level}";
+            //uiPrefab.attackText.text = $"{ci.Atk} +{ci.Atk_Up}";
+            //uiPrefab.runText.text = $"{ci.Run} -{ci.Run_Up}";
         }   
     }
 
@@ -40,6 +42,8 @@ public class LevelUp : MonoBehaviour
     {
         //GameManager.Instance.GameManagerAwake();
         //SceneManager.LoadScene("Main");
-        UIManager.Instance.OpenUI(Page.NEWHERO);
+        UIManager.Instance.OpenUI(Page.NEWCHARACTER);
+        //UIManager.Instance.OpenUI(Page.CHARACTERCHANGE);
+
     }
 }

@@ -1,12 +1,13 @@
 public enum Page
 {
-    TITLE,
+    MAIN,
     LOADING,
     OPTION,
-    STAGE,
-    FORMATION,
     LEVELUP,
-    NEWHERO,
     LOSE,
     RULEBOOK,
+    FORMATION2,
+    CHARACTERSELECT,
+    CHARACTERCHANGE,
+    NEWCHARACTER,
 }

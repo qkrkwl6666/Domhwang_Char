@@ -50,6 +50,6 @@ public class RuleBook : MonoBehaviour
     {
         GameManager.Instance.BackgroundAudioSource.Stop();
         GameManager.Instance.BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));
-        UIManager.Instance.OpenUI(Page.TITLE);
+        UIManager.Instance.OpenUI(Page.MAIN);
     }
 }

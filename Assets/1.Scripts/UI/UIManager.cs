@@ -16,9 +16,17 @@ public class UIManager : Singleton<UIManager>
         canvas = mainPanels.GetComponentInParent<Canvas>();
         
         //Debug.Log("UIManagerAwake");
-        page = Page.TITLE;
+        page = Page.MAIN;
 
         DontDestroyOnLoad(canvas.gameObject);
+
+        foreach (Transform panel in mainPanels)
+        {
+            defaultPanels.Add(panel.gameObject);
+            panel.gameObject.SetActive(false);
+        }
+
+        defaultPanels[(int)page].SetActive(true);
 
         //SceneManager.sceneLoaded += CanvasRemove;
     }
@@ -31,20 +39,6 @@ public class UIManager : Singleton<UIManager>
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= CanvasRemove;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Debug.Log("UIManagerStart");
-        foreach (Transform panel in mainPanels)
-        {
-            defaultPanels.Add(panel.gameObject);
-            panel.gameObject.SetActive(false);
-        }
-
-        defaultPanels[(int)page].SetActive(true);
-        //DontDestroyOnLoad(canvas.gameObject);
     }
 
     // Update is called once per frame

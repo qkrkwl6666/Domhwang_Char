@@ -7,6 +7,7 @@ public class ColorConverter : JsonConverter<Color>
 {
     public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
     {
+
         JObject jo = JObject.Load(reader);
         Color c = new Color();
         c.r = (float)jo["r"];
@@ -110,6 +111,11 @@ public class CharacterInfoConverter : JsonConverter<CharacterInfo>
 {
     public override CharacterInfo ReadJson(JsonReader reader, Type objectType, CharacterInfo existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
     {
+        if (reader.TokenType == JsonToken.Null)
+        {
+            return null;
+        }
+
         JObject jo = JObject.Load(reader);
         CharacterInfo v = new CharacterInfo();
         
