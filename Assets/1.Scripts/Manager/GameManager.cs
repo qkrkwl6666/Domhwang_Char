@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -336,7 +337,7 @@ public class GameManager : Singleton<GameManager>
     {
         SaveData1 saveData1 = new SaveData1();
         List<CharacterInfo> playerList = new List<CharacterInfo>();
-        List<CharacterInfo> formationList = new List<CharacterInfo>();
+        List<int> formationDataList = new List<int>();
 
         saveData1.currentStage = CurrentStage;
         saveData1.tryCount = TryCount;
@@ -350,16 +351,16 @@ public class GameManager : Singleton<GameManager>
         {
             if(character == null)
             {
-                formationList.Add(null);
+                formationDataList.Add(0);
             }
             else
             {
-                formationList.Add(character.GetComponent<CharacterInfo>());
+                formationDataList.Add(character.GetComponent<CharacterInfo>().InstanceId);
             }
         }
 
         saveData1.characterDataList = playerList;
-        saveData1.formationDataList = formationList;
+        saveData1.formationInstanceList = formationDataList;
 
         SaveLoadSystem.Save(-1, saveData1);
 
@@ -385,28 +386,30 @@ public class GameManager : Singleton<GameManager>
             PlayerCharacterList.Add(character);
         }
 
-        // 포메이션 정보 로드
-        foreach (CharacterInfo go in SaveLoadSystem.CurrentData.formationDataList)
-        {
-            //if (go == null)
-            //{
-            //    formationCharacterList.Add(null);
-            //    continue;
-            //}    
-
+        //포메이션 정보 로드
+        foreach (int instanceId in SaveLoadSystem.CurrentData.formationInstanceList)
+        {  
+            if(instanceId == 0)
+            {
+                formationCharacterList.Add(null);
+                continue;
+            }
+           
             for(int i = 0; i < PlayerCharacterList.Count; i ++)
             {
+                var ci = PlayerCharacterList[i].GetComponent<CharacterInfo>();
 
-            }
-            foreach(var character in PlayerCharacterList)
-            {
-                var ci = character.GetComponent<CharacterInfo>();
-                if(go.InstanceId == ci.InstanceId)
+                if (instanceId == ci.InstanceId)
                 {
                     formationCharacterList.Add(ci.gameObject);
-                    continue;
+                    break;
+                }
+                else if (i == PlayerCharacterList.Count - 1)
+                {
+                    formationCharacterList.Add(null);
                 }
             }
+
         }
 
      }
