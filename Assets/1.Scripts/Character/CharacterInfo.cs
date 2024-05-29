@@ -41,13 +41,10 @@ public class CharacterInfo : MonoBehaviour
 
             // 해당 라운드에서 캐릭터가 돌격에 성공 할 시
             case 9:
-                if(CharacterSkillData.ConditionValue == battleSystem.CurrentRound)
-                {
-                    var ci = GetComponent<CharacterControll>();
-                    ci.RunMode(true);
-                    conditionMet = ci.isRun == false;
-                    Debug.Log(conditionMet);
-                }
+                var ci = GetComponent<CharacterControll>();
+                ci.RunMode(true);
+                conditionMet = ci.isRun == false;
+                Debug.Log(conditionMet);
                 break;
         }
 

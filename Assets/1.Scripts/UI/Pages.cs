@@ -13,4 +13,5 @@ public enum Page
     CHARACTERBOOK,
     GAMEOVER,
     TITLE,
+    GAMECLEAR,
 }

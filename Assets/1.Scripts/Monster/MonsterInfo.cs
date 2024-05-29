@@ -17,7 +17,6 @@ public class MonsterInfo : MonoBehaviour
     public bool isInvincible { get; set; }
     public bool isIncreasedDamage { get; set; }
 
-
     private BattleSystem battleSystem;
 
     private UnityEngine.UI.Slider hpSlider;
@@ -126,6 +125,12 @@ public class MonsterInfo : MonoBehaviour
     public void DeathEnd()
     {
         // Todo : 여기서 게임 우승 메서드 호출
+        if(GameManager.Instance.CurrentStage >= 11)
+        {
+            UIManager.Instance.OpenUI(Page.GAMECLEAR);
+            return;
+        }
+
         GameManager.Instance.GameWin();
         GameObject.FindWithTag("BackgroundBGM").GetComponent<AudioSource>().Stop();
     }
