@@ -110,8 +110,8 @@ public class CharacterSelect : MonoBehaviour
         characterInfo = cns.characterInfo;
 
         characterDescTexts[(int)Desc.TIER].text = $"ÀÌ¸§ : {cns.characterInfo.Name}";
-        characterDescTexts[(int)Desc.ATTACK].text = $"°ø°Ý·Â : {cns.characterInfo.Atk}";
-        characterDescTexts[(int)Desc.RUN].text = $"µµ¸Á È®·ü : {cns.characterInfo.Run}%";
+        characterDescTexts[(int)Desc.ATTACK].text = $"°ø°Ý·Â : {cns.characterInfo.Atk} (+{cns.characterInfo.Atk_Up})";
+        characterDescTexts[(int)Desc.RUN].text = $"µµ¸Á È®·ü : {cns.characterInfo.Run}% (-{cns.characterInfo.Run_Up})";
 
         if (cns.characterInfo.Skill_Id == 0)
         {

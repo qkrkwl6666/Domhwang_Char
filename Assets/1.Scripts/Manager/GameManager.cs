@@ -14,6 +14,9 @@ public class GameManager : Singleton<GameManager>
 
     public bool isPassTryCount = false;
 
+    // 플레이어 처음 접속 시
+    public bool firstStart = true;
+
     // 플레이어 스테이지
     public int CurrentStage { get; private set; } = 0;
     public int UiStage { get; set; } = 0;
@@ -93,6 +96,8 @@ public class GameManager : Singleton<GameManager>
                 i++;
             }
         }
+
+        
     }   
 
     // Update is called once per frame
@@ -192,6 +197,7 @@ public class GameManager : Singleton<GameManager>
         }
         if(scene.name == "Main")
         {
+            Debug.Log("처음");
             UiStage = CurrentStage;
             CharacterAnimationEvent.MonsterDamageEvent = null;
             CreateMonster();
@@ -211,6 +217,13 @@ public class GameManager : Singleton<GameManager>
                 character.SetActive(false);
             }
 
+            if(firstStart)
+            {
+                UIManager.Instance.OpenUI(Page.TITLE);
+                firstStart = false;
+                return;
+            }
+                
             UIManager.Instance.OpenUI(Page.MAIN);
         }
     }

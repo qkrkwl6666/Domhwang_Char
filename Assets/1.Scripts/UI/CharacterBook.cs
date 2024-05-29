@@ -56,8 +56,8 @@ public class CharacterBook : MonoBehaviour
     {
 
         characterDescTexts[(int)Desc.TIER].text = $"ÀÌ¸§ : {cd.Name}";
-        characterDescTexts[(int)Desc.ATTACK].text = $"°ø°Ý·Â : {cd.Atk}";
-        characterDescTexts[(int)Desc.RUN].text = $"µµ¸Á È®·ü : {cd.Run}%";
+        characterDescTexts[(int)Desc.ATTACK].text = $"°ø°Ý·Â : {cd.Atk} (+{cd.Atk_Up})";
+        characterDescTexts[(int)Desc.RUN].text = $"µµ¸Á È®·ü : {cd.Run}% (-{cd.Run_Up})";
 
         if (cd.Skill_Id == 0)
         {

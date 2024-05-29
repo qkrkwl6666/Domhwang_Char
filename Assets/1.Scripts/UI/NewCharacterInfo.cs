@@ -31,8 +31,8 @@ public class NewCharacterInfo : MonoBehaviour
         model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -40f, 0f);
 
         levelText.text = $"Level{ci.Level}";
-        attackText.text = $"°ø°Ý·Â : {ci.Atk} +{ci.Atk_Up}";
-        runText.text = $"µµ¸Á È®·ü : {ci.Run} -{ci.Run_Up}";
+        attackText.text = $"°ø°Ý·Â : {ci.Atk} (+{ci.Atk_Up})";
+        runText.text = $"µµ¸Á È®·ü : {ci.Run} (-{ci.Run_Up})";
 
         if (characterInfo.Skill_Id == 0)
         {
@@ -69,8 +69,8 @@ public class NewCharacterInfo : MonoBehaviour
         model.GetComponent<RectTransform>().anchoredPosition = new Vector3(0f, -40f, 0f);
 
         levelText.text = $"Level{characterData.Level}";
-        attackText.text = $"°ø°Ý·Â : {characterData.Atk} +{characterData.Atk_Up}";
-        runText.text = $"µµ¸Á È®·ü : {characterData.Run} -{characterData.Run_Up}";
+        attackText.text = $"°ø°Ý·Â : {characterData.Atk} (+{characterData.Atk_Up})";
+        runText.text = $"µµ¸Á È®·ü : {characterData.Run} (-{characterData.Run_Up})";
 
         if (cd.Skill_Id == 0)
         {

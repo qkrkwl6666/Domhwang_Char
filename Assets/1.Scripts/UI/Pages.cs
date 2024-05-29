@@ -12,4 +12,5 @@ public enum Page
     NEWCHARACTER,
     CHARACTERBOOK,
     GAMEOVER,
+    TITLE,
 }
