@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Option : MonoBehaviour
@@ -9,6 +10,8 @@ public class Option : MonoBehaviour
     public Slider backgroundVolumeSlider;
     public Slider vfxVolumeSlider;
     public Button exitButton;
+    public Button gameRestartButton;
+    public Button gameExitButton;
 
     private void Awake()
     {
@@ -24,14 +27,28 @@ public class Option : MonoBehaviour
         vfxVolumeSlider.onValueChanged.AddListener(delegate
         { GameManager.Instance.AudioSource.volume = vfxVolumeSlider.value; });
 
-        exitButton.onClick.AddListener(ExitButtonOnClick);
+        exitButton.onClick.AddListener(OnExitButtonClick);
+        gameRestartButton.onClick.AddListener(OnGameRestart);
+        gameExitButton.onClick.AddListener(OnGameExitButtonClick);
     }
 
-    public void ExitButtonOnClick()
+    public void OnExitButtonClick()
     {
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         main.bossContent.gameObject.SetActive(true);
         gameObject.SetActive(false);
+    }
+
+    public void OnGameRestart()
+    {
+        UIManager.Instance.OpenUI(Page.LOADING);
+        GameManager.Instance.GameRestart();
+        SceneManager.LoadScene("Main");
+    }
+
+    public void OnGameExitButtonClick()
+    {
+        Application.Quit();
     }
 
 
