@@ -100,44 +100,7 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SaveData1 saveData1 = new SaveData1();
-            List<CharacterInfo> list = new List<CharacterInfo>();
 
-            foreach(var character in PlayerCharacterList)
-            {
-                list.Add(character.GetComponent<CharacterInfo>());
-            }
-            saveData1.characterDataList = list;
-            SaveLoadSystem.Save( -1, saveData1);
-
-            Debug.Log("Save");
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            TryCount--;
-        }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            // Load
-            SaveData1 save = SaveLoadSystem.Load() as SaveData1;
-            Debug.Log("Load");
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            StageClear();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            foreach(var character in formationCharacterList)
-            {
-                character.GetComponent<CharacterInfo>().BattleAttack = 1000;
-            }
-        }
     }
 
     public void CreateMonster()
@@ -358,7 +321,15 @@ public class GameManager : Singleton<GameManager>
             playerList.Add(character.GetComponent<CharacterInfo>());
         }
 
-
+        if(formationCharacterList.Count < 6)
+        {
+            formationCharacterList.Clear();
+            for(int i = 0; i < 6; i ++)
+            {
+                formationCharacterList.Add(null);
+            }
+        }
+        
         foreach (var character in formationCharacterList)
         {
             if(character == null)
