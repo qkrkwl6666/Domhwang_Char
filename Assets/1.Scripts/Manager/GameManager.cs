@@ -56,7 +56,6 @@ public class GameManager : Singleton<GameManager>
     public AudioClip VictoryClip { get; private set; }
     public AudioSource BackgroundAudioSource { get; private set; }
 
-
     private void Awake()
     {
         // 캐릭터 데이터 가져오기
@@ -96,8 +95,6 @@ public class GameManager : Singleton<GameManager>
                 i++;
             }
         }
-
-        
     }   
 
     // Update is called once per frame
