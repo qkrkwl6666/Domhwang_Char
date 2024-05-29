@@ -104,7 +104,7 @@ public class CharacterInfo : MonoBehaviour
                 RemainingRoundsPass(battleSystem);
                 break;
             case 4:
-                // 트라이 카운트 소모되지 않음
+                TryCountPass();
                 break;
             case 5:
                 // 반드시 돌격 하며 반드시 잔류 하지 않음

@@ -197,7 +197,7 @@ public class GameManager : Singleton<GameManager>
         }
         if(scene.name == "Main")
         {
-            Debug.Log("Ã³À½");
+            isPassTryCount = false;
             UiStage = CurrentStage;
             CharacterAnimationEvent.MonsterDamageEvent = null;
             CreateMonster();
@@ -223,7 +223,7 @@ public class GameManager : Singleton<GameManager>
                 firstStart = false;
                 return;
             }
-                
+
             UIManager.Instance.OpenUI(Page.MAIN);
         }
     }
@@ -245,7 +245,9 @@ public class GameManager : Singleton<GameManager>
 
     public void GameLose()
     {
-        TryCount--;
+        if(!isPassTryCount)
+            TryCount--;
+
         GameObject.FindWithTag("BackgroundBGM").GetComponent<AudioSource>().Stop();
 
         if (TryCount == 0)
@@ -296,6 +298,7 @@ public class GameManager : Singleton<GameManager>
         TryCount = 3;
         CurrentStage = 0;
         gameRestart = false;
+        isPassTryCount = false;
     }
 
     public void CharactersCCEnable(bool isEnable)
