@@ -46,7 +46,7 @@ public class BackgroundBgm : MonoBehaviour
         }
 
         AudioSource.loop = true;
-        AudioSource.volume = 0.03f;
+        AudioSource.volume = GameManager.Instance.BackgroundAudioSource.volume;
         AudioSource.PlayOneShot(audio);
     }
 }

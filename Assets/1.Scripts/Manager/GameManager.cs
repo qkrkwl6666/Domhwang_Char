@@ -69,12 +69,12 @@ public class GameManager : Singleton<GameManager>
         SceneManager.sceneLoaded += GameManagerAwake;
 
         AudioSource = gameObject.AddComponent<AudioSource>();
-        AudioSource.volume = 0.1f;
+        //AudioSource.volume = 0.1f;
 
         AudioClipLoad();
 
         BackgroundAudioSource = gameObject.AddComponent<AudioSource>();
-        BackgroundAudioSource.volume = 0.05f;
+        BackgroundAudioSource.volume = 0.1f;
         BackgroundAudioSource.loop = true;
 
         BackgroundAudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/MainMenu"));

@@ -49,8 +49,13 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenUI(Page page)
     {
-        defaultPanels[(int)this.page].SetActive(false);
+        if(page == Page.OPTION)
+        {
+            defaultPanels[(int)page].SetActive(true);
+            return;
+        }
 
+        defaultPanels[(int)this.page].SetActive(false);
         defaultPanels[(int)page].SetActive(true);
         this.page = page;
     }

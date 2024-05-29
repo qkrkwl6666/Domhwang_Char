@@ -24,11 +24,15 @@ public class Main : MonoBehaviour
     public Transform tryContent;
     public GameObject tryCountPrefab;
 
+    public GameObject GameStartPopUp;
+    public Button popUpExitButton;
+
     //public static event Action <MonsterData> OnMonsterData;
 
     private void OnEnable()
     {
         //OnMonsterData = null;
+        GameStartPopUp.SetActive(false);
 
         BossUIUpdate();
 
@@ -46,14 +50,15 @@ public class Main : MonoBehaviour
 
     private void Awake()
     {
+        popUpExitButton.onClick.AddListener(OnPopUpExitButtonClick);
         startButton.onClick.AddListener(StartButton);
         nextButton.onClick.AddListener(OnNextButtonClick);
         prevButton.onClick.AddListener(OnPrevButtonClick);
         formationButton.onClick.AddListener(OnFormationButtonClick);
         guideButton.onClick.AddListener(OnGuideButtonClick);
         characterButton.onClick.AddListener(OnCharacterBookButtonClick);
+        optionButton.onClick.AddListener(OptionButton);
 
-        // optionButton.onClick.AddListener(OptionButton);
         // exitButton.onClick.AddListener(ExitButton);
     }
 
@@ -103,7 +108,8 @@ public class Main : MonoBehaviour
         {
             if (character == null)
             {
-                Debug.Log("캐릭터 편성 필수");
+                GameStartPopUp.SetActive(true);
+                bossContent.gameObject.SetActive(false);
                 return;
             }
         }
@@ -120,9 +126,9 @@ public class Main : MonoBehaviour
 
     private void OptionButton()
     {
-        //UIManager.Instance.OpenUI(Page.OPTION);
+        bossContent.gameObject.SetActive(false);
+        UIManager.Instance.OpenUI(Page.OPTION);
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
-        UIManager.Instance.OpenUI(Page.RULEBOOK);
     }
 
     private void ExitButton()
@@ -189,6 +195,13 @@ public class Main : MonoBehaviour
     {
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         UIManager.Instance.OpenUI(Page.CHARACTERBOOK);
+    }
+
+    public void OnPopUpExitButtonClick()
+    {
+        GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
+        GameStartPopUp.SetActive(false);
+        bossContent.gameObject.SetActive(true);
     }
 
 }
