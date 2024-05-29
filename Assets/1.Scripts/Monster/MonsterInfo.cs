@@ -100,6 +100,9 @@ public class MonsterInfo : MonoBehaviour
             if (reducedDmg < 0) { reducedDmg = 0; }
 
             Hp -= reducedDmg;
+
+            Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
+            DynamicTextManager.CreateText2D(position, reducedDmg.ToString(), DynamicTextManager.defaultData);
         }
 
         animator.SetTrigger("TakeHit");
