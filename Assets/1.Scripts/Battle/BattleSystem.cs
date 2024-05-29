@@ -6,6 +6,7 @@ using UnityEngine;
 public class BattleSystem : MonoBehaviour
 {
     public DynamicTextManager textManager;
+    public RunTextEffect runTextEffect;
 
     public TextMeshProUGUI roundTextUI;
     public List<List<GameObject>> battleCharacter { get; private set; } = new List<List<GameObject>>();
@@ -322,6 +323,7 @@ public class BattleSystem : MonoBehaviour
 
             if (characterControll.isRun) 
             {
+                runTextEffect.CreateRunText(characterControll.gameObject);
                 removeCharacters.Add(character);
                 continue;
             }
@@ -504,7 +506,20 @@ public class BattleSystem : MonoBehaviour
         for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
             var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
-            characterInfo.InitializeSkill(this);
+            bool isSkill = characterInfo.InitializeSkill(this);
+
+            if (!isSkill) continue;
+
+            currentRoundCharacters[i].GetComponent<CharacterControll>().Flip(false);
+
+            string skillName = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill")
+                .Get(characterInfo.Skill_Id.ToString()).SkillName;
+
+            var text = runTextEffect.CreateSkillText(characterInfo.gameObject, skillName);
+
+            Quaternion quaternion = Quaternion.identity;
+            quaternion.eulerAngles = new Vector3(0f, 180f, 90f);
+            text.transform.rotation = quaternion;
         }
     }
 
@@ -518,7 +533,14 @@ public class BattleSystem : MonoBehaviour
         for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
             var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
-            characterInfo.ApplySkill(this);
+            bool isSkill = characterInfo.ApplySkill(this);
+
+            if (!isSkill) continue;
+
+            string skillName = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill")
+                .Get(characterInfo.Skill_Id.ToString()).SkillName;
+
+            runTextEffect.CreateSkillText(characterInfo.gameObject, skillName);
         }
     }
 

@@ -264,7 +264,7 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/qkrkw/Desktop/Key/TestKey.keystore
+  AndroidKeystoreName: C:/Users/park/Desktop/TestKey.keystore
   AndroidKeyaliasName: domhwangchar
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidBuildApkPerCpuArchitecture: 0

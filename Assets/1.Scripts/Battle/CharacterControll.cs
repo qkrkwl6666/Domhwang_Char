@@ -36,6 +36,8 @@ public class CharacterControll : MonoBehaviour
     public UnityEngine.Transform MonsterTransform {  get; set; }
     public RectTransform skillCanvasRectTransform { get; private set; }
 
+    public GameObject textBox;
+
     public CharacterEffect characterEffect { get; private set; }
 
     // Todo : ���� �й��� ����۽� ĳ���� �ִϸ��̼� ���� ��ȯ �������
@@ -106,6 +108,13 @@ public class CharacterControll : MonoBehaviour
 
         transform.rotation = quaternion;
         skillCanvasRectTransform.rotation = quaternion;
+        
+        //if (textBox != null)
+        //{
+        //    Debug.Log(textBox.name);
+        //    quaternion.eulerAngles = isFlip ? new Vector3(0f, -180, 90) : new Vector3(0f, 0, 90);
+        //    textBox.transform.rotation = quaternion;
+        //}
 
         //transform.localScale = isFlip ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
     }
@@ -247,6 +256,7 @@ public class CharacterControll : MonoBehaviour
         attackEndRun = false;
         isRun = false;
         confirmAttackEndRun = false;
+        textBox = null;
         Flip(true);
         ChangeStatus(Status.Move);
         gameObject.transform.position = Vector3.zero;

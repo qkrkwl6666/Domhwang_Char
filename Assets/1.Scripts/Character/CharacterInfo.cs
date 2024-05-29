@@ -23,9 +23,9 @@ public class CharacterInfo : MonoBehaviour
     public Sprite characterImage;
     public System.DateTime creationTime;
 
-    public void InitializeSkill(BattleSystem battleSystem)
+    public bool InitializeSkill(BattleSystem battleSystem)
     {
-        if (CharacterSkillData == null) return;
+        if (CharacterSkillData == null) return false;
 
         bool conditionMet = false;
 
@@ -50,12 +50,14 @@ public class CharacterInfo : MonoBehaviour
         if (conditionMet)
         {
             SkillType(battleSystem);
+            return true;
         }
+        return false;
     }
 
-    public void ApplySkill(BattleSystem battleSystem)
+    public bool ApplySkill(BattleSystem battleSystem)
     {
-        if (CharacterSkillData == null) return;
+        if (CharacterSkillData == null) return false;
 
         bool conditionMet = false;
 
@@ -82,10 +84,16 @@ public class CharacterInfo : MonoBehaviour
                 conditionMet = battleSystem.CurrentRound == CharacterSkillData.ConditionValue && GetComponent<CharacterControll>().isRun;
                 break;
         }
+
         if (conditionMet)
         {
             SkillType(battleSystem);
+
+            return true;
         }
+
+        return false;
+
     }
 
     public void SkillType(BattleSystem battleSystem)

@@ -20,11 +20,15 @@ public class DataTableMgr : Singleton<DataTableMgr>
         DataTable stageTable = new StageTable();
         stageTable.Load("StageData");
 
+        DataTable runStringTable = new RunStringTable();
+        runStringTable.Load("RunString");
+
         tables.Add("Effect", effectTable);
         tables.Add("Character", characterTable);
         tables.Add("CharacterSkill", characterskillTable);
         tables.Add("Monster", monsterTable);
         tables.Add("Stage", stageTable);
+        tables.Add("RunString", runStringTable);
     }
 
     public T Get<T>(string id) where T : DataTable
