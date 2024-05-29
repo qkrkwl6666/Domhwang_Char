@@ -212,7 +212,6 @@ public class GameManager : Singleton<GameManager>
 
         if (TryCount == 0)
         {
-            Debug.Log("게임 초기화");
             gameRestart = true;
             AudioSource.Stop();
             AudioSource.PlayOneShot(Resources.Load<AudioClip>("Sound/GameOver"));
@@ -347,7 +346,6 @@ public class GameManager : Singleton<GameManager>
 
         SaveLoadSystem.Save(-1, saveData1);
 
-        Debug.Log("Save");
     }
 
     public void Load()

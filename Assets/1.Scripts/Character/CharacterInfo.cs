@@ -44,7 +44,6 @@ public class CharacterInfo : MonoBehaviour
                 var ci = GetComponent<CharacterControll>();
                 ci.RunMode(true);
                 conditionMet = ci.isRun == false;
-                Debug.Log(conditionMet);
                 break;
         }
 
@@ -83,7 +82,6 @@ public class CharacterInfo : MonoBehaviour
                 conditionMet = battleSystem.CurrentRound == CharacterSkillData.ConditionValue && GetComponent<CharacterControll>().isRun;
                 break;
         }
-        Debug.Log(conditionMet);
         if (conditionMet)
         {
             SkillType(battleSystem);
@@ -124,13 +122,13 @@ public class CharacterInfo : MonoBehaviour
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
-                Debug.Log("자신의 캐릭터에게 효과 적용");
+               
                 BattleAttack = DamageCheck(this);
                 GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
-                Debug.Log("잔류 병사에게 효과 적용");
+                
                 foreach (var character in battleSystem.remainingCharacters)
                 {
                     var cc = character.GetComponent<CharacterInfo>();
@@ -140,7 +138,7 @@ public class CharacterInfo : MonoBehaviour
                 break;
             case 3:
                 // 모든 인원에게 효과 적용
-                Debug.Log("모든 인원에게 효과 적용");
+               
                 foreach (var characterList in battleSystem.battleCharacter)
                 {
                     foreach (var character in characterList)
@@ -209,13 +207,13 @@ public class CharacterInfo : MonoBehaviour
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
-                Debug.Log("자신의 캐릭터에게 효과 적용");
+               
                 GetComponent<CharacterControll>().isPass = true;
                 GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
-                Debug.Log("잔류 병사에게 효과 적용");
+                
                 foreach (var character in battleSystem.remainingCharacters)
                 {
                     var cc = character.GetComponent<CharacterControll>();
@@ -225,7 +223,7 @@ public class CharacterInfo : MonoBehaviour
                 break;
             case 3:
                 // 모든 인원에게 효과 적용
-                Debug.Log("모든 인원에게 효과 적용");
+                
                 foreach (var characterList in battleSystem.battleCharacter)
                 {
                     foreach (var character in characterList)
@@ -265,13 +263,13 @@ public class CharacterInfo : MonoBehaviour
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
-                Debug.Log("자신의 캐릭터에게 효과 적용");
+               
                 GetComponent<CharacterControll>().isAttackEndPass = true;
                 GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
-                Debug.Log("잔류 병사에게 효과 적용");
+               
                 foreach (var character in battleSystem.remainingCharacters)
                 {
                     var cc = character.GetComponent<CharacterControll>();
@@ -281,7 +279,7 @@ public class CharacterInfo : MonoBehaviour
                 break;
             case 3:
                 // 모든 인원에게 효과 적용
-                Debug.Log("모든 인원에게 효과 적용");
+               
                 foreach (var characterList in battleSystem.battleCharacter)
                 {
                     foreach (var character in characterList)
@@ -321,14 +319,14 @@ public class CharacterInfo : MonoBehaviour
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
-                Debug.Log("자신의 캐릭터에게 효과 적용");
+               
                 GetComponent<CharacterControll>().isPass = true;
                 GetComponent<CharacterControll>().confirmAttackEndRun = true;
                 GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
-                Debug.Log("잔류 병사에게 효과 적용");
+              
                 foreach (var character in battleSystem.remainingCharacters)
                 {
                     var cc = character.GetComponent<CharacterControll>();
@@ -339,7 +337,7 @@ public class CharacterInfo : MonoBehaviour
                 break;
             case 3:
                 // 모든 인원에게 효과 적용
-                Debug.Log("모든 인원에게 효과 적용");
+            
                 foreach (var characterList in battleSystem.battleCharacter)
                 {
                     foreach (var character in characterList)
@@ -393,13 +391,13 @@ public class CharacterInfo : MonoBehaviour
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
-                Debug.Log("자신의 캐릭터에게 효과 적용");
+             
                 BattleAttack = maxAttack;
                 GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterSkillData.Skill_Icon.ToString());
                 break;
             case 2:
                 // 잔류 병사에게 효과 적용
-                Debug.Log("잔류 병사에게 효과 적용");
+              
                 foreach (var character in battleSystem.remainingCharacters)
                 {
                     var cc = character.GetComponent<CharacterInfo>();
@@ -409,7 +407,7 @@ public class CharacterInfo : MonoBehaviour
                 break;
             case 3:
                 // 모든 인원에게 효과 적용
-                Debug.Log("모든 인원에게 효과 적용");
+              
                 foreach (var characterList in battleSystem.battleCharacter)
                 {
                     foreach (var character in characterList)

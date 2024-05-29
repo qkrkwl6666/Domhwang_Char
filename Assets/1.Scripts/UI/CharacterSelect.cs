@@ -56,7 +56,7 @@ public class CharacterSelect : MonoBehaviour
     {
         if (scene.name == "Main")
         {
-            Debug.Log("AwakeCharacterUIMain");
+          
             UpdateCharacterUI();
         }
     }

@@ -729,12 +729,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterInfo: {fileID: 0}
   LineSprites:
-  - {fileID: 21300000, guid: 48a1d6a72302ce3458fbc789d8621e6a, type: 3}
-  - {fileID: 21300000, guid: 47d378f4957cf574daa3d754765171d3, type: 3}
-  - {fileID: 21300000, guid: 04a4ecaa63ff62749893368d6239c72c, type: 3}
+  - {fileID: 21300000, guid: 4f07881d37f98504aaac3ee5f2ce5fa3, type: 3}
+  - {fileID: 21300000, guid: bc1b6ae28f7e0594394ab542ae0068e2, type: 3}
+  - {fileID: 21300000, guid: 1b28117502f4a5248be1aea9b864c50f, type: 3}
   modelContent: {fileID: 3547875965086861176}
   level: {fileID: 7404308610973526681}
   image: {fileID: 7064624628917086631}
+  add: {fileID: 0}
   slotIndex: 0
   attackText: {fileID: 6466696283881950760}
   runText: {fileID: 6096374750452171390}

@@ -20,7 +20,7 @@ public class CharacterRender : MonoBehaviour
     {
         if (GameManager.Instance.PlayerCharacterList.Count != characterRenderTexture.Count)
         {
-            Debug.LogError("Character list and render texture list counts do not match!");
+            //Debug.LogError("Character list and render texture list counts do not match!");
             return;
         }
 
