@@ -57,8 +57,8 @@ public class Main : MonoBehaviour
         formationButton.onClick.AddListener(OnFormationButtonClick);
         guideButton.onClick.AddListener(OnGuideButtonClick);
         characterButton.onClick.AddListener(OnCharacterBookButtonClick);
+        optionButton.onClick.AddListener(OptionButton);
 
-        // optionButton.onClick.AddListener(OptionButton);
         // exitButton.onClick.AddListener(ExitButton);
     }
 
@@ -126,9 +126,9 @@ public class Main : MonoBehaviour
 
     private void OptionButton()
     {
-        //UIManager.Instance.OpenUI(Page.OPTION);
+        bossContent.gameObject.SetActive(false);
+        UIManager.Instance.OpenUI(Page.OPTION);
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
-        UIManager.Instance.OpenUI(Page.RULEBOOK);
     }
 
     private void ExitButton()
