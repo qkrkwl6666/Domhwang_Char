@@ -7,13 +7,13 @@ public class SaveLoadSystem : MonoBehaviour
     public static readonly string[] SaveFileName =
     {
         "SaveAuto.sav",
-        "Save1.sav",
+        "SaveAuto1.sav",
         "Save2.sav",
         "Save3.sav"
     };
 
     public static SaveData1 CurrentData { get; set; }
-    public static int currentSlot;
+    public static int currentSlot = 1;
     public static string SaveDirectory
     {
         get

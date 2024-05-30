@@ -4444,7 +4444,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf528702603c7ec44b5b14746e336d64, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7322f49de4af93941993cb58aeb6c600, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -19370,12 +19370,12 @@ MonoBehaviour:
   exitButton: {fileID: 681734111}
   ruleImage: {fileID: 457340634}
   ruleSprites:
-  - {fileID: 21300000, guid: cf528702603c7ec44b5b14746e336d64, type: 3}
-  - {fileID: 21300000, guid: 7166fc8e26c894d44a0b244aea7cf77a, type: 3}
-  - {fileID: 21300000, guid: e2e6bb1f7c147ec43925e7ff0315e734, type: 3}
-  - {fileID: 21300000, guid: fa7cf51f8b0fb5243b9bca0fd7558cf5, type: 3}
-  - {fileID: 21300000, guid: 331a363625aab5444b607a5751d1694e, type: 3}
-  - {fileID: 21300000, guid: a7b02b981999c9e49a9c88e1ff61a704, type: 3}
+  - {fileID: 21300000, guid: 7322f49de4af93941993cb58aeb6c600, type: 3}
+  - {fileID: 21300000, guid: 5c194476e0279d144a87ea8b7a08d52a, type: 3}
+  - {fileID: 21300000, guid: 2256b39eebe6beb4688fcab5e422bd7f, type: 3}
+  - {fileID: 21300000, guid: fd350b207d257d940bbf1ac757c37256, type: 3}
+  - {fileID: 21300000, guid: 5a6253a78d7848843a71fb49c5787433, type: 3}
+  - {fileID: 21300000, guid: c9109644e1d6fbb4db79007f40c33f7d, type: 3}
 --- !u!1 &1648734392
 GameObject:
   m_ObjectHideFlags: 0
