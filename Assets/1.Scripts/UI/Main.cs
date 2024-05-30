@@ -162,7 +162,7 @@ public class Main : MonoBehaviour
         }
         
         stageDesc.text = $"{GameManager.Instance.CurrentStage + 1} 스테이지";
-        bossName.text = $"{GameManager.Instance.MonsterData.Name}";
+        bossName.text = $"[{GameManager.Instance.MonsterData.Name}] 체력 : {GameManager.Instance.MonsterData.Hp}";
         bossDesc.text = $"{GameManager.Instance.MonsterData.Desc}";
 
         GameObject Model = Resources.Load<GameObject>($"MonsterModel/{GameManager.Instance.MonsterData.Id}");
