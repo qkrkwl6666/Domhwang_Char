@@ -80,7 +80,7 @@ public class NewFormationSlot : MonoBehaviour
         {
             var table = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill");
             var data = table.Get(CharacterInfo.Skill_Id.ToString());
-            skillText.text = $"{data.Desc}";
+            skillText.text = $"[{data.SkillName}] : {data.Desc}";
         }
     }
 

@@ -36,6 +36,11 @@ public class Option : MonoBehaviour
     {
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         main.bossContent.gameObject.SetActive(true);
+        main.startButton.interactable = true;
+        main.characterButton.interactable = true;
+        main.formationButton.interactable = true;
+        main.guideButton.interactable = true;
+        main.optionButton.interactable = true;
         gameObject.SetActive(false);
     }
 

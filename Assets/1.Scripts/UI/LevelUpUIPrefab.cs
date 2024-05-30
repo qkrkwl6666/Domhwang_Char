@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelUpUIPrefab : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class LevelUpUIPrefab : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI attackText;
     public TextMeshProUGUI runText;
-    public List<Sprite> linePanel = new List<Sprite>();
+    public Image image;
 
     public void SetLevelUpUI(CharacterInfo ci)
     {
@@ -20,6 +21,19 @@ public class LevelUpUIPrefab : MonoBehaviour
         levelText.text = $"Level{ci.Level}";
         attackText.text = $"°ø°Ý·Â : {ci.Atk} +{ci.Atk_Up}";
         runText.text = $"µµ¸Á È®·ü : {ci.Run} -{ci.Run_Up}";
+
+        switch(ci.Tier)
+        {
+            case "normal":
+                image.sprite = Resources.Load<Sprite>(Defines.NormalPanel);
+                break;
+            case "rare":
+                image.sprite = Resources.Load<Sprite>(Defines.RarePanel);
+                break;
+            case "epic":
+                image.sprite = Resources.Load<Sprite>(Defines.EpicPanel);
+                break;
+        }
     }
 
 }

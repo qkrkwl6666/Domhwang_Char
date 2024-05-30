@@ -37,7 +37,8 @@ public class RunTextEffect : MonoBehaviour
         if (gameObject.GetComponent<CharacterControll>().isRun) return null;
 
         var text = Instantiate(RunTextPrefab, gameObject.transform);
-        text.GetComponentInChildren<TextMeshPro>().text = skillName;
+        text.GetComponentInChildren<TextMeshPro>().text = $"\"{skillName}\"";
+        text.GetComponentInChildren<TextMeshPro>().color = Color.red;
         text.transform.position = gameObject.transform.position + new Vector3(0f, 1.5f, 0f);
         gameObject.GetComponent<CharacterControll>().textBox = text;
         Destroy(text, 3f);

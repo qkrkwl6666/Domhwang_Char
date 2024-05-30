@@ -42,7 +42,7 @@ public class NewCharacterInfo : MonoBehaviour
         {
             var table = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill");
             var data = table.Get(characterInfo.Skill_Id.ToString());
-            skillText.text = $"{data.Desc}";
+            skillText.text = $"[{data.SkillName}] : {data.Desc}";
         }
 
         switch (characterInfo.Tier)
@@ -80,7 +80,7 @@ public class NewCharacterInfo : MonoBehaviour
         {
             var table = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill");
             var data = table.Get(cd.Skill_Id.ToString());
-            skillText.text = $"{data.Desc}";
+            skillText.text = $"[{data.SkillName}] : {data.Desc}";
         }
 
         switch(cd.Tier)

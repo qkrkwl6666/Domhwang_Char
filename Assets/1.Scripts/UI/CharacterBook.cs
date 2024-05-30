@@ -67,7 +67,7 @@ public class CharacterBook : MonoBehaviour
         {
             var table = DataTableMgr.Instance.Get<CharacterSkillTable>("CharacterSkill");
             var data = table.Get(cd.Skill_Id.ToString());
-            characterDescTexts[(int)Desc.SKILL].text = $"½ºÅ³ : {data.Desc}";
+            characterDescTexts[(int)Desc.SKILL].text = $"[{data.SkillName}] : {data.Desc}";
         }
     }
 

@@ -109,6 +109,11 @@ public class Main : MonoBehaviour
             if (character == null)
             {
                 GameStartPopUp.SetActive(true);
+                startButton.interactable = false;
+                characterButton.interactable = false;
+                formationButton.interactable = false;
+                optionButton.interactable = false;
+                guideButton.interactable = false;
                 bossContent.gameObject.SetActive(false);
                 return;
             }
@@ -129,6 +134,11 @@ public class Main : MonoBehaviour
         bossContent.gameObject.SetActive(false);
         UIManager.Instance.OpenUI(Page.OPTION);
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
+        startButton.interactable = false;
+        characterButton.interactable = false;
+        formationButton.interactable = false;
+        guideButton.interactable = false;
+        optionButton.interactable = false;
     }
 
     private void ExitButton()
@@ -202,6 +212,11 @@ public class Main : MonoBehaviour
         GameManager.Instance.AudioSource.PlayOneShot(GameManager.Instance.OkClip);
         GameStartPopUp.SetActive(false);
         bossContent.gameObject.SetActive(true);
+        startButton.interactable = true;
+        characterButton.interactable = true;
+        formationButton.interactable = true;
+        optionButton.interactable = true;
+        guideButton.interactable = true;
     }
 
 }

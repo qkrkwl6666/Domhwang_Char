@@ -13,5 +13,5 @@ public static class Defines
 
     public static readonly string EpicPanel = "Texture/EpicPanel";
     public static readonly string NormalPanel = "Texture/NormalPanel";
-    public static readonly string RarePanel = "Texture/NormalPanel";
+    public static readonly string RarePanel = "Texture/RarePanel";
 }
