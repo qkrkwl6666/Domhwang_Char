@@ -35,9 +35,6 @@ public class BattleSystem : MonoBehaviour
     private GameObject monster;
     public MonsterInfo MonsterInfo { get; private set; }
 
-    // 이펙트 
-    public EffectManager EffectManager { get; private set; }
-
     // Todo : 이곳에서 테이블 가져와서 확률에 따라 몬스터 생성
     private void Awake()
     {
@@ -584,5 +581,18 @@ public class BattleSystem : MonoBehaviour
         Stage3BossSkill();
         Stage9BossSkill();
         Stage12BossSkill();
+    }
+
+    public void AllStop()
+    {
+        foreach(var characterList in battleCharacter)
+        {
+            foreach(var character in  characterList)
+            {
+                character.GetComponent<CharacterControll>()
+                    .ChangeAnimationIdle();
+                character.GetComponent<CharacterEffect>().EffectAwake();
+            }
+        }
     }
 }

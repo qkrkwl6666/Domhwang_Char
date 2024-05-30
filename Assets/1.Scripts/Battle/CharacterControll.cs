@@ -273,4 +273,11 @@ public class CharacterControll : MonoBehaviour
         OnCharacterControll = null;
     }
 
+    public void ChangeAnimationIdle()
+    {
+        animator.SetBool("Attack", false);
+        animator.SetBool("Move", false);
+        animator.SetBool("Idle", true);
+    }
+
 }
