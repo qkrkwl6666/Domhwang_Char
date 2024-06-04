@@ -77,7 +77,7 @@ public class BattleSystem : MonoBehaviour
             MonsterInfo.CurrentRound = CurrentRound;
 
             BossSkills();
-            ApplyInitializeSkill();
+            usePreChargeSkill();
 
             roundTextUI.text = CurrentRound.ToString() + " 라운드";
             removeCharacters.Clear();
@@ -87,7 +87,7 @@ public class BattleSystem : MonoBehaviour
 
             // 라운드별 캐릭터 스폰  
             BattleSetCharacters(CurrentRound);
-            ApplyCharacterSkills(CurrentRound);
+            usePostChargeSkill(CurrentRound);
 
             SetIdlePosition(CurrentRound);
 
@@ -494,7 +494,7 @@ public class BattleSystem : MonoBehaviour
 
     // 캐릭터 스폰 전에 스킬 적용
 
-    public void ApplyInitializeSkill()
+    public void usePreChargeSkill()
     {
         if (CurrentRound > Round) return;
 
@@ -521,7 +521,7 @@ public class BattleSystem : MonoBehaviour
     }
 
     // 캐릭터 isRun and AttackEnd Run 후 스킬 적용
-    public void ApplyCharacterSkills(int currentRound)
+    public void usePostChargeSkill(int currentRound)
     {
         if (currentRound > Round) return;
 
