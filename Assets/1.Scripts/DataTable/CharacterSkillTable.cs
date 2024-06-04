@@ -1,4 +1,5 @@
 using CsvHelper;
+using CsvHelper.Configuration;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -20,7 +21,7 @@ public class CharacterSkillData
 public class CharacterSkillTable : DataTable
 {
 
-    private Dictionary<string, CharacterSkillData> skillTable = new();
+    public Dictionary<string, CharacterSkillData> skillTable {  get; private set; } = new Dictionary<string, CharacterSkillData>();
 
     public CharacterSkillData Get(string id)
     {
@@ -42,6 +43,28 @@ public class CharacterSkillTable : DataTable
                 skillTable.Add(record.SkillID.ToString(), record);
             }
         }
+    }
 
+    public void Save(string Path)
+    {
+
+        using (var writer = new StreamWriter(string.Format(FormatPath2, Path), false, new System.Text.UTF8Encoding(true)))
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ",",
+            };
+
+            using (var csv = new CsvWriter(writer, config))
+            {
+                csv.WriteRecords(skillTable.Values);
+            }
+        }
+    }
+
+    public void AddOrUpdateSkill(CharacterSkillData skillData, string Path)
+    {
+        skillTable[skillData.SkillID.ToString()] = skillData; // 기존 ID가 있으면 업데이트, 없으면 추가
+        Save(Path); // 변경된 데이터를 파일에 저장
     }
 }
