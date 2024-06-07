@@ -100,7 +100,14 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.F1))
+        {
+            foreach(var character in PlayerCharacterList)
+            {
+                var ci = character.GetComponent<CharacterInfo>();
+                ci.BattleAttack = 10000;
+            }
+        }
     }
 
     public void CreateMonster()

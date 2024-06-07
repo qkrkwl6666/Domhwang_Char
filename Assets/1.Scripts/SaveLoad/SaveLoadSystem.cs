@@ -36,8 +36,11 @@ public class SaveLoadSystem : MonoBehaviour
         if (!Directory.Exists(SaveDirectory))
             Directory.CreateDirectory(SaveDirectory);
 
+        string jsonData = string.Empty;
+
         var path = Path.Combine(SaveDirectory, SaveFileName[slot]);
-        using (var writer = new JsonTextWriter(new StreamWriter(path)))
+        using (var stringWriter = new StringWriter())
+        using (var jsonwriter = new JsonTextWriter(stringWriter))
         {
             var serializer = new JsonSerializer();
 
@@ -49,8 +52,13 @@ public class SaveLoadSystem : MonoBehaviour
 
             serializer.Formatting = Formatting.Indented;
             serializer.TypeNameHandling = TypeNameHandling.All;
-            serializer.Serialize(writer, data);
+            serializer.Serialize(jsonwriter, data);
+            jsonData = stringWriter.ToString(); 
         }
+
+        byte[] encryptedData = AesEncryption.EncryptToBytes(jsonData);
+
+        File.WriteAllBytes(path, encryptedData);
 
         CurrentData = data as SaveData1;
         currentSlot = slot;
@@ -73,7 +81,15 @@ public class SaveLoadSystem : MonoBehaviour
         try
         {
             var path = Path.Combine(SaveDirectory, SaveFileName[slot]);
-            using (var writer = new JsonTextReader(new StreamReader(path)))
+
+            // 암호화된 데이터 읽기
+            byte[] encryptedData = File.ReadAllBytes(path);
+
+            // 복호화
+            string jsonData = AesEncryption.DecryptFromBytes(encryptedData);
+
+            using (var stringReader = new StringReader(jsonData))
+            using (var writer = new JsonTextReader(stringReader))
             {
                 var serializer = new JsonSerializer();
                 serializer.TypeNameHandling = TypeNameHandling.All;

@@ -6,10 +6,6 @@ using UnityEngine;
 [CustomEditor(typeof(DataTableMgr))]
 public class CharacterSkillManager : Editor
 {
-    private Dictionary<string, CharacterSkillData> skillsToEdit;
-
-    private int selectedIndex = 0;
-
     private string[] ConditionTypeStrings = new string[] 
     { 
         "조건 없음", "적의 체력이 ConditionValue이하 일때", "잔류 병사가 ConditionValue이상일 때 ",
