@@ -68,7 +68,6 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(CharactersBattleSystem());
     }
 
-    
     IEnumerator CharactersBattleSystem()
     {
         while (CurrentRound <= Round)
@@ -77,7 +76,7 @@ public class BattleSystem : MonoBehaviour
             MonsterInfo.CurrentRound = CurrentRound;
 
             BossSkills();
-            usePreChargeSkill();
+            FirstSkillActive();
 
             roundTextUI.text = CurrentRound.ToString() + " 라운드";
             removeCharacters.Clear();
@@ -87,7 +86,7 @@ public class BattleSystem : MonoBehaviour
 
             // 라운드별 캐릭터 스폰  
             BattleSetCharacters(CurrentRound);
-            usePostChargeSkill(CurrentRound);
+            SecondSkillActive(CurrentRound);
 
             SetIdlePosition(CurrentRound);
 
@@ -108,7 +107,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         // 스테이지 끝나고 2초후 공격
-        yield return StartCoroutine(WaitFor2Sec());
+        yield return StartCoroutine(WaitFor1Sec());
 
         // 몬스터 공격
         yield return StartCoroutine(MonsterAttack());
@@ -137,14 +136,14 @@ public class BattleSystem : MonoBehaviour
         yield break;
     }
 
-    IEnumerator WaitFor2Sec()
+    IEnumerator WaitFor1Sec()
     {
         yield return new WaitForSeconds(1f);
     }
 
     IEnumerator WaitForCharactersIdle(bool firstRound = false, int currentRound = -1)
     {
-        if(playingCharacters.Count == 0 && !firstRound && currentRound == -1) { yield return StartCoroutine(WaitFor2Sec()); }
+        if(playingCharacters.Count == 0 && !firstRound && currentRound == -1) { yield return StartCoroutine(WaitFor1Sec()); }
         else if (playingCharacters.Count == 0 && firstRound)
         {
             bool isPass = false;
@@ -494,7 +493,7 @@ public class BattleSystem : MonoBehaviour
 
     // 캐릭터 스폰 전에 스킬 적용
 
-    public void usePreChargeSkill()
+    public void FirstSkillActive()
     {
         if (CurrentRound > Round) return;
 
@@ -505,7 +504,7 @@ public class BattleSystem : MonoBehaviour
             var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
 
             var characterSkill = currentRoundCharacters[i].GetComponent<CharacterSkill>();
-            bool isSkill = characterSkill.InitializeSkill(this);
+            bool isSkill = characterSkill.ActivateFirstSkill(this);
 
             if (!isSkill) continue;
 
@@ -523,7 +522,7 @@ public class BattleSystem : MonoBehaviour
     }
 
     // 캐릭터 isRun and AttackEnd Run 후 스킬 적용
-    public void usePostChargeSkill(int currentRound)
+    public void SecondSkillActive(int currentRound)
     {
         if (currentRound > Round) return;
 
@@ -533,7 +532,7 @@ public class BattleSystem : MonoBehaviour
         {
             var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
             var characterSkill = characterInfo.GetComponent<CharacterSkill>();
-            bool isSkill = characterSkill.ApplySkill(this);
+            bool isSkill = characterSkill.ActivateSecondSkill(this);
 
             if (!isSkill) continue;
 

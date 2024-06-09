@@ -1,12 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+using static UnityEngine.GraphicsBuffer;
 
 public class CharacterSkill : MonoBehaviour
 {
     public CharacterInfo CharacterInfo { get; set; }
 
-    public bool InitializeSkill(BattleSystem battleSystem)
+    // 1 번째 스킬 발동
+    public bool ActivateFirstSkill(BattleSystem battleSystem)
     {
         if (CharacterInfo.CharacterSkillData == null) return false;
 
@@ -32,13 +37,21 @@ public class CharacterSkill : MonoBehaviour
 
         if (conditionMet)
         {
-            SkillType(battleSystem);
+            var targets = SelectTargets(battleSystem, CharacterInfo.CharacterSkillData.Target);
+            var skillApply = SkillType(battleSystem);
+
+            foreach (var target in targets)
+            {
+                skillApply(target);
+            }
+
             return true;
         }
         return false;
     }
 
-    public bool ApplySkill(BattleSystem battleSystem)
+    // 2 번째 스킬 발동
+    public bool ActivateSecondSkill(BattleSystem battleSystem)
     {
         if (CharacterInfo.CharacterSkillData == null) return false;
 
@@ -70,7 +83,15 @@ public class CharacterSkill : MonoBehaviour
 
         if (conditionMet)
         {
-            SkillType(battleSystem);
+            var targets = SelectTargets(battleSystem, CharacterInfo.CharacterSkillData.Target);
+            var skillApply = SkillType(battleSystem);
+
+            if (skillApply == null || targets == null) return false;
+
+            foreach (var target in targets)
+            {
+                skillApply(target);
+            }
 
             return true;
         }
@@ -79,90 +100,61 @@ public class CharacterSkill : MonoBehaviour
 
     }
 
-    public void SkillType(BattleSystem battleSystem)
+    public Action<GameObject> SkillType(BattleSystem battleSystem)
     {
         switch (CharacterInfo.CharacterSkillData.EffectType)
         {
             case 1:
-                IncreasedDamage(battleSystem);
-                break;
+                return target => IncreasedDamage(target.GetComponent<CharacterInfo>());
             case 2:
-                chargeForward(battleSystem);
-                break;
+                return target => ChargeForward(target.GetComponent<CharacterControll>());
             case 3:
-                RemainingRoundsPass(battleSystem);
-                break;
+                return target => RemainingRoundsPass(target.GetComponent<CharacterInfo>());
             case 4:
                 TryCountPass();
                 break;
             case 5:
                 // 반드시 돌격 하며 반드시 잔류 하지 않음
-                ChargeAndRun(battleSystem);
-                break;
+                return target => ChargeAndRun(target.GetComponent<CharacterControll>());
             case 6:
                 // 이 병사의 공격력은, 편성된 인원 중 가장 높은 수치로 복제된다.
-                HighDamage(battleSystem);
-                break;
+                return target => HighDamage(battleSystem, target.GetComponent<CharacterInfo>());
         }
+
+        return null;
     }
 
-    public void IncreasedDamage(BattleSystem battleSystem)
+    public List<GameObject> SelectTargets(BattleSystem battleSystem, int targetType)
     {
-        // 스킬 타겟 선택 및 효과 적용
-        switch (CharacterInfo.CharacterSkillData.Target)
+        switch (targetType)
         {
             case 1:
                 // 자신의 캐릭터에게 효과 적용
-
-                CharacterInfo.BattleAttack = DamageCheck(CharacterInfo);
-                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                break;
+                return new List<GameObject> { gameObject };
             case 2:
                 // 잔류 병사에게 효과 적용
-                foreach (var character in battleSystem.remainingCharacters)
-                {
-                    var ci = character.GetComponent<CharacterInfo>();
-                    var skill = character.GetComponent<CharacterSkill>();
-                    ci.BattleAttack = skill.DamageCheck(CharacterInfo);
-                    ci.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
+                return battleSystem.remainingCharacters;
             case 3:
                 // 모든 인원에게 효과 적용
-                foreach (var characterList in battleSystem.battleCharacter)
-                {
-                    foreach (var character in characterList)
-                    {
-                        var ci = character.GetComponent<CharacterInfo>();
-                        var skill = character.GetComponent<CharacterSkill>();
-                        ci.BattleAttack = skill.DamageCheck(CharacterInfo);
-                        ci.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                    }
-                }
-                break;
+                return battleSystem.battleCharacter.SelectMany(x => x).ToList();
             case 4:
                 //다음 라운드의 돌격 인원에게 효과 적용
                 int nextRound = battleSystem.CurrentRound + 1;
                 if (nextRound > battleSystem.Round) break;
-                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
-                {
-                    var ci = character.GetComponent<CharacterInfo>();
-                    var skill = character.GetComponent<CharacterSkill>();
-                    ci.BattleAttack = skill.DamageCheck(CharacterInfo);
-                    ci.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
+                return battleSystem.roundsCharacters[nextRound - 1];
             case 5:
                 //해당 라운드의 돌격 인원에게 효과 적용
-                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
-                {
-                    var ci = character.GetComponent<CharacterInfo>();
-                    var skill = character.GetComponent<CharacterSkill>();
-                    ci.BattleAttack = skill.DamageCheck(CharacterInfo);
-                    ci.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
+                return battleSystem.roundsCharacters[battleSystem.CurrentRound - 1];
         }
+
+        return null;
+    }
+
+    public void IncreasedDamage(CharacterInfo ci)
+    {
+        var skill = ci.gameObject.GetComponent<CharacterSkill>();
+        ci.BattleAttack = skill.DamageCheck(CharacterInfo);
+        ci.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
     }
 
     public int DamageCheck(CharacterInfo characterInfo)
@@ -193,180 +185,27 @@ public class CharacterSkill : MonoBehaviour
     }
 
     // 무조건 돌격 메서드
-    public void chargeForward(BattleSystem battleSystem)
+    public void ChargeForward(CharacterControll cc)
     {
-        switch (CharacterInfo.CharacterSkillData.Target)
-        {
-            case 1:
-                // 자신의 캐릭터에게 효과 적용
-
-                GetComponent<CharacterControll>().isPass = true;
-                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                break;
-            case 2:
-                // 잔류 병사에게 효과 적용
-
-                foreach (var character in battleSystem.remainingCharacters)
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isPass = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 3:
-                // 모든 인원에게 효과 적용
-
-                foreach (var characterList in battleSystem.battleCharacter)
-                {
-                    foreach (var character in characterList)
-                    {
-                        var cc = character.GetComponent<CharacterControll>();
-                        cc.isPass = true;
-                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                    }
-                }
-                break;
-            case 4:
-                //다음 라운드의 돌격 인원에게 효과 적용
-                int nextRound = battleSystem.CurrentRound + 1;
-                if (nextRound > battleSystem.Round) break;
-                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isPass = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 5:
-                //해당 라운드의 돌격 인원에게 효과 적용
-                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isPass = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-        }
+        cc.isPass = true;
+        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
     }
 
-    public void RemainingRoundsPass(BattleSystem battleSystem)
+    public void RemainingRoundsPass(CharacterInfo ci)
     {
-        switch (CharacterInfo.CharacterSkillData.Target)
-        {
-            case 1:
-                // 자신의 캐릭터에게 효과 적용
-
-                GetComponent<CharacterControll>().isAttackEndPass = true;
-                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                break;
-            case 2:
-                // 잔류 병사에게 효과 적용
-
-                foreach (var character in battleSystem.remainingCharacters)
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isAttackEndPass = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 3:
-                // 모든 인원에게 효과 적용
-
-                foreach (var characterList in battleSystem.battleCharacter)
-                {
-                    foreach (var character in characterList)
-                    {
-                        var cc = character.GetComponent<CharacterControll>();
-                        cc.isAttackEndPass = true;
-                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                    }
-                }
-                break;
-            case 4:
-                //다음 라운드의 돌격 인원에게 효과 적용
-                int nextRound = battleSystem.CurrentRound + 1;
-                if (nextRound > battleSystem.Round) break;
-                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isAttackEndPass = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 5:
-                //해당 라운드의 돌격 인원에게 효과 적용
-                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isAttackEndPass = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-        }
+        var cc = ci.gameObject.GetComponent<CharacterControll>();
+        cc.isAttackEndPass = true;
+        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(ci.CharacterSkillData.Skill_Icon.ToString());
     }
 
-    public void ChargeAndRun(BattleSystem battleSystem)
+    public void ChargeAndRun(CharacterControll cc)
     {
-        switch (CharacterInfo.CharacterSkillData.Target)
-        {
-            case 1:
-                // 자신의 캐릭터에게 효과 적용
-
-                GetComponent<CharacterControll>().isPass = true;
-                GetComponent<CharacterControll>().confirmAttackEndRun = true;
-                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                break;
-            case 2:
-                // 잔류 병사에게 효과 적용
-
-                foreach (var character in battleSystem.remainingCharacters)
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isPass = true;
-                    cc.confirmAttackEndRun = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 3:
-                // 모든 인원에게 효과 적용
-
-                foreach (var characterList in battleSystem.battleCharacter)
-                {
-                    foreach (var character in characterList)
-                    {
-                        var cc = character.GetComponent<CharacterControll>();
-                        cc.isPass = true;
-                        cc.confirmAttackEndRun = true;
-                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                    }
-                }
-                break;
-            case 4:
-                //다음 라운드의 돌격 인원에게 효과 적용
-                int nextRound = battleSystem.CurrentRound + 1;
-                if (nextRound > battleSystem.Round) break;
-                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isPass = true;
-                    cc.confirmAttackEndRun = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 5:
-                //해당 라운드의 돌격 인원에게 효과 적용
-                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterControll>();
-                    cc.isPass = true;
-                    cc.confirmAttackEndRun = true;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-        }
+        cc.isPass = true;
+        cc.confirmAttackEndRun = true;
+        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
     }
 
-    public void HighDamage(BattleSystem battleSystem)
+    public void HighDamage(BattleSystem battleSystem, CharacterInfo chracterinfo)
     {
         int maxAttack = 0;
 
@@ -379,59 +218,11 @@ public class CharacterSkill : MonoBehaviour
             }
         }
 
-        switch (CharacterInfo.CharacterSkillData.Target)
-        {
-            case 1:
-                // 자신의 캐릭터에게 효과 적용
-
-                CharacterInfo.BattleAttack = maxAttack;
-                GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                break;
-            case 2:
-                // 잔류 병사에게 효과 적용
-
-                foreach (var character in battleSystem.remainingCharacters)
-                {
-                    var cc = character.GetComponent<CharacterInfo>();
-                    cc.BattleAttack = maxAttack;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 3:
-                // 모든 인원에게 효과 적용
-
-                foreach (var characterList in battleSystem.battleCharacter)
-                {
-                    foreach (var character in characterList)
-                    {
-                        var cc = character.GetComponent<CharacterInfo>();
-                        cc.BattleAttack = maxAttack;
-                        cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                    }
-                }
-                break;
-            case 4:
-                //다음 라운드의 돌격 인원에게 효과 적용
-                int nextRound = battleSystem.CurrentRound + 1;
-                if (nextRound > battleSystem.Round) break;
-                foreach (var character in battleSystem.roundsCharacters[nextRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterInfo>();
-                    cc.BattleAttack = maxAttack;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-            case 5:
-                //해당 라운드의 돌격 인원에게 효과 적용
-                foreach (var character in battleSystem.roundsCharacters[battleSystem.CurrentRound - 1])
-                {
-                    var cc = character.GetComponent<CharacterInfo>();
-                    cc.BattleAttack = maxAttack;
-                    cc.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
-                }
-                break;
-        }
+        chracterinfo.BattleAttack = maxAttack;
+        chracterinfo.GetComponent<CharacterSkillIcon>().AddSkillIcon(CharacterInfo.CharacterSkillData.Skill_Icon.ToString());
     }
+
+
     public void TryCountPass()
     {
         GameManager.Instance.isPassTryCount = true;
