@@ -503,7 +503,9 @@ public class BattleSystem : MonoBehaviour
         for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
             var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
-            bool isSkill = characterInfo.InitializeSkill(this);
+
+            var characterSkill = currentRoundCharacters[i].GetComponent<CharacterSkill>();
+            bool isSkill = characterSkill.InitializeSkill(this);
 
             if (!isSkill) continue;
 
@@ -530,7 +532,8 @@ public class BattleSystem : MonoBehaviour
         for (int i = 0; i < currentRoundCharacters.Count; i++)
         {
             var characterInfo = currentRoundCharacters[i].GetComponent<CharacterInfo>();
-            bool isSkill = characterInfo.ApplySkill(this);
+            var characterSkill = characterInfo.GetComponent<CharacterSkill>();
+            bool isSkill = characterSkill.ApplySkill(this);
 
             if (!isSkill) continue;
 

@@ -3340,6 +3340,7 @@ MonoBehaviour:
   confirmAttackEndRun: 0
   isPass: 0
   isAttackEndPass: 0
+  textBox: {fileID: 0}
   StopPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &3325866635142417235
 BoxCollider:
@@ -3389,9 +3390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e739c5e7e6863824493cb99086df34e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackParticle: {fileID: 0}
-  runParticle: {fileID: 0}
-  cryParticle: {fileID: 0}
 --- !u!1 &7332627403224248114
 GameObject:
   m_ObjectHideFlags: 0

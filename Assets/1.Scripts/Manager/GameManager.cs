@@ -306,6 +306,11 @@ public class GameManager : Singleton<GameManager>
         character.GetComponent<CharacterEffect>().EffectInitialiAwake();
         info.creationTime = System.DateTime.Now;
         info.InstanceId = Animator.StringToHash(info.creationTime.Ticks.ToString());
+
+        // 스킬 추가
+        var skill = character.AddComponent<CharacterSkill>();
+        skill.CharacterInfo = info;
+
         character.SetActive(false);
         DontDestroyOnLoad(character);
         PlayerCharacterList.Add(character);
@@ -368,6 +373,10 @@ public class GameManager : Singleton<GameManager>
             character.GetComponentInChildren<CharacterAnimationEvent>().characterInfo = info;
             info.SetCharacterInfo(go);
             character.GetComponent<CharacterEffect>().EffectInitialiAwake();
+
+            // 스킬
+            var skill = character.AddComponent<CharacterSkill>();
+            skill.CharacterInfo = info;
 
             DontDestroyOnLoad(character);
             character.SetActive(false);
