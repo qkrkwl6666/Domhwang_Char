@@ -19,6 +19,7 @@ public class MonsterData
     public int Atk_Effect_Id { get; set; }
     public string Desc { get; set; }
     [Ignore] public float weight {  get; set; }
+    public int SkillId {  get; set; }
 }
 
 public class MonsterTable : DataTable

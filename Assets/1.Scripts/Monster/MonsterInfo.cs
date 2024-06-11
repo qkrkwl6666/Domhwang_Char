@@ -17,6 +17,7 @@ public class MonsterInfo : MonoBehaviour
     public int SkillId {  get; private set; }
     public bool isInvincible { get; set; }
     public bool isIncreasedDamage { get; set; }
+    public MonsterSkillData SkillData { get; private set; }
 
     private BattleSystem battleSystem;
 
@@ -67,6 +68,8 @@ public class MonsterInfo : MonoBehaviour
         Tier = monsterData.Tier;
         Round = monsterData.round;
         Atk_Effect_Id = monsterData.Atk_Effect_Id;
+
+        SkillData = DataTableMgr.Instance.Get<MonsterSkillTable>("MonsterSkill").Get(SkillId.ToString());
     }
 
     public void Damage(int damage)

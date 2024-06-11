@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class MonsterSkill : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    MonsterInfo monsterInfo;
 
-    // Update is called once per frame
-    void Update()
+    public bool ActivateSkill()
     {
-        
+        if (monsterInfo == null) return false;
+
+
+
+        return false;
     }
 }
