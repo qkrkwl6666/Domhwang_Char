@@ -14,6 +14,7 @@ public class MonsterInfo : MonoBehaviour
     public int Heal { get; private set; }
     public int Reduced_dmg { get; private set; }
     public int Atk_Effect_Id { get; set; }
+    public int SkillId {  get; private set; }
     public bool isInvincible { get; set; }
     public bool isIncreasedDamage { get; set; }
 
