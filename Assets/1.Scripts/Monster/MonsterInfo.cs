@@ -69,6 +69,12 @@ public class MonsterInfo : MonoBehaviour
         Round = monsterData.round;
         Atk_Effect_Id = monsterData.Atk_Effect_Id;
 
+        if(monsterData.SkillId == 0)
+        {
+            SkillData = null;
+            return;
+        }
+
         SkillData = DataTableMgr.Instance.Get<MonsterSkillTable>("MonsterSkill").Get(SkillId.ToString());
     }
 
