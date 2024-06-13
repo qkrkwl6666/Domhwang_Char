@@ -11,6 +11,9 @@ public class DataTableMgr : Singleton<DataTableMgr>
         DataTable characterskillTable = new CharacterSkillTable();
         characterskillTable.Load("CharacterSkillData");
 
+        DataTable monsterSkillTable = new MonsterSkillTable();
+        monsterSkillTable.Load("MonsterSkillData");
+
         DataTable characterTable = new CharacterTable();
         characterTable.Load("CharacterData_Designer");
 
@@ -26,6 +29,7 @@ public class DataTableMgr : Singleton<DataTableMgr>
         tables.Add("Effect", effectTable);
         tables.Add("Character", characterTable);
         tables.Add("CharacterSkill", characterskillTable);
+        tables.Add("MonsterSkill", monsterSkillTable);
         tables.Add("Monster", monsterTable);
         tables.Add("Stage", stageTable);
         tables.Add("RunString", runStringTable);

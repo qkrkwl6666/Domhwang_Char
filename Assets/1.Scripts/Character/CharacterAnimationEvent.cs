@@ -10,7 +10,7 @@ public class CharacterAnimationEvent : MonoBehaviour
     public CharacterInfo characterInfo;
 
     public MonsterInfo monsterInfo;
-    public static Action<int> MonsterDamageEvent;
+    public static Action<int, CharacterInfo> MonsterDamageEvent;
 
     private void Awake()
     {
@@ -43,7 +43,7 @@ public class CharacterAnimationEvent : MonoBehaviour
 
         GameManager.Instance.AudioSource.PlayOneShot(Resources.Load<AudioClip>(path));
         characterEffect.AttackParticle.Play();
-        MonsterDamageEvent?.Invoke(characterInfo.BattleAttack);
+        MonsterDamageEvent?.Invoke(characterInfo.BattleAttack, characterInfo);
     }
 
     private void AttackEnd()
