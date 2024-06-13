@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class MonsterInfo : MonoBehaviour
@@ -5,7 +6,7 @@ public class MonsterInfo : MonoBehaviour
     public Canvas HpSliderPrefabs;
     public int Id {  get; private set; }
     public string Name { get; private set; }
-    public int Hp {  get; set; }
+    [field: SerializeField] public int Hp {  get; set; }
     public int MaxHp {  get; set; }
     public string Tier { get; private set; }
     public bool isDead { get; private set; } = false;
@@ -21,7 +22,7 @@ public class MonsterInfo : MonoBehaviour
 
     private BattleSystem battleSystem;
 
-    private UnityEngine.UI.Slider hpSlider;
+    public UnityEngine.UI.Slider hpSlider;
 
     public int CurrentRound { get; set; }
 
@@ -37,6 +38,8 @@ public class MonsterInfo : MonoBehaviour
 
         SetMonster(GameManager.Instance.MonsterData);
 
+        gameObject.AddComponent<MonsterSkill>();
+
         if (hpSlider == null)
         {
             var hpCanvas = Instantiate(HpSliderPrefabs, transform);
@@ -47,7 +50,6 @@ public class MonsterInfo : MonoBehaviour
         hpSlider.minValue = 0;
         hpSlider.maxValue = Hp;
         hpSlider.value = hpSlider.maxValue;
-     
 
         transform.position = new Vector3(4f, 0.5f, 0f);
 
@@ -68,6 +70,7 @@ public class MonsterInfo : MonoBehaviour
         Tier = monsterData.Tier;
         Round = monsterData.round;
         Atk_Effect_Id = monsterData.Atk_Effect_Id;
+        SkillId = monsterData.SkillId;
 
         if(monsterData.SkillId == 0)
         {
@@ -78,55 +81,41 @@ public class MonsterInfo : MonoBehaviour
         SkillData = DataTableMgr.Instance.Get<MonsterSkillTable>("MonsterSkill").Get(SkillId.ToString());
     }
 
-    public void Damage(int damage)
+    public void Damage(int damage, CharacterInfo ci)
     {
-        // 엘리트 몬스터 의 경우 첫공격 무효
-        if(Tier == "elite")
+        MonsterSkill monsterSkill = GetComponent<MonsterSkill>();
+        
+        switch(monsterSkill.currentDamageSkill)
         {
-            if(GetComponent<MonsterEliteSkill>().FirstAttackDefence()) return;
-        }
-
-        if(!isInvincible && !isIncreasedDamage && !battleSystem.RemainingAttack)
-        {
-            Hp -= damage;
-            //DynamicTextManager manager = battleSystem.textManager.GetComponent<DynamicTextManager>();
-            //manager.c
-
-            Vector2 position = transform.position + new Vector3(-1f , 2.5f, 0f);
-
-            DynamicTextManager.CreateText2D(position, damage.ToString(), DynamicTextManager.defaultData);
-        }
-
-        else if (isIncreasedDamage)
-        {
-            Hp -= damage * 8;
-            Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
-            DynamicTextManager.CreateText2D(position, (damage * 8).ToString(), DynamicTextManager.defaultData);
-        }
-
-        else if (battleSystem.RemainingAttack)
-        {
-            int reducedDmg = damage - Reduced_dmg;
-            if (reducedDmg < 0) { reducedDmg = 0; }
-
-            Hp -= reducedDmg;
-
-            Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
-            DynamicTextManager.CreateText2D(position, reducedDmg.ToString(), DynamicTextManager.defaultData);
+            case DamageSkillStatus.None:
+                BasicDamaged(damage);
+                break;
+            case DamageSkillStatus.FirstGuard:
+                monsterSkill.FirstAttackDefence();
+                break;
+            case DamageSkillStatus.IsRemainingReduceDamage:
+                bool isContains = battleSystem.remainingCharacters.Contains(ci.gameObject);
+                if (isContains) monsterSkill.RemainingReduceDamage(damage);
+                else BasicDamaged(damage);
+                break;
+            case DamageSkillStatus.IsInvincible:
+                {
+                    Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
+                    DynamicTextManager.CreateText2D(position, "0", DynamicTextManager.defaultData);
+                }
+                break;
+            case DamageSkillStatus.IsRoundIncreasedDamage:
+                {
+                    if (battleSystem.battleCharacter[battleSystem.CurrentRound - 1]
+                        .Contains(ci.gameObject)) monsterSkill.RoundIncreasedDamageReceived(damage);
+                    else BasicDamaged(damage);
+                }
+                break;
         }
 
         animator.SetTrigger("TakeHit");
 
-        if (Hp <= 0)
-        {
-            Hp = 0;
-            isDead = true;
-            battleSystem.AllStop();
-            GameManager.Instance.CharactersCCEnable(false);
-            GameManager.Instance.LevelUpCharacterList = battleSystem.battleCharacter[battleSystem.CurrentRound - 1];
-            battleSystem.StopAllCoroutines();
-            animator.SetTrigger("Death");
-        }
+        DeadCheck();
 
         hpSlider.value = Hp;
     }
@@ -134,6 +123,13 @@ public class MonsterInfo : MonoBehaviour
     public void AttackEnd()
     {
         MonsterAttackEnd = true;
+    }
+
+    public void BasicDamaged(int damage)
+    {
+        Hp -= damage;
+        Vector2 position = transform.position + new Vector3(-1f, 2.5f, 0f);
+        DynamicTextManager.CreateText2D(position, damage.ToString(), DynamicTextManager.defaultData);
     }
 
     public void DeathEnd()
@@ -147,5 +143,18 @@ public class MonsterInfo : MonoBehaviour
 
         GameManager.Instance.GameWin();
         GameObject.FindWithTag("BackgroundBGM").GetComponent<AudioSource>().Stop();
+    }
+    public void DeadCheck()
+    {
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            isDead = true;
+            battleSystem.AllStop();
+            GameManager.Instance.CharactersCCEnable(false);
+            GameManager.Instance.LevelUpCharacterList = battleSystem.battleCharacter[battleSystem.CurrentRound - 1];
+            battleSystem.StopAllCoroutines();
+            animator.SetTrigger("Death");
+        }
     }
 }

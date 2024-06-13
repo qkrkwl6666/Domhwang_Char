@@ -13,7 +13,7 @@ public class MonsterSkillData
     public int ConditionType { get; set; }
     public int ConditionValue { get; set; }
     public int EffectType { get; set; }
-    public string EffectValue { get; set; }
+    public int EffectValue { get; set; }
     public int Target { get; set; }
 }
 public class MonsterSkillTable : DataTable

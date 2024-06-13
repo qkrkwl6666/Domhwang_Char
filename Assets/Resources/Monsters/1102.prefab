@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1291729410518365379}
   - component: {fileID: 2250011317479860239}
   - component: {fileID: 6904720430409186666}
-  - component: {fileID: 1798002564599075070}
   - component: {fileID: 562331881372459526}
   m_Layer: 0
   m_Name: 1102
@@ -172,18 +171,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpSliderPrefabs: {fileID: 1280854428539982601, guid: 0810c14966daf894792235f331c3b045, type: 3}
---- !u!114 &1798002564599075070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4282596813375793207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b97b7786bf35e24a8f79f770c5f8198, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  hpSlider: {fileID: 0}
+  audioSource: {fileID: 0}
+  hitAudio: {fileID: 0}
 --- !u!114 &562331881372459526
 MonoBehaviour:
   m_ObjectHideFlags: 0
