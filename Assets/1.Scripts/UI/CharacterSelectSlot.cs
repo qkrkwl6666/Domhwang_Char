@@ -41,7 +41,7 @@ public class CharacterSelectSlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        if (MultiTouchManager.Instance.Tap == false) return;
+        //if (MultiTouchManager.Instance.Tap == false) return;
 
         if (characterSlot == null) return;
 

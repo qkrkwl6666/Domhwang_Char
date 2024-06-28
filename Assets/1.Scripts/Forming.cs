@@ -157,7 +157,7 @@ public class Forming : MonoBehaviour
     {
         //if (MultiTouchManager.Instance.LongTap == false) return;
 
-        if (MultiTouchManager.Instance.Tap == false) return;
+        //if (MultiTouchManager.Instance.Tap == false) return;
 
         if (characterInfo == InfoCharacter)
         {
